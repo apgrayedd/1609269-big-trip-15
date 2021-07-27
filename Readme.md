@@ -1,7 +1,7 @@
 # Проект «Большое путешествие»
 
 * Студент: [Дима Арефьев](https://up.htmlacademy.ru/ecmascript/15/user/1609269).
-* Наставник: `Неизвестно`.
+* Наставник: [Станислав Посиделов](https://htmlacademy.ru/profile/stanispos).
 
 ---
 
