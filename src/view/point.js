@@ -1,22 +1,29 @@
 import dayjs from 'dayjs';
 
 export const point = (data) => {
-  const date = dayjs(data.date).format('YYYY-MM-DD');
-  const dateWithFormat = dayjs(data.date).format('MMM D');
+  const dateForDateTime = dayjs(data.date).format('YYYY-MM-DD');
+  const dateForTime = dayjs(data.date).format('MMM D');
+  const dateStart = dayjs(data.date);
+  const dateStartDateTime = dateStart.format('YYYY-MM-DDThh-mm');
+  const dateStartTime = dateStart.format('hh-mm');
+  const dateEnd = dayjs(data.date).add(data.duration, 'minute');
+  const dateEndDateTime = dateEnd.format('YYYY-MM-DDThh-mm');
+  const dateEndTime = dateEnd.format('hh-mm');
+  const duration = dateEnd.diff(dateStart,'minute');
   return `<li class="trip-events__item">
     <div class="event">
-      <time class="event__date" datetime="${date}">${dateWithFormat}</time>
+      <time class="event__date" datetime="${dateForDateTime}">${dateForTime}</time>
       <div class="event__type">
         <img class="event__type-icon" width="42" height="42" src="img/icons/taxi.png" alt="Event type icon"/>
       </div>
       <h3 class="event__title">Taxi Amsterdam</h3>
       <div class="event__schedule">
         <p class="event__time">
-          <time class="event__start-time" datetime="2019-03-18T10:30">10:30</time>
+          <time class="event__start-time" datetime="${dateStartDateTime}">${dateStartTime}</time>
           &mdash;
-          <time class="event__end-time" datetime="2019-03-18T11:00">11:00</time>
+          <time class="event__end-time" datetime="${dateEndDateTime}">${dateEndTime}</time>
         </p>
-        <p class="event__duration">30M</p>
+        <p class="event__duration">${duration}M</p>
       </div>
       <p class="event__price">
         &euro;&nbsp;<span class="event__price-value">20</span>
