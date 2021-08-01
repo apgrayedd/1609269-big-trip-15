@@ -1,7 +1,11 @@
-export const point = () => (
-  `<li class="trip-events__item">
+import dayjs from 'dayjs';
+
+export const point = (data) => {
+  const date = dayjs(data.date).format('YYYY-MM-DD');
+  const dateWithFormat = dayjs(data.date).format('MMM D');
+  return `<li class="trip-events__item">
     <div class="event">
-      <time class="event__date" datetime="2019-03-18">MAR 18</time>
+      <time class="event__date" datetime="${date}">${dateWithFormat}</time>
       <div class="event__type">
         <img class="event__type-icon" width="42" height="42" src="img/icons/taxi.png" alt="Event type icon"/>
       </div>
@@ -35,5 +39,5 @@ export const point = () => (
         <span class="visually-hidden">Open event</span>
       </button>
     </div>
-  </li>`
-);
+  </li>`;
+};

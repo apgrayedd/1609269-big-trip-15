@@ -10,6 +10,8 @@ import {filtersList} from './view/filtersList.js';
 import {sortList} from './view/sortList.js';
 import {stats} from './view/stats.js';
 
+import {data} from './model/data.js';
+
 const render = (container, template, place) => {
   container.insertAdjacentHTML(place, template);
 };
@@ -23,7 +25,7 @@ render(listFilters, filtersList(), 'beforeend');
 render(listPoints, sortList(), 'beforebegin');
 render(listPoints, editPoint(), 'beforeend');
 for (let points = 0; points < 3; points++) {
-  render(listPoints, point(), 'beforeend');
+  render(listPoints, point(data()), 'beforeend');
 }
 render(listPoints, addNewPoint(), 'beforeend');
 render(listPoints, addNewPointWithoutDestination(), 'beforeend');
