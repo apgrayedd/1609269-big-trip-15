@@ -23,7 +23,8 @@ const listPoints = siteHeaderElement.querySelector('.trip-events__list');
 const listFilters = document.querySelector('.trip-controls__filters');
 render(listFilters, filtersList(), 'beforeend');
 render(listPoints, sortList(), 'beforebegin');
-render(listPoints, editPoint(), 'beforeend');
+console.log(data())
+render(listPoints, editPoint(data()), 'beforeend');
 for (let points = 0; points < 3; points++) {
   render(listPoints, point(data()), 'beforeend');
 }
