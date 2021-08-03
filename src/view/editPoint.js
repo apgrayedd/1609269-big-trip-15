@@ -80,7 +80,7 @@ const getEventAvailableDestination = (description) => (
   <p class="event__destination-description">${description}</p>
 </section>`);
 
-export const editPoint = ({type, basePrice, offers}) => `<form class="event event--edit" action="#" method="post">
+export const editPoint = ({type, basePrice, offers, description}) => `<form class="event event--edit" action="#" method="post">
     <header class="event__header">
       ${getEventType(type)}
       ${getEventFieldGroupDestination(type)}
@@ -93,10 +93,6 @@ export const editPoint = ({type, basePrice, offers}) => `<form class="event even
     </header>
     <section class="event__details">
       ${getEventAvailableOffers(offers)}
-      ${getEventAvailableDestination()}
-      <section class="event__section  event__section--destination">
-        <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-        <p class="event__destination-description">Chamonix-Mont-Blanc (usually shortened to Chamonix) is a resort area near the junction of France, Switzerland and Italy. At the base of Mont Blanc, the highest summit in the Alps, it's renowned for its skiing.</p>
-      </section>
+      ${getEventAvailableDestination(description)}
     </section>
   </form>`;

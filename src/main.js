@@ -9,7 +9,7 @@ import {editPoint} from './view/editPoint.js';
 import {filtersList} from './view/filtersList.js';
 import {sortList} from './view/sortList.js';
 import {stats} from './view/stats.js';
-import {pointArr} from './model/data.js';
+import {pointArr, destination} from './model/data.js';
 
 console.log(pointArr())
 const render = (container, template, place) => {
@@ -24,7 +24,7 @@ const listFilters = document.querySelector('.trip-controls__filters');
 render(listFilters, filtersList(), 'beforeend');
 render(listPoints, sortList(), 'beforebegin');
 
-render(listPoints, editPoint(pointArr()), 'beforeend');
+render(listPoints, editPoint(pointArr(), destination()), 'beforeend');
 for (let points = 0; points < 3; points++) {
   render(listPoints, point(pointArr()), 'beforeend');
 }
