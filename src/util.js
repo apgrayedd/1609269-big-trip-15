@@ -61,7 +61,8 @@ const getEventFieldGroupDestination = (type, destinationArr) => {
   </div>`;
 };
 
-const getEventFieldGroupPrice = (basePrice) => `<div class="event__field-group  event__field-group--price">
+const getEventFieldGroupPrice = (basePrice) => `
+<div class="event__field-group  event__field-group--price">
   <label class="event__label" for="event-price-1">
     <span class="visually-hidden">Price</span>
     &euro;
@@ -78,23 +79,25 @@ const dataAdapter = (...data) => {
 };
 
 const getEventAvailableOffers = (offers) => {
-  const eventOffer = ({title,price}) => `<div class="event__offer-selector">
-  <input class="event__offer-checkbox  visually-hidden" id="event-offer-luggage-1" type="checkbox" name="event-offer-luggage">
-  <label class="event__offer-label" for="event-offer-luggage-1">
-    <span class="event__offer-title">${title}</span>
-    &plus;&euro;&nbsp;
-    <span class="event__offer-price">${price}</span>
-  </label>
-</div>`;
+  const eventOffer = ({title,price}) => `
+  <div class="event__offer-selector">
+    <input class="event__offer-checkbox  visually-hidden" id="event-offer-luggage-1" type="checkbox" name="event-offer-luggage">
+    <label class="event__offer-label" for="event-offer-luggage-1">
+      <span class="event__offer-title">${title}</span>
+      &plus;&euro;&nbsp;
+      <span class="event__offer-price">${price}</span>
+    </label>
+  </div>`;
   let offerList = '';
   offers.forEach((offer) => {
     offerList+=eventOffer(offer);
   });
-  return `<section class="event__section  event__section--offers">
-  <h3 class="event__section-title  event__section-title--offers">Offers</h3>
-    <div class="event__available-offers">
-    ${offerList}
-  </div>
+  return `
+  <section class="event__section  event__section--offers">
+    <h3 class="event__section-title  event__section-title--offers">Offers</h3>
+      <div class="event__available-offers">
+      ${offerList}
+    </div>
   </section>`;
 };
 
@@ -108,11 +111,12 @@ const getEventAvailableDestination = (eventDescription, pictures) => {
     });
     getPicturesList += '</div>\n </div>';
   }
-  return `<section class="event__section  event__section--destination">
-  <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-  <p class="event__destination-description">${eventDescription}</p>
-    ${getPicturesList}
-</section>`;
+  return `
+  <section class="event__section  event__section--destination">
+    <h3 class="event__section-title  event__section-title--destination">Destination</h3>
+    <p class="event__destination-description">${eventDescription}</p>
+      ${getPicturesList}
+  </section>`;
 };
 
 export {

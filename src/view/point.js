@@ -11,7 +11,8 @@ const getEventTime = (dateFrom, dayTo) => {
   const dateEndDateTime = dateEndPatt.format('YYYY-MM-DDTHH:mm');
   const dateEndTime = dateEndPatt.format('HH-mm');
   const duration = getTimeFromMins(dateEndPatt.diff(dateFromPatt, 'minute'));
-  return `<div class="event__schedule">
+  return `
+  <div class="event__schedule">
     <p class="event__time">
       <time class="event__start-time" datetime="${dateStartDateTime}">${dateStartTime}</time>
       &mdash;
@@ -22,11 +23,12 @@ const getEventTime = (dateFrom, dayTo) => {
 };
 
 const getEventOffers = (offers) => {
-  const getEventOffer = ({title, price}) => (`<li class="event__offer">
-  <span class="event__offer-title">${title}</span>
-  &plus;&euro;&nbsp;
-  <span class="event__offer-price">${price}</span>
-</li>`
+  const getEventOffer = ({title, price}) => (`
+  <li class="event__offer">
+    <span class="event__offer-title">${title}</span>
+    &plus;&euro;&nbsp;
+    <span class="event__offer-price">${price}</span>
+  </li>`
   );
   let offerList = '';
   offers.forEach((offer) => {
@@ -41,7 +43,8 @@ const getEventOffers = (offers) => {
 export const point = ({basePrice, destination, type, dateFrom, dateTo, offers, isFavorite}) => {
   const dateForDateTime = dayjs(dateFrom).format('YYYY-MM-DD');
   const dateForTime = dayjs(dateFrom).format('MMM D');
-  return `<li class="trip-events__item">
+  return `
+  <li class="trip-events__item">
     <div class="event">
       <time class="event__date" datetime="${dateForDateTime}">${dateForTime}</time>
       <div class="event__type">

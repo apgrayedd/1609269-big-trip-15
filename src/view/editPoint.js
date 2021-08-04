@@ -7,7 +7,8 @@ import {
   getEventAvailableDestination
 } from '../util.js';
 
-export const editPoint = ({type, basePrice, offers, description}) => `<form class="event event--edit" action="#" method="post">
+export const editPoint = ({type, basePrice, offers, description}) => (
+  `<form class="event event--edit" action="#" method="post">
     <header class="event__header">
       ${getEventType(type)}
       ${getEventFieldGroupDestination(type, destinations)}
@@ -22,4 +23,5 @@ export const editPoint = ({type, basePrice, offers, description}) => `<form clas
       ${getEventAvailableOffers(offers)}
       ${getEventAvailableDestination(description)}
     </section>
-  </form>`;
+  </form>`
+);
