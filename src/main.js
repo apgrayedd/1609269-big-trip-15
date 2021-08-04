@@ -9,9 +9,13 @@ import {editPoint} from './view/editPoint.js';
 import {filtersList} from './view/filtersList.js';
 import {sortList} from './view/sortList.js';
 import {stats} from './view/stats.js';
-import {pointArr, destination} from './model/data.js';
+import {dataAdapter} from './util.js';
+import {
+  pointArr,
+  destination
+} from './mock/data.js';
 
-console.log(pointArr())
+const data = () => dataAdapter(pointArr(), destination());
 const render = (container, template, place) => {
   container.insertAdjacentHTML(place, template);
 };
@@ -24,11 +28,11 @@ const listFilters = document.querySelector('.trip-controls__filters');
 render(listFilters, filtersList(), 'beforeend');
 render(listPoints, sortList(), 'beforebegin');
 
-render(listPoints, editPoint(pointArr(), destination()), 'beforeend');
+render(listPoints, editPoint(data()), 'beforeend');
 for (let points = 0; points < 3; points++) {
-  render(listPoints, point(pointArr()), 'beforeend');
+  render(listPoints, point(data()), 'beforeend');
 }
-render(listPoints, addNewPoint(), 'beforeend');
+render(listPoints, addNewPoint(data()), 'beforeend');
 render(listPoints, addNewPointWithoutDestination(), 'beforeend');
 render(listPoints, addNewPointWithoutOffers(), 'beforeend');
 render(listPoints, emptyList(), 'beforeend');
