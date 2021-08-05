@@ -4,7 +4,13 @@ import {
   getStrFromArr
 } from '../util.js';
 
-const getEventTime = (dateFrom, dayTo) => {
+const getEventDate = (dateFrom) => {
+  const dateForDateTime = dayjs(dateFrom).format('YYYY-MM-DD');
+  const dateForTime = dayjs(dateFrom).format('MMM D');
+  return `<time class="event__date" datetime="${dateForDateTime}">${dateForTime}</time>`;
+};
+
+const getEventSchedule = (dateFrom, dayTo) => {
   const dateFromPatt = dayjs(dateFrom);
   const dateEndPatt = dayjs(dayTo);
   const dateStartDateTime = dateFromPatt.format('YYYY-MM-DDTHH:mm');
@@ -38,18 +44,15 @@ const getEventOffers = (offers) => (
   </ul>`
 );
 
-export const point = ({basePrice, destination, type, dateFrom, dateTo, offers, isFavorite}) => {
-  const dateForDateTime = dayjs(dateFrom).format('YYYY-MM-DD');
-  const dateForTime = dayjs(dateFrom).format('MMM D');
-  return `
-  <li class="trip-events__item">
+export const point = ({basePrice, destination, type, dateFrom, dateTo, offers, isFavorite}) => (
+  `<li class="trip-events__item">
     <div class="event">
-      <time class="event__date" datetime="${dateForDateTime}">${dateForTime}</time>
+      ${getEventDate(dateFrom)}
       <div class="event__type">
         <img class="event__type-icon" width="42" height="42" src="img/icons/${type}.png" alt="Event type icon"/>
       </div>
       <h3 class="event__title">${type} ${destination}</h3>
-      ${getEventTime(dateFrom, dateTo)}
+      ${getEventSchedule(dateFrom, dateTo)}
       <p class="event__price">
         &euro;&nbsp;<span class="event__price-value">${basePrice}</span>
       </p>
@@ -65,5 +68,5 @@ export const point = ({basePrice, destination, type, dateFrom, dateTo, offers, i
         <span class="visually-hidden">Open event</span>
       </button>
     </div>
-  </li>`;
-};
+  </li>`
+);
