@@ -11,10 +11,13 @@ function getRandomInt (min, max) {
 
 function getTimeFromMins(mins) {
   const days = mins/MAX_MINUTES_DAY >= 1 ? Math.trunc(mins/MAX_MINUTES_DAY) : 0;
+
   const hours = (mins - days*MAX_MINUTES_DAY)/MAX_MINUTES_HOUR >= 1
     ? Math.trunc((mins - days*MAX_MINUTES_DAY)/MAX_MINUTES_HOUR) : 0;
+
   const minutes = (mins - days*MAX_MINUTES_DAY - hours*MAX_MINUTES_HOUR) >= 1
     ? Math.ceil(mins - days*MAX_MINUTES_DAY - hours*MAX_MINUTES_HOUR) : 0;
+
   let str = days ? `${days}D ` : '';
   str += hours || days ? `${hours}H ` : '';
   str += `${minutes}M`;
@@ -103,6 +106,7 @@ const getEventAvailableOffers = (offers) => {
 
 const getEventAvailableDestination = (eventDescription, pictures) => {
   let picturesList = '';
+
   if (pictures) {
     picturesList = (
       `<div class="event__photos-tape">
@@ -111,6 +115,7 @@ const getEventAvailableDestination = (eventDescription, pictures) => {
         </div>
       </div>`);
   }
+
   const availableDestination = (
     `<section class="event__section  event__section--destination">
       <h3 class="event__section-title  event__section-title--destination">Destination</h3>
