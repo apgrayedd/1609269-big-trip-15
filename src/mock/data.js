@@ -33,6 +33,7 @@ const destination = () => {
       },
     ],
   };};
+
 const pointArr = () => {
   const dateStart = `${getRandomInt(2000,2030)}-${getRandomInt(1,12)}-${getRandomInt(1,31)}T${getRandomInt(0,23)}:${getRandomInt(0,59)}:${getRandomInt(0,59)}`;
   const offers = new Array(getRandomInt(1,MAX_NUMBER_OFFERS)).fill().map(() => ({title: 'Choose meal',price: getRandomInt(1,MAX_NUMBER_OFFER_PRICE)}));

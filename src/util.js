@@ -68,20 +68,17 @@ const getPicturesItem = ({src,imgDescription}) => (
 
 // Creating big blocks
 
-const getEventFieldGroupDestination = (type, destinationArr) => {
-  const destinationList = (
-    `<div class="event__field-group  event__field-group--destination">
-      <label class="event__label  event__type-output" for="event-destination-1">
-        ${type}
-      </label>
-      <input class="event__input  event__input--destination" id="event-destination-1"
-      type="text" name="event-destination" value="Chamonix" list="destination-list-1">
-      <datalist id="destination-list-1">
-        ${getStrFromArr(destinationArr,destinationItem)}
-      </datalist>
-    </div>`);
-  return destinationList;
-};
+const getEventFieldGroupDestination = (type, destinationArr) => (
+  `<div class="event__field-group  event__field-group--destination">
+    <label class="event__label  event__type-output" for="event-destination-1">
+      ${type}
+    </label>
+    <input class="event__input  event__input--destination" id="event-destination-1"
+    type="text" name="event-destination" value="Chamonix" list="destination-list-1">
+    <datalist id="destination-list-1">
+      ${getStrFromArr(destinationArr,destinationItem)}
+    </datalist>
+  </div>`);
 
 const getEventFieldGroupPrice = (basePrice) => `
 <div class="event__field-group  event__field-group--price">
@@ -93,16 +90,13 @@ const getEventFieldGroupPrice = (basePrice) => `
   type="text" name="event-price" value="${basePrice}">
 </div>`;
 
-const getEventAvailableOffers = (offers) => {
-  const offerList = (
-    `<section class="event__section  event__section--offers">
-      <h3 class="event__section-title  event__section-title--offers">Offers</h3>
-      <div class="event__available-offers">
-        ${getStrFromArr(offers, offerItem)}
-      </div>
-    </section>`);
-  return offerList;
-};
+const getEventAvailableOffers = (offers) => (
+  `<section class="event__section  event__section--offers">
+    <h3 class="event__section-title  event__section-title--offers">Offers</h3>
+    <div class="event__available-offers">
+      ${getStrFromArr(offers, offerItem)}
+    </div>
+  </section>`);
 
 const getEventAvailableDestination = (eventDescription, pictures) => {
   let picturesList = '';
@@ -116,18 +110,16 @@ const getEventAvailableDestination = (eventDescription, pictures) => {
       </div>`);
   }
 
-  const availableDestination = (
+  return (
     `<section class="event__section  event__section--destination">
       <h3 class="event__section-title  event__section-title--destination">Destination</h3>
       <p class="event__destination-description">${eventDescription}</p>
         ${picturesList}
     </section>`);
-  return availableDestination;
 };
 
-const getEventType = (type) => {
-  const eventTypeList = (
-    `<div class="event__type-wrapper">
+const getEventType = (type) => (
+  `<div class="event__type-wrapper">
     <label class="event__type  event__type-btn" for="event-type-toggle-1">
       <span class="visually-hidden">Choose event type</span>
       <img class="event__type-icon" width="17" height="17"
@@ -140,9 +132,8 @@ const getEventType = (type) => {
         ${getStrFromArr(types,eventTypeItem)}
       </fieldset>
     </div>
-  </div>`);
-  return eventTypeList;
-};
+  </div>`
+);
 
 export {
   dataAdapter,
