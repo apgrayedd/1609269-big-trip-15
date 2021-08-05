@@ -99,16 +99,14 @@ const getEventAvailableOffers = (offers) => (
   </section>`);
 
 const getEventAvailableDestination = (eventDescription, pictures) => {
-  let picturesList = '';
-
-  if (pictures) {
-    picturesList = (
+  const picturesList = pictures
+    ? (
       `<div class="event__photos-tape">
         <div class="event__photos-container">
           ${getStrFromArr(pictures, getPicturesItem)}
         </div>
-      </div>`);
-  }
+      </div>`)
+    : '';
 
   return (
     `<section class="event__section  event__section--destination">
