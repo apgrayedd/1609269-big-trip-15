@@ -1,16 +1,16 @@
 import {destinations} from '../const.js';
 import {
-  getEventType,
+  getEventTypeWrapper,
   getEventFieldGroupDestination,
   getEventFieldGroupPrice,
   getEventAvailableOffers,
   getEventAvailableDestination
 } from '../util.js';
 
-export const editPoint = ({type, basePrice, offers, description}) => (
+const editPoint = ({type, basePrice, offers, description}) => (
   `<form class="event event--edit" action="#" method="post">
     <header class="event__header">
-      ${getEventType(type)}
+      ${getEventTypeWrapper(type)}
       ${getEventFieldGroupDestination(type, destinations)}
       ${getEventFieldGroupPrice(basePrice)}
       <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
@@ -25,3 +25,22 @@ export const editPoint = ({type, basePrice, offers, description}) => (
     </section>
   </form>`
 );
+
+export default class EditPoint {
+  constructor(data) {
+    this._element = null;
+    this._data = data;
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = editPoint(this._data);
+    }
+
+    return this._element;
+  }
+
+  clearElement() {
+    this._element = null;
+  }
+}

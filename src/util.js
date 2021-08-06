@@ -1,3 +1,4 @@
+import dayjs from 'dayjs';
 import {
   types
 } from './const.js';
@@ -31,6 +32,10 @@ function getStrFromArr (arr, functOnArrItems, firstItem = '') {
   },firstItem);
 }
 
+// Adapters
+
+const timeAdapter = (date, format) => dayjs(date === 'now' ? undefined : date).format(format);
+const timeAdapterDiff = (date1, date2, unit = 'minute') => dayjs(date1).diff(dayjs(date2), unit);
 
 const dataAdapter = (...data) => {
   const  dataFormat = data.reduce((obj, current) => Object.assign(obj,current), {});
@@ -116,7 +121,7 @@ const getEventAvailableDestination = (eventDescription, pictures) => {
     </section>`);
 };
 
-const getEventType = (type) => (
+const getEventTypeWrapper = (type) => (
   `<div class="event__type-wrapper">
     <label class="event__type  event__type-btn" for="event-type-toggle-1">
       <span class="visually-hidden">Choose event type</span>
@@ -135,10 +140,12 @@ const getEventType = (type) => (
 
 export {
   dataAdapter,
+  timeAdapter,
+  timeAdapterDiff,
   getRandomInt,
   getStrFromArr,
   getTimeFromMins,
-  getEventType,
+  getEventTypeWrapper,
   getEventFieldGroupDestination,
   getEventFieldGroupPrice,
   getEventAvailableOffers,

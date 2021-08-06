@@ -1,4 +1,4 @@
-export const stats = () => (
+const getStats = () => (
   `<section class="statistics">
     <h2 class="visually-hidden">Trip statistics</h2>
 
@@ -15,3 +15,21 @@ export const stats = () => (
     </div>
   </section>`
 );
+
+export default class Stats {
+  constructor() {
+    this._element = null;
+  }
+
+  static getElement() {
+    if (!this._element) {
+      this._element = getStats(this._data);
+    }
+
+    return this._element;
+  }
+
+  static clearElement() {
+    this._element = null;
+  }
+}

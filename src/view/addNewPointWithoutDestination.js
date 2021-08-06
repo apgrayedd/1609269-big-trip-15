@@ -1,4 +1,4 @@
-export const addNewPointWithoutDestination = () => (
+const addNewPointWithoutDestination = () => (
   `<form class="event event--edit" action="#" method="post">
     <header class="event__header">
       <div class="event__type-wrapper">
@@ -150,3 +150,22 @@ export const addNewPointWithoutDestination = () => (
     </section>
   </form>`
 );
+
+export default class NewPointWithoutDestination {
+  constructor(data) {
+    this._element = null;
+    this._data = data;
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = addNewPointWithoutDestination(this._data);
+    }
+
+    return this._element;
+  }
+
+  clearElement() {
+    this._element = null;
+  }
+}

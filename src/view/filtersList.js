@@ -1,4 +1,4 @@
-export const filtersList = () => (
+const getfiltersList = () => (
   `<div class="trip-controls__filters">
     <h2 class="visually-hidden">Filter events</h2>
     <form class="trip-filters" action="#" method="get">
@@ -21,3 +21,21 @@ export const filtersList = () => (
     </form>
   </div>`
 );
+
+export default class FiltersList {
+  constructor() {
+    this._element = null;
+  }
+
+  static getElement() {
+    if (!this._element) {
+      this._element = getfiltersList(this._data);
+    }
+
+    return this._element;
+  }
+
+  static clearElement() {
+    this._element = null;
+  }
+}

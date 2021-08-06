@@ -1,4 +1,4 @@
-export const addNewPointWithoutOffers = () => (
+const addNewPointWithoutOffers = () => (
   `<form class="event event--edit" action="#" method="post">
     <header class="event__header">
       <div class="event__type-wrapper">
@@ -115,3 +115,22 @@ export const addNewPointWithoutOffers = () => (
     </section>
   </form>`
 );
+
+export default class NewPointWithoutOffers {
+  constructor(data) {
+    this._element = null;
+    this._data = data;
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = addNewPointWithoutOffers(this._data);
+    }
+
+    return this._element;
+  }
+
+  clearElement() {
+    this._element = null;
+  }
+}

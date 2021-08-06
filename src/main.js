@@ -1,40 +1,52 @@
-import {list} from './view/list.js';
-import {emptyList} from './view/emptyList.js';
-import {loading} from './view/loading.js';
-import {addNewPoint} from './view/addNewPoint.js';
-import {addNewPointWithoutDestination} from './view/addNewPointWithoutDestination.js';
-import {addNewPointWithoutOffers} from './view/addNewPointWithoutOffers.js';
-import {point} from './view/point.js';
-import {editPoint} from './view/editPoint.js';
-import {filtersList} from './view/filtersList.js';
-import {sortList} from './view/sortList.js';
-import {stats} from './view/stats.js';
+import ListEventsView from './view/list.js';
+import EmptyListView from './view/emptyList.js';
+import LoadingView from './view/loading.js';
+import NewPointView from './view/addNewPoint.js';
+import NewPointWithoutDestinationView from './view/addNewPointWithoutDestination.js';
+import NewPointWithoutOffersView from './view/addNewPointWithoutOffers.js';
+import PointView from './view/point.js';
+import EditPointView from './view/editPoint.js';
+import FiltersListView from './view/filtersList.js';
+import SortListView from './view/sortList.js';
+import StatsView from './view/stats.js';
 import {dataAdapter} from './util.js';
 import {
   pointArr,
   destination
 } from './mock/data.js';
 
+const MAX_NUMBER_POINTS = 3;
+
 const data = () => dataAdapter(pointArr(), destination());
 const render = (container, template, place) => {
   container.insertAdjacentHTML(place, template);
 };
-const siteMainElement = document.querySelector('main');
-const siteHeaderElement = siteMainElement.querySelector('.trip-events');
+const siteHeader = document.querySelector('.page-header');
+const listPoints = document.querySelector('.trip-events');
 
-render(siteHeaderElement, list(), 'beforeend');
-const listPoints = siteHeaderElement.querySelector('.trip-events__list');
-const listFilters = document.querySelector('.trip-controls__filters');
-render(listFilters, filtersList(), 'beforeend');
-render(listPoints, sortList(), 'beforebegin');
+const renderPoints = () => {
+  for (let points = 0; points < MAX_NUMBER_POINTS; points++) {
+    render(listPoints, new PointView(data()).getElement(), 'beforeend');
+  }
+};
 
-render(listPoints, editPoint(data()), 'beforeend');
+const renderListPoints = () => {
+  render(siteHeader, ListEventsView.getElement(), 'beforeend');
+};
+render(siteHeader, ListEventsView.getElement(), 'beforeend');
+render(listPoints, new EditPointView(data()).getElement(), 'beforeend');
 for (let points = 0; points < 3; points++) {
-  render(listPoints, point(data()), 'beforeend');
+  render(listPoints, new PointView(data()).getElement(), 'beforeend');
 }
-render(listPoints, addNewPoint(data()), 'beforeend');
-render(listPoints, addNewPointWithoutDestination(), 'beforeend');
-render(listPoints, addNewPointWithoutOffers(), 'beforeend');
-render(listPoints, emptyList(), 'beforeend');
-render(listPoints, loading(), 'beforeend');
-render(listPoints, stats(), 'beforeend');
+render(listPoints, new NewPointView(data()).getElement(), 'beforeend');
+render(listPoints, new NewPointWithoutDestinationView(data()).getElement(), 'beforeend');
+render(listPoints, new NewPointWithoutOffersView(data()).getElement(), 'beforeend');
+render(listPoints, new EmptyListView(data()).getElement(), 'beforeend');
+
+const listFilters = document.querySelector('.trip-controls__filters');
+render(listFilters, FiltersListView.getElement(), 'beforeend');
+
+render(listPoints, SortListView.getElement(), 'beforebegin');
+render(listPoints, LoadingView.getElement(), 'beforeend');
+render(listPoints, StatsView.getElement(), 'beforeend');
+
