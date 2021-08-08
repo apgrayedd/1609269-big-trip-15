@@ -2,7 +2,7 @@ const types = ['Taxi', 'Bus', 'Train', 'Ship', 'Drive', 'Flight', 'Check-in', 'S
 const destinations = ['Amsterdam', 'Geneva', 'Chamonix'];
 const filters = ['Everything', 'Future', 'Past'];
 const controls = ['Table', 'Stats'];
-const sorts = ['Day', 'Event', 'Time', 'Price', 'Offers']
+const sorts = ['Day', 'Event', 'Time', 'Price', 'Offers'];
 
 export {
   types,

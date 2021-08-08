@@ -1,15 +1,15 @@
 import ListEventsView from './view/list.js';
 import NavigationList from './view/navigationList.js';
 import EmptyListView from './view/emptyList.js';
-import LoadingView from './view/loading.js';
-import NewPointView from './view/addNewPoint.js';
-import NewPointWithoutDestinationView from './view/addNewPointWithoutDestination.js';
-import NewPointWithoutOffersView from './view/addNewPointWithoutOffers.js';
+// import LoadingView from './view/loading.js';
+// import NewPointView from './view/addNewPoint.js';
+// import NewPointWithoutDestinationView from './view/addNewPointWithoutDestination.js';
+// import NewPointWithoutOffersView from './view/addNewPointWithoutOffers.js';
 import PointView from './view/point.js';
 import EditPointView from './view/editPoint.js';
 import FiltersListView from './view/filtersList.js';
 import SortListView from './view/sortList.js';
-import StatsView from './view/stats.js';
+// import StatsView from './view/stats.js';
 import {
   dataAdapter,
   render,
