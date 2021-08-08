@@ -1,30 +1,39 @@
-import {createElement} from '../util.js';
+import {sorts} from '../const.js';
+import {
+  createElement,
+  getRandomInt,
+  getStrFromArr
+} from '../util.js';
+
+const getNavigationItem = (sortItem) => (
+  `<a class="trip-tabs__btn${getRandomInt(0,1)
+    ? ' trip-tabs__btn--active'
+    : '' }" href="#">${sortItem}</a>`
+);
 
 const getNavigationList = () => (
   `<div class="trip-controls__navigation">
     <h2 class="visually-hidden">Switch trip view</h2>
     <nav class="trip-controls__trip-tabs  trip-tabs">
-      <a class="trip-tabs__btn  trip-tabs__btn--active" href="#">Table</a>
-      <a class="trip-tabs__btn" href="#">Stats</a>
+      ${getStrFromArr(sorts, getNavigationItem)}
     </nav>
   </div>`);
 
 export default class NavigationList {
-  constructor(data) {
+  constructor() {
     this._element = null;
-    this._data = data;
   }
 
-  getElement() {
+  static getElement() {
     if (!this._element) {
-      this._element = getNavigationList(this._data)
+      this._element = getNavigationList();
     }
 
-    return createElement(this._element)
+    return createElement(this._element);
   }
 
-  getTemplate() {
-    return getNavigationList(this._data);
+  static getTemplate() {
+    return getNavigationList();
   }
 
   removeElement() {

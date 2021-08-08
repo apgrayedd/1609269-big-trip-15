@@ -1,4 +1,5 @@
 import ListEventsView from './view/list.js';
+import NavigationList from './view/navigationList.js';
 import EmptyListView from './view/emptyList.js';
 import LoadingView from './view/loading.js';
 import NewPointView from './view/addNewPoint.js';
@@ -61,8 +62,10 @@ const renderPointList = (place, maxNumberPoints) => {
 };
 
 const tripEvents = document.querySelector('.trip-events');
+const tripControls = document.querySelector('.trip-controls__navigation');
 const listFilters = document.querySelector('.trip-controls__filters');
 
+render(tripControls, NavigationList.getElement(), RenderPosition.AFTERBEGIN);
 render(listFilters, FiltersListView.getElement(), RenderPosition.AFTERBEGIN);
 renderPointList(tripEvents, MAX_NUMBER_POINTS);
 // render(listPoints, new NewPointView(data()).getElement(), RenderPosition.AFTERBEGIN);
