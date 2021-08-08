@@ -96,12 +96,15 @@ const getEventFieldGroupPrice = (basePrice) => `
 </div>`;
 
 const getEventAvailableOffers = (offers) => (
-  `<section class="event__section  event__section--offers">
-    <h3 class="event__section-title  event__section-title--offers">Offers</h3>
-    <div class="event__available-offers">
-      ${getStrFromArr(offers, offerItem)}
-    </div>
-  </section>`);
+  offers.length > 0
+    ? `<section class="event__section  event__section--offers">
+        <h3 class="event__section-title  event__section-title--offers">Offers</h3>
+        <div class="event__available-offers">
+          ${getStrFromArr(offers, offerItem)}
+        </div>
+      </section>`
+    : ''
+);
 
 const getEventAvailableDestination = (eventDescription, pictures) => {
   const picturesList = pictures
@@ -114,11 +117,14 @@ const getEventAvailableDestination = (eventDescription, pictures) => {
     : '';
 
   return (
-    `<section class="event__section  event__section--destination">
-      <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-      <p class="event__destination-description">${eventDescription}</p>
-        ${picturesList}
-    </section>`);
+    eventDescription.length > 0
+      ? (
+        `<section class="event__section  event__section--destination">
+          <h3 class="event__section-title  event__section-title--destination">Destination</h3>
+          <p class="event__destination-description">${eventDescription}</p>
+            ${picturesList}
+        </section>`)
+      : '');
 };
 
 const getEventTypeWrapper = (type) => (

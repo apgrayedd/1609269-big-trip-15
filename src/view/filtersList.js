@@ -30,10 +30,10 @@ export default class FiltersList {
 
   static getElement() {
     if (!this._element) {
-      this._element = getFiltersList();
+      this._element = createElement(getFiltersList());
     }
 
-    return createElement(this._element);
+    return this._element;
   }
 
   static getTemplate() {

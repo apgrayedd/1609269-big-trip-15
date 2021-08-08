@@ -26,26 +26,35 @@ const data = () => dataAdapter(pointArr(), destination());
 
 const renderPoint = (listPoints) => {
   const pointInfo = data();
-  const point = new PointView(pointInfo).getElement();
-  const editPoint = new EditPointView(pointInfo).getElement();
+  const point = new PointView(pointInfo);
+  const editPoint = new EditPointView(pointInfo);
 
-  const replacePointToEdit = (evt) => {
-    evt.preventDefault();
-    point.querySelector('.event__rollup-btn').removeEventListener('click', replacePointToEdit);
-    listPoints.replaceChild(editPoint, point);
-    // eslint-disable-next-line no-use-before-define
-    editPoint.querySelector('.event__rollup-btn').addEventListener('click', replaceEditToPoint);
+  const replacePointToEditByEsc = (evt) => {
+    if(evt.keyCode === 27) {
+      // eslint-disable-next-line no-use-before-define
+      replaceEditToPoint();
+    }
   };
 
-  const replaceEditToPoint = (evt) => {
-    evt.preventDefault();
-    editPoint.querySelector('.event__rollup-btn').removeEventListener('click', replaceEditToPoint);
-    listPoints.replaceChild(point, editPoint);
-    point.querySelector('.event__rollup-btn').addEventListener('click', replacePointToEdit);
+  const replacePointToEdit = () => {
+    listPoints.replaceChild(editPoint.getElement(), point.getElement());
+    window.addEventListener('keydown', replacePointToEditByEsc);
   };
 
-  point.querySelector('.event__rollup-btn').addEventListener('click', replacePointToEdit);
-  render(listPoints, point, RenderPosition.AFTERBEGIN);
+  const replaceEditToPoint = () => {
+    listPoints.replaceChild(point.getElement(), editPoint.getElement());
+    window.removeEventListener('keydown', replacePointToEditByEsc);
+  };
+
+  const pointSave = () => {};
+
+  point.getElement().querySelector('.event__rollup-btn')
+    .addEventListener('click', replacePointToEdit);
+  editPoint.getElement().querySelector('.event__rollup-btn')
+    .addEventListener('click', replaceEditToPoint);
+  editPoint.getElement().querySelector('.event__rollup-btn')
+    .addEventListener('submit', pointSave);
+  render(listPoints, point.getElement(), RenderPosition.AFTERBEGIN);
 };
 
 const renderPointList = (place, maxNumberPoints) => {

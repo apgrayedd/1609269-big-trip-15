@@ -11,10 +11,10 @@ export default class EmptyList {
 
   static getElement() {
     if (!this._element) {
-      this._element = getEmptyList();
+      this._element = createElement(getEmptyList());
     }
 
-    return createElement(this._element);
+    return this._element;
   }
 
   static getTemplate() {

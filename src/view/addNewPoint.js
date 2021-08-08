@@ -34,10 +34,10 @@ export default class NewPoint {
 
   getElement() {
     if (!this._element) {
-      this._element = addNewPoint(this._data);
+      this._element = createElement(addNewPoint(this._data));
     }
 
-    return createElement(this._element);
+    return this._element;
   }
 
   getTemplate() {

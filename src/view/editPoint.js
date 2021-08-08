@@ -8,7 +8,7 @@ import {
   createElement
 } from '../util.js';
 
-const editPoint = ({type, basePrice, offers, description}) => (
+const editPoint = ({type, basePrice, offers, description, pictures}) => (
   `<form class="event event--edit" action="#" method="post">
     <header class="event__header">
       ${getEventTypeWrapper(type)}
@@ -22,7 +22,7 @@ const editPoint = ({type, basePrice, offers, description}) => (
     </header>
     <section class="event__details">
       ${getEventAvailableOffers(offers)}
-      ${getEventAvailableDestination(description)}
+      ${getEventAvailableDestination(description, pictures)}
     </section>
   </form>`
 );
@@ -35,10 +35,10 @@ export default class EditPoint {
 
   getElement() {
     if (!this._element) {
-      this._element = editPoint(this._data);
+      this._element = createElement(editPoint(this._data));
     }
 
-    return createElement(this._element);
+    return this._element;
   }
 
   getTemplate() {

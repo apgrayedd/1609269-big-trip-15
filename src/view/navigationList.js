@@ -1,4 +1,4 @@
-import {sorts} from '../const.js';
+import {controls} from '../const.js';
 import {
   createElement,
   getRandomInt,
@@ -15,7 +15,7 @@ const getNavigationList = () => (
   `<div class="trip-controls__navigation">
     <h2 class="visually-hidden">Switch trip view</h2>
     <nav class="trip-controls__trip-tabs  trip-tabs">
-      ${getStrFromArr(sorts, getNavigationItem)}
+      ${getStrFromArr(controls, getNavigationItem)}
     </nav>
   </div>`);
 
@@ -26,10 +26,10 @@ export default class NavigationList {
 
   static getElement() {
     if (!this._element) {
-      this._element = getNavigationList();
+      this._element = createElement(getNavigationList());
     }
 
-    return createElement(this._element);
+    return this._element;
   }
 
   static getTemplate() {

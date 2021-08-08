@@ -11,10 +11,10 @@ export default class Loading {
 
   static getElement() {
     if (!this._element) {
-      this._element = getLoading();
+      this._element = createElement(getLoading());
     }
 
-    return createElement(this._element);
+    return this._element;
   }
 
   getTemplate() {

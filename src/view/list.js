@@ -11,10 +11,10 @@ export default class ListEvents {
 
   static getElement() {
     if (!this._element) {
-      this._element = getListEvents(this._data);
+      this._element = createElement(getListEvents(this._data));
     }
 
-    return createElement(this._element);
+    return this._element;
   }
 
   static getTemplate() {

@@ -32,10 +32,10 @@ export default class NewPointWithoutOffers {
 
   getElement() {
     if (!this._element) {
-      this._element = addNewPointWithoutOffers(this._data);
+      this._element = createElement(addNewPointWithoutOffers(this._data));
     }
 
-    return createElement(this._element);
+    return this._element;
   }
 
   getTemplate() {
