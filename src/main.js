@@ -57,6 +57,7 @@ const renderPointList = (place, maxNumberPoints) => {
     for (let elem = 0; elem < numberPoints; elem++) {
       renderPoint(pointList);
     }
+    place.append(SortListView.getElement());
     place.append(pointList);
   }
 };
@@ -71,8 +72,5 @@ renderPointList(tripEvents, MAX_NUMBER_POINTS);
 // render(listPoints, new NewPointView(data()).getElement(), RenderPosition.AFTERBEGIN);
 // render(listPoints, new NewPointWithoutDestinationView(data()).getElement(), RenderPosition.AFTERBEGIN);
 // render(listPoints, new NewPointWithoutOffersView(data()).getElement(), RenderPosition.AFTERBEGIN);
-// render(listPoints, new EditPointView(data()).getElement(), RenderPosition.AFTERBEGIN);
-// render(listPoints, EmptyListView.getElement(), RenderPosition.AFTERBEGIN);
 // render(listPoints, LoadingView.getElement(), RenderPosition.AFTERBEGIN);
-// render(listPoints, SortListView.getElement(), RenderPosition.AFTERBEGIN);
 // render(listPoints, StatsView.getElement(), RenderPosition.AFTERBEGIN);
