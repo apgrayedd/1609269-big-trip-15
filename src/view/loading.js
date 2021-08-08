@@ -1,3 +1,5 @@
+import {createElement} from '../util.js';
+
 const getLoading = () => (
   '<p class="trip-events__msg">Loading...</p>'
 );
@@ -9,13 +11,17 @@ export default class Loading {
 
   static getElement() {
     if (!this._element) {
-      this._element = getLoading(this._data);
+      this._element = getLoading();
     }
 
-    return this._element;
+    return createElement(this._element);
   }
 
-  static clearElement() {
+  getTemplate() {
+    return getLoading();
+  }
+
+  static removeElement() {
     this._element = null;
   }
 }

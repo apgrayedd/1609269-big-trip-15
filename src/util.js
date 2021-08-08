@@ -138,6 +138,41 @@ const getEventTypeWrapper = (type) => (
   </div>`
 );
 
+const getEventFieldGroupTime = () => (
+  `<div class="event__field-group  event__field-group--time">
+    <label class="visually-hidden" for="event-start-time-1">From</label>
+    <input class="event__input  event__input--time" id="event-start-time-1"
+    type="text" name="event-start-time" value="${timeAdapter('now','DD/MM/YYYY HH:mm')}">
+    &mdash;
+    <label class="visually-hidden" for="event-end-time-1">To</label>
+    <input class="event__input  event__input--time" id="event-end-time-1"
+    type="text" name="event-end-time" value="${timeAdapter('now','DD/MM/YYYY HH:mm')}">
+  </div>`
+);
+
+const createElement = (template) => {
+  const newElement = document.createElement('div'); // 1
+  newElement.innerHTML = template; // 2
+
+  return newElement.firstChild; // 3
+};
+
+const RenderPosition = {
+  AFTERBEGIN: 'afterbegin',
+  BEFOREEND: 'beforeend',
+};
+
+const render = (container, element, place) => {
+  switch(place){
+    case RenderPosition.BEFOREEND:
+      container.prepend(element);
+      break;
+    case RenderPosition.AFTERBEGIN:
+      container.append(element);
+      break;
+  }
+};
+
 export {
   dataAdapter,
   timeAdapter,
@@ -149,5 +184,9 @@ export {
   getEventFieldGroupDestination,
   getEventFieldGroupPrice,
   getEventAvailableOffers,
-  getEventAvailableDestination
+  getEventAvailableDestination,
+  getEventFieldGroupTime,
+  createElement,
+  render,
+  RenderPosition
 };

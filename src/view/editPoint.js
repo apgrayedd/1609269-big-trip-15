@@ -4,7 +4,8 @@ import {
   getEventFieldGroupDestination,
   getEventFieldGroupPrice,
   getEventAvailableOffers,
-  getEventAvailableDestination
+  getEventAvailableDestination,
+  createElement
 } from '../util.js';
 
 const editPoint = ({type, basePrice, offers, description}) => (
@@ -37,10 +38,14 @@ export default class EditPoint {
       this._element = editPoint(this._data);
     }
 
-    return this._element;
+    return createElement(this._element);
   }
 
-  clearElement() {
+  getTemplate() {
+    return editPoint(this._data);
+  }
+
+  removeElement() {
     this._element = null;
   }
 }

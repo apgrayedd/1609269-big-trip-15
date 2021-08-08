@@ -9,44 +9,67 @@ import EditPointView from './view/editPoint.js';
 import FiltersListView from './view/filtersList.js';
 import SortListView from './view/sortList.js';
 import StatsView from './view/stats.js';
-import {dataAdapter} from './util.js';
+import {
+  dataAdapter,
+  render,
+  RenderPosition,
+  getRandomInt
+} from './util.js';
 import {
   pointArr,
   destination
 } from './mock/data.js';
 
 const MAX_NUMBER_POINTS = 3;
-
 const data = () => dataAdapter(pointArr(), destination());
-const render = (container, template, place) => {
-  container.insertAdjacentHTML(place, template);
-};
-const siteHeader = document.querySelector('.page-header');
-const listPoints = document.querySelector('.trip-events');
 
-const renderPoints = () => {
-  for (let points = 0; points < MAX_NUMBER_POINTS; points++) {
-    render(listPoints, new PointView(data()).getElement(), 'beforeend');
+const renderPoint = (listPoints) => {
+  const pointInfo = data();
+  const point = new PointView(pointInfo).getElement();
+  const editPoint = new EditPointView(pointInfo).getElement();
+
+  const replacePointToEdit = (evt) => {
+    evt.preventDefault();
+    point.querySelector('.event__rollup-btn').removeEventListener('click', replacePointToEdit);
+    listPoints.replaceChild(editPoint, point);
+    // eslint-disable-next-line no-use-before-define
+    editPoint.querySelector('.event__rollup-btn').addEventListener('click', replaceEditToPoint);
+  };
+
+  const replaceEditToPoint = (evt) => {
+    evt.preventDefault();
+    editPoint.querySelector('.event__rollup-btn').removeEventListener('click', replaceEditToPoint);
+    listPoints.replaceChild(point, editPoint);
+    point.querySelector('.event__rollup-btn').addEventListener('click', replacePointToEdit);
+  };
+
+  point.querySelector('.event__rollup-btn').addEventListener('click', replacePointToEdit);
+  render(listPoints, point, RenderPosition.AFTERBEGIN);
+};
+
+const renderPointList = (place, maxNumberPoints) => {
+  const pointList = ListEventsView.getElement();
+  const numberPoints = getRandomInt(0, maxNumberPoints);
+  if (!numberPoints) {
+    place.append(EmptyListView.getElement());
+  } else {
+    for (let elem = 0; elem < numberPoints; elem++) {
+      renderPoint(pointList);
+    }
+    place.append(pointList);
   }
 };
 
-const renderListPoints = () => {
-  render(siteHeader, ListEventsView.getElement(), 'beforeend');
-};
-render(siteHeader, ListEventsView.getElement(), 'beforeend');
-render(listPoints, new EditPointView(data()).getElement(), 'beforeend');
-for (let points = 0; points < 3; points++) {
-  render(listPoints, new PointView(data()).getElement(), 'beforeend');
-}
-render(listPoints, new NewPointView(data()).getElement(), 'beforeend');
-render(listPoints, new NewPointWithoutDestinationView(data()).getElement(), 'beforeend');
-render(listPoints, new NewPointWithoutOffersView(data()).getElement(), 'beforeend');
-render(listPoints, new EmptyListView(data()).getElement(), 'beforeend');
-
+const tripEvents = document.querySelector('.trip-events');
 const listFilters = document.querySelector('.trip-controls__filters');
-render(listFilters, FiltersListView.getElement(), 'beforeend');
 
-render(listPoints, SortListView.getElement(), 'beforebegin');
-render(listPoints, LoadingView.getElement(), 'beforeend');
-render(listPoints, StatsView.getElement(), 'beforeend');
-
+render(listFilters, FiltersListView.getElement(), RenderPosition.AFTERBEGIN);
+renderPointList(tripEvents, MAX_NUMBER_POINTS);
+// render(listPoints, new NewPointView(data()).getElement(), RenderPosition.AFTERBEGIN);
+// render(listPoints, new NewPointWithoutDestinationView(data()).getElement(), RenderPosition.AFTERBEGIN);
+// render(listPoints, new NewPointWithoutOffersView(data()).getElement(), RenderPosition.AFTERBEGIN);
+// render(listPoints, new EditPointView(data()).getElement(), RenderPosition.AFTERBEGIN);
+// render(listPoints, EmptyListView.getElement(), RenderPosition.AFTERBEGIN);
+// render(listPoints, LoadingView.getElement(), RenderPosition.AFTERBEGIN);
+// render(listPoints, SortListView.getElement(), RenderPosition.AFTERBEGIN);
+// render(listPoints, StatsView.getElement(), RenderPosition.AFTERBEGIN);

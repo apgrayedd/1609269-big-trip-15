@@ -1,22 +1,27 @@
+import {createElement} from '../util.js';
+
 const getEmptyList = () => (
   '<p class="trip-events__msg">Click New Event to create your first point</p>'
 );
 
 export default class EmptyList {
-  constructor(data) {
+  constructor() {
     this._element = null;
-    this._data = data;
   }
 
-  getElement() {
+  static getElement() {
     if (!this._element) {
-      this._element = getEmptyList(this._data);
+      this._element = getEmptyList();
     }
 
-    return this._element;
+    return createElement(this._element);
   }
 
-  clearElement() {
+  static getTemplate() {
+    return getEmptyList();
+  }
+
+  removeElement() {
     this._element = null;
   }
 }

@@ -1,24 +1,13 @@
 import {destinations} from '../const.js';
 import {
-  timeAdapter,
   getEventTypeWrapper,
   getEventFieldGroupDestination,
   getEventFieldGroupPrice,
   getEventAvailableOffers,
-  getEventAvailableDestination
+  getEventAvailableDestination,
+  getEventFieldGroupTime,
+  createElement
 } from '../util.js';
-
-const getEventFieldGroupTime = () => (
-  `<div class="event__field-group  event__field-group--time">
-    <label class="visually-hidden" for="event-start-time-1">From</label>
-    <input class="event__input  event__input--time" id="event-start-time-1"
-    type="text" name="event-start-time" value="${timeAdapter('now','DD/MM/YYYY HH:mm')}">
-    &mdash;
-    <label class="visually-hidden" for="event-end-time-1">To</label>
-    <input class="event__input  event__input--time" id="event-end-time-1"
-    type="text" name="event-end-time" value="${timeAdapter('now','DD/MM/YYYY HH:mm')}">
-  </div>`
-);
 
 export const addNewPoint = ({type, basePrice, offers, description, pictures}) => (
   `<form class="event event--edit" action="#" method="post">
@@ -48,10 +37,14 @@ export default class NewPoint {
       this._element = addNewPoint(this._data);
     }
 
-    return this._element;
+    return createElement(this._element);
   }
 
-  clearElement() {
+  getTemplate() {
+    return addNewPoint(this._data);
+  }
+
+  removeElement() {
     this._element = null;
   }
 }

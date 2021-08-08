@@ -1,3 +1,5 @@
+import {createElement} from '../util.js';
+
 const getStats = () => (
   `<section class="statistics">
     <h2 class="visually-hidden">Trip statistics</h2>
@@ -23,13 +25,17 @@ export default class Stats {
 
   static getElement() {
     if (!this._element) {
-      this._element = getStats(this._data);
+      this._element = getStats();
     }
 
-    return this._element;
+    return createElement(this._element);
   }
 
-  static clearElement() {
+  static getTemplate() {
+    return getStats();
+  }
+
+  static removeElement() {
     this._element = null;
   }
 }

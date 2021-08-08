@@ -2,7 +2,8 @@ import {
   getTimeFromMins,
   getStrFromArr,
   timeAdapter,
-  timeAdapterDiff
+  timeAdapterDiff,
+  createElement
 } from '../util.js';
 
 const getEventDate = (dateFrom) => {
@@ -94,10 +95,14 @@ export default class Point {
       this._element = point(this._data);
     }
 
-    return this._element;
+    return createElement(this._element);
   }
 
-  clearElement() {
+  getTemplate() {
+    return point(this._data);
+  }
+
+  removeElement() {
     this._element = null;
   }
 }

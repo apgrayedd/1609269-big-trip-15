@@ -1,3 +1,5 @@
+import {createElement} from '../util.js';
+
 const getListEvents = () => (
   '<ul class="trip-events__list"></ul>'
 );
@@ -12,7 +14,11 @@ export default class ListEvents {
       this._element = getListEvents(this._data);
     }
 
-    return this._element;
+    return createElement(this._element);
+  }
+
+  static getTemplate() {
+    return getListEvents(this._data);
   }
 
   static clearElement() {
