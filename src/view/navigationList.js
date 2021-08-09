@@ -24,15 +24,15 @@ export default class NavigationList {
     this._element = null;
   }
 
-  static getElement() {
+  getElement() {
     if (!this._element) {
-      this._element = createElement(getNavigationList());
+      this._element = createElement(this.getTemplate());
     }
 
     return this._element;
   }
 
-  static getTemplate() {
+  getTemplate() {
     return getNavigationList();
   }
 
@@ -40,3 +40,4 @@ export default class NavigationList {
     this._element = null;
   }
 }
+

@@ -34,7 +34,7 @@ export default class NewPoint {
 
   getElement() {
     if (!this._element) {
-      this._element = createElement(addNewPoint(this._data));
+      this._element = createElement(this.getTemplate());
     }
 
     return this._element;

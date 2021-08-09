@@ -28,19 +28,19 @@ export default class FiltersList {
     this._element = null;
   }
 
-  static getElement() {
+  getElement() {
     if (!this._element) {
-      this._element = createElement(getFiltersList());
+      this._element = createElement(this.getTemplate());
     }
 
     return this._element;
   }
 
-  static getTemplate() {
+  getTemplate() {
     return getFiltersList();
   }
 
-  static removeElement() {
+  removeElement() {
     this._element = null;
   }
 }

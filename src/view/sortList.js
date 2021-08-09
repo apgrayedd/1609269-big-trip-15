@@ -23,19 +23,19 @@ export default class SortList {
     this._element = null;
   }
 
-  static getElement() {
+  getElement() {
     if (!this._element) {
-      this._element = getSortList();
+      this._element = createElement(this.getTemplate());
     }
 
-    return createElement(this._element);
+    return this._element;
   }
 
-  static getTemplate() {
+  getTemplate() {
     return getSortList();
   }
 
-  static removeElement() {
+  removeElement() {
     this._element = null;
   }
 }

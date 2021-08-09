@@ -9,19 +9,19 @@ export default class ListEvents {
     this._element = null;
   }
 
-  static getElement() {
+  getElement() {
     if (!this._element) {
-      this._element = createElement(getListEvents(this._data));
+      this._element = createElement(this.getTemplate());
     }
 
     return this._element;
   }
 
-  static getTemplate() {
-    return getListEvents(this._data);
+  getTemplate() {
+    return getListEvents();
   }
 
-  static clearElement() {
+  removeElement() {
     this._element = null;
   }
 }

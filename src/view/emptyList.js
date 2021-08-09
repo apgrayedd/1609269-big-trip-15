@@ -9,15 +9,15 @@ export default class EmptyList {
     this._element = null;
   }
 
-  static getElement() {
+  getElement() {
     if (!this._element) {
-      this._element = createElement(getEmptyList());
+      this._element = createElement(this.getTemplate());
     }
 
     return this._element;
   }
 
-  static getTemplate() {
+  getTemplate() {
     return getEmptyList();
   }
 

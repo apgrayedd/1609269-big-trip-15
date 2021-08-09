@@ -19,23 +19,24 @@ const getStats = () => (
 );
 
 export default class Stats {
-  constructor() {
+  constructor(data) {
     this._element = null;
+    this._data = data;
   }
 
-  static getElement() {
+  getElement() {
     if (!this._element) {
-      this._element = getStats();
+      this._element = createElement(this.getTemplate());
     }
 
-    return createElement(this._element);
+    return this._element;
   }
 
-  static getTemplate() {
-    return getStats();
+  getTemplate() {
+    return getStats(this._data);
   }
 
-  static removeElement() {
+  removeElement() {
     this._element = null;
   }
 }

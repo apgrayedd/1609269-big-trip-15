@@ -9,9 +9,9 @@ export default class Loading {
     this._element = null;
   }
 
-  static getElement() {
+  getElement() {
     if (!this._element) {
-      this._element = createElement(getLoading());
+      this._element = createElement(this.getTemplate());
     }
 
     return this._element;
@@ -21,8 +21,7 @@ export default class Loading {
     return getLoading();
   }
 
-  static removeElement() {
+  removeElement() {
     this._element = null;
   }
 }
-

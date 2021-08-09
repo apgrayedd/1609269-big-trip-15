@@ -1,15 +1,10 @@
 import ListEventsView from './view/list.js';
 import NavigationList from './view/navigationList.js';
 import EmptyListView from './view/emptyList.js';
-// import LoadingView from './view/loading.js';
-// import NewPointView from './view/addNewPoint.js';
-// import NewPointWithoutDestinationView from './view/addNewPointWithoutDestination.js';
-// import NewPointWithoutOffersView from './view/addNewPointWithoutOffers.js';
 import PointView from './view/point.js';
 import EditPointView from './view/editPoint.js';
 import FiltersListView from './view/filtersList.js';
 import SortListView from './view/sortList.js';
-// import StatsView from './view/stats.js';
 import {
   dataAdapter,
   render,
@@ -23,27 +18,28 @@ import {
 
 const MAX_NUMBER_POINTS = 3;
 const data = () => dataAdapter(pointArr(), destination());
+const KEY_TO_CLOSE_POINT = 27;
 
 const renderPoint = (listPoints) => {
   const pointInfo = data();
   const point = new PointView(pointInfo);
   const editPoint = new EditPointView(pointInfo);
 
-  const replacePointToEditByEsc = (evt) => {
-    if(evt.keyCode === 27) {
+  function ReplacePointToEditByEsc (evt) {
+    if(evt.keyCode === KEY_TO_CLOSE_POINT) {
       // eslint-disable-next-line no-use-before-define
       replaceEditToPoint();
     }
-  };
+  }
 
   const replacePointToEdit = () => {
     listPoints.replaceChild(editPoint.getElement(), point.getElement());
-    window.addEventListener('keydown', replacePointToEditByEsc);
+    window.addEventListener('keydown', ReplacePointToEditByEsc);
   };
 
   const replaceEditToPoint = () => {
     listPoints.replaceChild(point.getElement(), editPoint.getElement());
-    window.removeEventListener('keydown', replacePointToEditByEsc);
+    window.removeEventListener('keydown', ReplacePointToEditByEsc);
   };
 
   const pointSave = () => {};
@@ -58,16 +54,17 @@ const renderPoint = (listPoints) => {
 };
 
 const renderPointList = (place, maxNumberPoints) => {
-  const pointList = ListEventsView.getElement();
+  const pointList = new ListEventsView();
   const numberPoints = getRandomInt(0, maxNumberPoints);
+
   if (!numberPoints) {
-    place.append(EmptyListView.getElement());
+    place.append(new EmptyListView().getElement());
   } else {
     for (let elem = 0; elem < numberPoints; elem++) {
-      renderPoint(pointList);
+      renderPoint(pointList.getElement());
     }
-    place.append(SortListView.getElement());
-    place.append(pointList);
+    place.append(new SortListView().getElement());
+    place.append(pointList.getElement());
   }
 };
 
@@ -75,11 +72,6 @@ const tripEvents = document.querySelector('.trip-events');
 const tripControls = document.querySelector('.trip-controls__navigation');
 const listFilters = document.querySelector('.trip-controls__filters');
 
-render(tripControls, NavigationList.getElement(), RenderPosition.AFTERBEGIN);
-render(listFilters, FiltersListView.getElement(), RenderPosition.AFTERBEGIN);
+render(tripControls, new NavigationList().getElement(), RenderPosition.AFTERBEGIN);
+render(listFilters, new FiltersListView().getElement(), RenderPosition.AFTERBEGIN);
 renderPointList(tripEvents, MAX_NUMBER_POINTS);
-// render(listPoints, new NewPointView(data()).getElement(), RenderPosition.AFTERBEGIN);
-// render(listPoints, new NewPointWithoutDestinationView(data()).getElement(), RenderPosition.AFTERBEGIN);
-// render(listPoints, new NewPointWithoutOffersView(data()).getElement(), RenderPosition.AFTERBEGIN);
-// render(listPoints, LoadingView.getElement(), RenderPosition.AFTERBEGIN);
-// render(listPoints, StatsView.getElement(), RenderPosition.AFTERBEGIN);

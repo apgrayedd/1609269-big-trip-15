@@ -92,7 +92,7 @@ export default class Point {
 
   getElement() {
     if (!this._element) {
-      this._element = createElement(point(this._data));
+      this._element = createElement(this.getTemplate());
     }
 
     return this._element;

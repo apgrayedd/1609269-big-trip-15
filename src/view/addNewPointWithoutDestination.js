@@ -32,7 +32,7 @@ export default class NewPointWithoutDestination {
 
   getElement() {
     if (!this._element) {
-      this._element = createElement(addNewPointWithoutDestination(this._data));
+      this._element = createElement(this.getTemplate());
     }
 
     return this._element;
