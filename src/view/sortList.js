@@ -1,8 +1,8 @@
 import {
-  createElement,
   getStrFromArr
 } from '../util.js';
 import {sorts} from '../const.js';
+import AbstractView from './abstract.js';
 
 const getSortItem = (sortItem) => (
   `<div class="trip-sort__item  trip-sort__item--${sortItem.toLowerCase()}">
@@ -18,24 +18,8 @@ const getSortList = () => (
   </form>`
 );
 
-export default class SortList {
-  constructor() {
-    this._element = null;
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
+export default class SortList extends AbstractView {
   getTemplate() {
     return getSortList();
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }

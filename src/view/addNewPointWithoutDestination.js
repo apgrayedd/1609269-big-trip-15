@@ -4,9 +4,9 @@ import {
   getEventFieldGroupDestination,
   getEventFieldGroupTime,
   getEventFieldGroupPrice,
-  getEventAvailableOffers,
-  createElement
+  getEventAvailableOffers
 } from '../util.js';
+import AbstractView from './abstract.js';
 
 const addNewPointWithoutDestination = ({type, basePrice, offers}) => (
   `<form class="event event--edit" action="#" method="post">
@@ -24,25 +24,13 @@ const addNewPointWithoutDestination = ({type, basePrice, offers}) => (
   </form>`
 );
 
-export default class NewPointWithoutDestination {
+export default class NewPointWithoutDestination extends AbstractView{
   constructor(data) {
-    this._element = null;
+    super();
     this._data = data;
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
   }
 
   getTemplate() {
     return addNewPointWithoutDestination(this._data);
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }

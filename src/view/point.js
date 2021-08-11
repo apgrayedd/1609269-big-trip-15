@@ -2,9 +2,9 @@ import {
   getTimeFromMins,
   getStrFromArr,
   timeAdapter,
-  timeAdapterDiff,
-  createElement
+  timeAdapterDiff
 } from '../util.js';
+import AbstractView from './abstract.js';
 
 const getEventDate = (dateFrom) => {
   const dateForDateTime = timeAdapter(dateFrom, 'YYYY-MM-DD');
@@ -84,25 +84,13 @@ const point = ({basePrice, destination, type, dateFrom, dateTo, offers, isFavori
   </li>`
 );
 
-export default class Point {
+export default class Point extends AbstractView {
   constructor(data) {
-    this._element = null;
+    super();
     this._data = data;
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
   }
 
   getTemplate() {
     return point(this._data);
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }

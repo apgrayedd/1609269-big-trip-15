@@ -25,31 +25,27 @@ const renderPoint = (listPoints) => {
   const point = new PointView(pointInfo);
   const editPoint = new EditPointView(pointInfo);
 
-  function ReplacePointToEditByEsc (evt) {
+  const replacePointToEditByEsc = (evt) => {
     if(evt.keyCode === KEY_TO_CLOSE_POINT) {
-      // eslint-disable-next-line no-use-before-define
-      replaceEditToPoint();
+      ReplacePointToEdit();
     }
+  };
+
+  function ReplacePointToEdit () {
+    listPoints.replaceChild(editPoint.getElement(), point.getElement());
+    window.addEventListener('keydown', replacePointToEditByEsc);
   }
 
-  const replacePointToEdit = () => {
-    listPoints.replaceChild(editPoint.getElement(), point.getElement());
-    window.addEventListener('keydown', ReplacePointToEditByEsc);
-  };
-
-  const replaceEditToPoint = () => {
+  function ReplaceEditToPoint () {
     listPoints.replaceChild(point.getElement(), editPoint.getElement());
-    window.removeEventListener('keydown', ReplacePointToEditByEsc);
-  };
+    window.removeEventListener('keydown', replacePointToEditByEsc);
+  }
 
   const pointSave = () => {};
 
-  point.getElement().querySelector('.event__rollup-btn')
-    .addEventListener('click', replacePointToEdit);
-  editPoint.getElement().querySelector('.event__rollup-btn')
-    .addEventListener('click', replaceEditToPoint);
-  editPoint.getElement().querySelector('.event__rollup-btn')
-    .addEventListener('submit', pointSave);
+  point.setHandler('click', '.event__rollup-btn', ReplacePointToEdit);
+  editPoint.setHandler('click', '.event__rollup-btn', ReplaceEditToPoint);
+  editPoint.setHandler('submit', '.event__rollup-btn', pointSave);
   render(listPoints, point.getElement(), RenderPosition.AFTERBEGIN);
 };
 
@@ -74,4 +70,5 @@ const listFilters = document.querySelector('.trip-controls__filters');
 
 render(tripControls, new NavigationList().getElement(), RenderPosition.AFTERBEGIN);
 render(listFilters, new FiltersListView().getElement(), RenderPosition.AFTERBEGIN);
+
 renderPointList(tripEvents, MAX_NUMBER_POINTS);

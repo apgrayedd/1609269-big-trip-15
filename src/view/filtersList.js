@@ -1,8 +1,8 @@
 import {filters} from '../const.js';
 import {
-  createElement,
   getStrFromArr
 } from '../util.js';
+import AbstractView from './abstract.js';
 
 const filterItem = (filter) => (
   `<div class="trip-filters__filter">
@@ -23,24 +23,8 @@ const getFiltersList = () => (
   </div>`
 );
 
-export default class FiltersList {
-  constructor() {
-    this._element = null;
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
+export default class FiltersList extends AbstractView{
   getTemplate() {
     return getFiltersList();
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }

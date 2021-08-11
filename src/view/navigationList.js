@@ -1,9 +1,9 @@
 import {controls} from '../const.js';
 import {
-  createElement,
   getRandomInt,
   getStrFromArr
 } from '../util.js';
+import AbstractView from './abstract.js';
 
 const getNavigationItem = (sortItem) => (
   `<a class="trip-tabs__btn${getRandomInt(0,1)
@@ -19,25 +19,9 @@ const getNavigationList = () => (
     </nav>
   </div>`);
 
-export default class NavigationList {
-  constructor() {
-    this._element = null;
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
+export default class NavigationList extends AbstractView {
   getTemplate() {
     return getNavigationList();
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }
 
