@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
 import {types} from '../const.js';
-import {getRandomInt} from '../util.js';
+import {getRandomInt} from '../utils/common.js';
 
 const descriptions = [
   'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',

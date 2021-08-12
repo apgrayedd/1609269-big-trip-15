@@ -1,6 +1,6 @@
 import {
   getStrFromArr
-} from '../util.js';
+} from '../utils/common.js';
 import {sorts} from '../const.js';
 import AbstractView from './abstract.js';
 

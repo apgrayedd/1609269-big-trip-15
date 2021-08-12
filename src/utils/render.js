@@ -1,50 +1,55 @@
-import dayjs from 'dayjs';
-import {
-  types
-} from './const.js';
+import {types} from '../const.js';
+import Abstract from '../view/abstract.js';
+import {timeAdapter} from './adapters.js';
+import {getStrFromArr} from './common.js';
 
-const MAX_MINUTES_DAY = 1440;
-const MAX_MINUTES_HOUR = 60;
+export const RenderPosition = {
+  AFTERBEGIN: 'afterbegin',
+  BEFOREEND: 'beforeend',
+};
 
-function getRandomInt (min, max) {
-  return Math.round(min - 0.5 + Math.random() * (max - min + 1));
-}
+export const render = (container, element, place) => {
+  if (element instanceof Abstract) {
+    element = element.getElement();
+  }
 
-function getTimeFromMins(mins) {
-  const days = mins/MAX_MINUTES_DAY >= 1 ? Math.trunc(mins/MAX_MINUTES_DAY) : 0;
+  switch(place){
+    case RenderPosition.BEFOREEND:
+      container.prepend(element);
+      break;
+    case RenderPosition.AFTERBEGIN:
+      container.append(element);
+      break;
+  }
+};
 
-  const hours = (mins - days*MAX_MINUTES_DAY)/MAX_MINUTES_HOUR >= 1
-    ? Math.trunc((mins - days*MAX_MINUTES_DAY)/MAX_MINUTES_HOUR) : 0;
+export const createElement = (template) => {
+  const newElement = document.createElement('div'); // 1
+  newElement.innerHTML = template; // 2
 
-  const minutes = (mins - days*MAX_MINUTES_DAY - hours*MAX_MINUTES_HOUR) >= 1
-    ? Math.ceil(mins - days*MAX_MINUTES_DAY - hours*MAX_MINUTES_HOUR) : 0;
+  return newElement.firstChild; // 3
+};
 
-  let str = days ? `${days}D ` : '';
-  str += hours || days ? `${hours}H ` : '';
-  str += `${minutes}M`;
-  return str;
-}
+export const replace = (newElement, oldElement) => {
+  if (newElement instanceof Abstract) {
+    newElement = newElement.getElement();
+  }
 
-function getStrFromArr (arr, functOnArrItems, firstItem = '') {
-  return arr.reduce((str,arrItem) => {
-    arrItem = functOnArrItems ? functOnArrItems(arrItem) : arrItem;
-    return str + arrItem;
-  },firstItem);
-}
+  if (oldElement instanceof Abstract) {
+    oldElement = oldElement.getElement();
+  }
 
-// Adapters
+  const parent = oldElement.parentElement;
+  if (!parent || !newElement || !oldElement) {
+    throw new Error('Не все эдементы в replace() определены.');
+  }
 
-const timeAdapter = (date, format) => dayjs(date === 'now' ? undefined : date).format(format);
-const timeAdapterDiff = (date1, date2, unit = 'minute') => dayjs(date1).diff(dayjs(date2), unit);
-
-const dataAdapter = (...data) => {
-  const  dataFormat = data.reduce((obj, current) => Object.assign(obj,current), {});
-  return dataFormat;
+  parent.replaceChild(newElement, oldElement);
 };
 
 // Сreating Items
 
-const eventTypeItem = (typeValue) => {
+export const eventTypeItem = (typeValue) => {
   const lowerTypeValue = typeValue.toLowerCase();
   return `<div class="event__type-item">
     <input id="event-type-${lowerTypeValue}-1" class="event__type-input
@@ -54,9 +59,9 @@ const eventTypeItem = (typeValue) => {
   </div>`;
 };
 
-const destinationItem = (destination) => `<option value="${destination}"></option>`;
+export const destinationItem = (destination) => `<option value="${destination}"></option>`;
 
-const offerItem = ({title,price}) => (
+export const offerItem = ({title,price}) => (
   `<div class="event__offer-selector">
     <input class="event__offer-checkbox  visually-hidden"
     id="event-offer-luggage-1" type="checkbox" name="event-offer-luggage">
@@ -67,13 +72,13 @@ const offerItem = ({title,price}) => (
     </label>
   </div>`);
 
-const getPicturesItem = ({src,imgDescription}) => (
+export const getPicturesItem = ({src,imgDescription}) => (
   `<img class="event__photo" src="${src}" alt="${imgDescription}">`
 );
 
 // Creating big blocks
 
-const getEventFieldGroupDestination = (type, destinationArr) => (
+export const getEventFieldGroupDestination = (type, destinationArr) => (
   `<div class="event__field-group  event__field-group--destination">
     <label class="event__label  event__type-output" for="event-destination-1">
       ${type}
@@ -85,7 +90,7 @@ const getEventFieldGroupDestination = (type, destinationArr) => (
     </datalist>
   </div>`);
 
-const getEventFieldGroupPrice = (basePrice) => `
+export const getEventFieldGroupPrice = (basePrice) => `
 <div class="event__field-group  event__field-group--price">
   <label class="event__label" for="event-price-1">
     <span class="visually-hidden">Price</span>
@@ -95,7 +100,7 @@ const getEventFieldGroupPrice = (basePrice) => `
   type="text" name="event-price" value="${basePrice}">
 </div>`;
 
-const getEventAvailableOffers = (offers) => (
+export const getEventAvailableOffers = (offers) => (
   offers.length > 0
     ? `<section class="event__section  event__section--offers">
         <h3 class="event__section-title  event__section-title--offers">Offers</h3>
@@ -106,7 +111,7 @@ const getEventAvailableOffers = (offers) => (
     : ''
 );
 
-const getEventAvailableDestination = (eventDescription, pictures) => {
+export const getEventAvailableDestination = (eventDescription, pictures) => {
   const picturesList = pictures
     ? (
       `<div class="event__photos-tape">
@@ -127,7 +132,7 @@ const getEventAvailableDestination = (eventDescription, pictures) => {
       : '');
 };
 
-const getEventTypeWrapper = (type) => (
+export const getEventTypeWrapper = (type) => (
   `<div class="event__type-wrapper">
     <label class="event__type  event__type-btn" for="event-type-toggle-1">
       <span class="visually-hidden">Choose event type</span>
@@ -144,7 +149,7 @@ const getEventTypeWrapper = (type) => (
   </div>`
 );
 
-const getEventFieldGroupTime = () => (
+export const getEventFieldGroupTime = () => (
   `<div class="event__field-group  event__field-group--time">
     <label class="visually-hidden" for="event-start-time-1">From</label>
     <input class="event__input  event__input--time" id="event-start-time-1"
@@ -155,44 +160,3 @@ const getEventFieldGroupTime = () => (
     type="text" name="event-end-time" value="${timeAdapter('now','DD/MM/YYYY HH:mm')}">
   </div>`
 );
-
-const createElement = (template) => {
-  const newElement = document.createElement('div'); // 1
-  newElement.innerHTML = template; // 2
-
-  return newElement.firstChild; // 3
-};
-
-const RenderPosition = {
-  AFTERBEGIN: 'afterbegin',
-  BEFOREEND: 'beforeend',
-};
-
-const render = (container, element, place) => {
-  switch(place){
-    case RenderPosition.BEFOREEND:
-      container.prepend(element);
-      break;
-    case RenderPosition.AFTERBEGIN:
-      container.append(element);
-      break;
-  }
-};
-
-export {
-  dataAdapter,
-  timeAdapter,
-  timeAdapterDiff,
-  getRandomInt,
-  getStrFromArr,
-  getTimeFromMins,
-  getEventTypeWrapper,
-  getEventFieldGroupDestination,
-  getEventFieldGroupPrice,
-  getEventAvailableOffers,
-  getEventAvailableDestination,
-  getEventFieldGroupTime,
-  createElement,
-  render,
-  RenderPosition
-};

@@ -2,13 +2,14 @@ import {destinations} from '../const.js';
 import {
   getEventTypeWrapper,
   getEventFieldGroupDestination,
-  getEventFieldGroupTime,
   getEventFieldGroupPrice,
-  getEventAvailableOffers
-} from '../util.js';
+  getEventAvailableOffers,
+  getEventAvailableDestination,
+  getEventFieldGroupTime
+} from '../utils/render.js';
 import AbstractView from './abstract.js';
 
-const addNewPointWithoutDestination = ({type, basePrice, offers}) => (
+export const addNewPoint = ({type, basePrice, offers, description, pictures}) => (
   `<form class="event event--edit" action="#" method="post">
     <header class="event__header">
       ${getEventTypeWrapper(type)}
@@ -20,17 +21,18 @@ const addNewPointWithoutDestination = ({type, basePrice, offers}) => (
     </header>
     <section class="event__details">
       ${getEventAvailableOffers(offers)}
+      ${getEventAvailableDestination(description, pictures)}
     </section>
   </form>`
 );
 
-export default class NewPointWithoutDestination extends AbstractView{
+export default class NewPoint extends AbstractView {
   constructor(data) {
     super();
     this._data = data;
   }
 
   getTemplate() {
-    return addNewPointWithoutDestination(this._data);
+    return addNewPoint(this._data);
   }
 }

@@ -1,16 +1,21 @@
 import ListEventsView from './view/list.js';
-import NavigationList from './view/navigationList.js';
-import EmptyListView from './view/emptyList.js';
+import NavigationList from './view/navigation-list.js';
+import EmptyListView from './view/empty-list.js';
 import PointView from './view/point.js';
-import EditPointView from './view/editPoint.js';
-import FiltersListView from './view/filtersList.js';
-import SortListView from './view/sortList.js';
+import EditPointView from './view/edit-point.js';
+import FiltersListView from './view/filters-list.js';
+import SortListView from './view/sort-list.js';
 import {
-  dataAdapter,
   render,
   RenderPosition,
+  replace
+} from './utils/render.js';
+import {
+  dataAdapter
+} from './utils/adapters.js';
+import {
   getRandomInt
-} from './util.js';
+} from './utils/common.js';
 import {
   pointArr,
   destination
@@ -32,21 +37,18 @@ const renderPoint = (listPoints) => {
   };
 
   function ReplacePointToEdit () {
-    listPoints.replaceChild(editPoint.getElement(), point.getElement());
+    replace(editPoint, point);
     window.addEventListener('keydown', replacePointToEditByEsc);
   }
 
   function ReplaceEditToPoint () {
-    listPoints.replaceChild(point.getElement(), editPoint.getElement());
+    replace(point, editPoint);
     window.removeEventListener('keydown', replacePointToEditByEsc);
   }
 
-  const pointSave = () => {};
-
   point.setHandler('click', '.event__rollup-btn', ReplacePointToEdit);
   editPoint.setHandler('click', '.event__rollup-btn', ReplaceEditToPoint);
-  editPoint.setHandler('submit', '.event__rollup-btn', pointSave);
-  render(listPoints, point.getElement(), RenderPosition.AFTERBEGIN);
+  render(listPoints, point, RenderPosition.AFTERBEGIN);
 };
 
 const renderPointList = (place, maxNumberPoints) => {
@@ -54,13 +56,13 @@ const renderPointList = (place, maxNumberPoints) => {
   const numberPoints = getRandomInt(0, maxNumberPoints);
 
   if (!numberPoints) {
-    place.append(new EmptyListView().getElement());
+    render(place, new EmptyListView(), RenderPosition.AFTERBEGIN);
   } else {
     for (let elem = 0; elem < numberPoints; elem++) {
       renderPoint(pointList.getElement());
     }
-    place.append(new SortListView().getElement());
-    place.append(pointList.getElement());
+    render(place, new SortListView(), RenderPosition.AFTERBEGIN);
+    render(place, pointList, RenderPosition.AFTERBEGIN);
   }
 };
 
@@ -68,7 +70,7 @@ const tripEvents = document.querySelector('.trip-events');
 const tripControls = document.querySelector('.trip-controls__navigation');
 const listFilters = document.querySelector('.trip-controls__filters');
 
-render(tripControls, new NavigationList().getElement(), RenderPosition.AFTERBEGIN);
-render(listFilters, new FiltersListView().getElement(), RenderPosition.AFTERBEGIN);
+render(tripControls, new NavigationList(), RenderPosition.AFTERBEGIN);
+render(listFilters, new FiltersListView(), RenderPosition.AFTERBEGIN);
 
 renderPointList(tripEvents, MAX_NUMBER_POINTS);

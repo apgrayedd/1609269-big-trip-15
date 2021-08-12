@@ -1,9 +1,11 @@
 import {
   getTimeFromMins,
-  getStrFromArr,
+  getStrFromArr
+} from '../utils/common.js';
+import {
   timeAdapter,
   timeAdapterDiff
-} from '../util.js';
+} from '../utils/adapters.js';
 import AbstractView from './abstract.js';
 
 const getEventDate = (dateFrom) => {

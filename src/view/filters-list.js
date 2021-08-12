@@ -1,7 +1,7 @@
 import {filters} from '../const.js';
 import {
   getStrFromArr
-} from '../util.js';
+} from '../utils/common.js';
 import AbstractView from './abstract.js';
 
 const filterItem = (filter) => (

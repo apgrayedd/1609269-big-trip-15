@@ -1,4 +1,4 @@
-import {createElement} from '../util.js';
+import {createElement} from '../utils/render.js';
 
 export default class Abstract {
   constructor() {
@@ -29,11 +29,11 @@ export default class Abstract {
 
   _callbackHandler(evt) {
     evt.preventDefault();
-    this._callback.editHandler();
+    this._callback.Handler();
   }
 
   setHandler (typeEvent, htmlQuery, callback) {
-    this._callback.editClick = callback;
-    this.getElement().querySelector(htmlQuery).addEventListener(typeEvent, this._editClickHandler);
+    this._callback.Handler = callback;
+    this.getElement().querySelector(htmlQuery).addEventListener(typeEvent, this._callbackHandler);
   }
 }

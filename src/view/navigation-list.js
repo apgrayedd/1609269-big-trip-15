@@ -2,7 +2,7 @@ import {controls} from '../const.js';
 import {
   getRandomInt,
   getStrFromArr
-} from '../util.js';
+} from '../utils/common.js';
 import AbstractView from './abstract.js';
 
 const getNavigationItem = (sortItem) => (
