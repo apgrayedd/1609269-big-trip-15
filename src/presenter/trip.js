@@ -29,24 +29,23 @@ export default class Trip {
     this._newPoint = new PointView(point);
     this._newEditPoint = new EditPointView(point);
 
-    const replacePointToEdit = () => {
+    const ReplacePointToEdit = () => {
       replace(this._newEditPoint, this._newPoint);
       window.addEventListener('keydown', ReplacePointToEditByEsc);
     };
 
-    const replaceEditToPoint = () => {
+    const ReplaceEditToPoint = () => {
       replace(this._newPoint, this._newEditPoint);
       window.removeEventListener('keydown', ReplacePointToEditByEsc);
     };
 
     function ReplacePointToEditByEsc (evt) {
       if(evt.keyCode === KEY_TO_CLOSE_POINT) {
-        replacePointToEdit();
+        ReplaceEditToPoint();
       }
     }
-
-    this._newPoint.setHandler('click', '.event__rollup-btn', replacePointToEdit);
-    this._newEditPoint.setHandler('click', '.event__rollup-btn', replaceEditToPoint);
+    this._newPoint.setHandler('click', '.event__rollup-btn', ReplacePointToEdit);
+    this._newEditPoint.setHandler('click', '.event__rollup-btn', ReplaceEditToPoint);
     render(this._listEvents.getElement(), this._newPoint, RenderPosition.AFTERBEGIN);
   }
 
