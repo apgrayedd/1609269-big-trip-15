@@ -38,7 +38,7 @@ const destination = () => {
     ],
   };};
 
-const pointArr = new Array(POINT_NUMBER).fill().map(() => {
+const pointArr = () => {
   const dateStart = `${getRandomInt(2000,2030)}-${getRandomInt(1,12)}-${getRandomInt(1,31)}T${getRandomInt(0,23)}:${getRandomInt(0,59)}:${getRandomInt(0,59)}`;
   const offers = new Array(getRandomInt(MIN_NUMBER_OFFERS,MAX_NUMBER_OFFERS))
     .fill().map(() => ({title: 'Choose meal',price: getRandomInt(1,MAX_NUMBER_OFFER_PRICE)}));
@@ -52,7 +52,7 @@ const pointArr = new Array(POINT_NUMBER).fill().map(() => {
     isFavorite: Boolean(getRandomInt(0,1)),
     offers,
     type: types[getRandomInt(0, types.length-1)],
-  };});
+  };};
 
-export {destination, pointArr};
+export const dataPoints = new Array(POINT_NUMBER).fill().map(() => Object.assign(pointArr(), destination()));
 // export const data = dayjs('2019-01-25').format('DD/MM/YYYY');

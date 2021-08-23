@@ -31,6 +31,7 @@ export const createElement = (template) => {
 };
 
 export const replace = (newElement, oldElement) => {
+  console.log(oldElement)
   if (newElement instanceof Abstract) {
     newElement = newElement.getElement();
   }

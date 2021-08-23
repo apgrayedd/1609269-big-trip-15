@@ -22,8 +22,6 @@ export default class Trip {
 
   init(points) {
     this._points = points.slice();
-
-    render(this._container, this._listEvents, RenderPosition.AFTERBEGIN);
     this._init();
   }
 
@@ -46,14 +44,13 @@ export default class Trip {
       replace(this._newPoint, this._newEditPoint);
       window.removeEventListener('keydown', replacePointToEditByEsc);
     }
-
     this._newPoint.setHandler('click', '.event__rollup-btn', ReplacePointToEdit);
     this._newEditPoint.setHandler('click', '.event__rollup-btn', ReplaceEditToPoint);
-    render(this._listEvents, this._newPoint, RenderPosition.AFTERBEGIN);
+    render(this._listEvents.getElement(), this._newPoint, RenderPosition.AFTERBEGIN);
   }
 
   _renderPoints() {
-    this._points.slice().forEach((point) => this._renderPoint(point));
+    this._points.slice(0,MAX_NUMBER_POINTS).forEach((point) => this._renderPoint(point));
   }
 
   _renderNoPoints() {
@@ -79,5 +76,6 @@ export default class Trip {
     if (this._points > MAX_NUMBER_POINTS) {
       this._renderButtonMorePoints();
     }
+    render(this._container, this._listEvents, RenderPosition.AFTERBEGIN);
   }
 }

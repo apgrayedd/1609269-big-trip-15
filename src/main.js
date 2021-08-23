@@ -19,26 +19,11 @@ import {
   getRandomInt
 } from './utils/common.js';
 import {
-  pointArr,
-  destination
+  dataPoints
 } from './mock/data.js';
 
 // const data = dataAdapter(pointArr, destination());
-const data = dataAdapter(pointArr);
-const renderPointList = (place, maxNumberPoints) => {
-  const pointList = new ListEventsView();
-  const numberPoints = getRandomInt(0, maxNumberPoints);
-
-  if (!numberPoints) {
-    render(place, new EmptyListView(), RenderPosition.AFTERBEGIN);
-  } else {
-    for (let elem = 0; elem < numberPoints; elem++) {
-      renderPoint(pointList.getElement());
-    }
-    render(place, new SortListView(), RenderPosition.AFTERBEGIN);
-    render(place, pointList, RenderPosition.AFTERBEGIN);
-  }
-};
+const data = dataAdapter(dataPoints);
 
 const tripEvents = document.querySelector('.trip-events');
 const tripControls = document.querySelector('.trip-controls__navigation');
