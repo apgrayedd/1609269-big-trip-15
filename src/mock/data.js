@@ -22,6 +22,7 @@ const MAX_NUMBER_OFFER_PRICE = 200;
 const MIN_NUMBER_DESCRIPTION = 0;
 const MAX_NUMBER_DESCRIPTION = 5;
 const MAX_POINT_TIME_DIFFERENCE_IN_MINUTES = 1000;
+const POINT_NUMBER = 10;
 
 const destination = () => {
   const description = new Array(getRandomInt(MIN_NUMBER_DESCRIPTION,MAX_NUMBER_DESCRIPTION))
@@ -37,7 +38,7 @@ const destination = () => {
     ],
   };};
 
-const pointArr = () => {
+const pointArr = new Array(POINT_NUMBER).fill().map(() => {
   const dateStart = `${getRandomInt(2000,2030)}-${getRandomInt(1,12)}-${getRandomInt(1,31)}T${getRandomInt(0,23)}:${getRandomInt(0,59)}:${getRandomInt(0,59)}`;
   const offers = new Array(getRandomInt(MIN_NUMBER_OFFERS,MAX_NUMBER_OFFERS))
     .fill().map(() => ({title: 'Choose meal',price: getRandomInt(1,MAX_NUMBER_OFFER_PRICE)}));
@@ -51,7 +52,7 @@ const pointArr = () => {
     isFavorite: Boolean(getRandomInt(0,1)),
     offers,
     type: types[getRandomInt(0, types.length-1)],
-  };};
+  };});
 
 export {destination, pointArr};
 // export const data = dayjs('2019-01-25').format('DD/MM/YYYY');

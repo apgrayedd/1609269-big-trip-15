@@ -5,6 +5,8 @@ import PointView from './view/point.js';
 import EditPointView from './view/edit-point.js';
 import FiltersListView from './view/filters-list.js';
 import SortListView from './view/sort-list.js';
+import TripPresenter from './presenter/trip.js';
+
 import {
   render,
   RenderPosition,
@@ -21,36 +23,8 @@ import {
   destination
 } from './mock/data.js';
 
-const MAX_NUMBER_POINTS = 3;
-const data = () => dataAdapter(pointArr(), destination());
-const KEY_TO_CLOSE_POINT = 27;
-
-const renderPoint = (listPoints) => {
-  const pointInfo = data();
-  const point = new PointView(pointInfo);
-  const editPoint = new EditPointView(pointInfo);
-
-  const replacePointToEditByEsc = (evt) => {
-    if(evt.keyCode === KEY_TO_CLOSE_POINT) {
-      ReplacePointToEdit();
-    }
-  };
-
-  function ReplacePointToEdit () {
-    replace(editPoint, point);
-    window.addEventListener('keydown', replacePointToEditByEsc);
-  }
-
-  function ReplaceEditToPoint () {
-    replace(point, editPoint);
-    window.removeEventListener('keydown', replacePointToEditByEsc);
-  }
-
-  point.setHandler('click', '.event__rollup-btn', ReplacePointToEdit);
-  editPoint.setHandler('click', '.event__rollup-btn', ReplaceEditToPoint);
-  render(listPoints, point, RenderPosition.AFTERBEGIN);
-};
-
+// const data = dataAdapter(pointArr, destination());
+const data = dataAdapter(pointArr);
 const renderPointList = (place, maxNumberPoints) => {
   const pointList = new ListEventsView();
   const numberPoints = getRandomInt(0, maxNumberPoints);
@@ -70,7 +44,9 @@ const tripEvents = document.querySelector('.trip-events');
 const tripControls = document.querySelector('.trip-controls__navigation');
 const listFilters = document.querySelector('.trip-controls__filters');
 
-render(tripControls, new NavigationList(), RenderPosition.AFTERBEGIN);
-render(listFilters, new FiltersListView(), RenderPosition.AFTERBEGIN);
+const presenterTrip = new TripPresenter(tripEvents);
+presenterTrip.init(data);
+// render(tripControls, new NavigationList(), RenderPosition.AFTERBEGIN);
+// render(listFilters, new FiltersListView(), RenderPosition.AFTERBEGIN);
 
-renderPointList(tripEvents, MAX_NUMBER_POINTS);
+// renderPointList(tripEvents, MAX_NUMBER_POINTS);
