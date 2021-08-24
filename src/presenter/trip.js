@@ -21,13 +21,8 @@ export default class Trip {
     this._init();
   }
 
-  _renderPoint(point) {
-    const newPoint = new PointPresent(this._listEvents);
-    newPoint.init(point);
-  }
-
   _renderPoints() {
-    this._points.slice().forEach((point) => this._renderPoint(point));
+    this._points.slice().forEach((point) => new PointPresent(this._listEvents).init(point));
   }
 
   _renderNoPoints() {
