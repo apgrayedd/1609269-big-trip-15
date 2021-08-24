@@ -95,4 +95,13 @@ export default class Point extends AbstractView {
   getTemplate() {
     return point(this._data);
   }
+
+  clickFavorite() {
+    if (this._data.isFavorite === true) {
+      this._data.isFavorite = false;
+      return;
+    }
+
+    this._data.isFavorite = true;
+  }
 }

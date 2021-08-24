@@ -36,4 +36,13 @@ export default class EditPoint extends AbstractView {
   getTemplate() {
     return editPoint(this._data);
   }
+
+  clickFavorite() {
+    if (this._data.isFavorite === true) {
+      this._data.isFavorite = false;
+      return;
+    }
+
+    this._data.isFavorite = true;
+  }
 }

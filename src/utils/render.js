@@ -40,11 +40,21 @@ export const replace = (newElement, oldElement) => {
   }
 
   const parent = oldElement.parentElement;
+
   if (!parent || !newElement || !oldElement) {
     throw new Error('Не все эдементы в replace() определены.');
   }
 
   parent.replaceChild(newElement, oldElement);
+};
+
+export const remove = (component) => {
+  if (!(component instanceof Abstract)) {
+    throw new Error('Can remove only components');
+  }
+
+  component.getElement().remove();
+  component.removeElement();
 };
 
 // Сreating Items

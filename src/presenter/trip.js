@@ -1,14 +1,10 @@
 import ListEventsView from '../view/list.js';
 import NavigationList from '../view/navigation-list.js';
 import EmptyListView from '../view/empty-list.js';
-import PointView from '../view/point.js';
-import EditPointView from '../view/edit-point.js';
-// import FiltersListView from './view/filters-list.js';
 import SortListView from '../view/sort-list.js';
-import {render, RenderPosition, replace} from '../utils/render.js';
 
-const MAX_NUMBER_POINTS = 3;
-const KEY_TO_CLOSE_POINT = 27;
+import PointPresent from './point.js';
+import {render, RenderPosition} from '../utils/render.js';
 
 export default class Trip {
   constructor(container){
@@ -26,38 +22,16 @@ export default class Trip {
   }
 
   _renderPoint(point) {
-    this._newPoint = new PointView(point);
-    this._newEditPoint = new EditPointView(point);
-
-    const ReplacePointToEdit = () => {
-      replace(this._newEditPoint, this._newPoint);
-      window.addEventListener('keydown', ReplacePointToEditByEsc);
-    };
-
-    const ReplaceEditToPoint = () => {
-      replace(this._newPoint, this._newEditPoint);
-      window.removeEventListener('keydown', ReplacePointToEditByEsc);
-    };
-
-    function ReplacePointToEditByEsc (evt) {
-      if(evt.keyCode === KEY_TO_CLOSE_POINT) {
-        ReplaceEditToPoint();
-      }
-    }
-    this._newPoint.setHandler('click', '.event__rollup-btn', ReplacePointToEdit);
-    this._newEditPoint.setHandler('click', '.event__rollup-btn', ReplaceEditToPoint);
-    render(this._listEvents.getElement(), this._newPoint, RenderPosition.AFTERBEGIN);
+    const newPoint = new PointPresent(this._listEvents);
+    newPoint.init(point);
   }
 
   _renderPoints() {
-    this._points.slice(0,MAX_NUMBER_POINTS).forEach((point) => this._renderPoint(point));
+    this._points.slice().forEach((point) => this._renderPoint(point));
   }
 
   _renderNoPoints() {
     render(this._listEvents, this._emptyList, RenderPosition.AFTERBEGIN);
-  }
-
-  _renderButtonMorePoints() {
   }
 
   _renderSort() {
@@ -71,11 +45,7 @@ export default class Trip {
     }
 
     this._renderSort();
-
-    this._renderPoints(MAX_NUMBER_POINTS);
-    if (this._points > MAX_NUMBER_POINTS) {
-      this._renderButtonMorePoints();
-    }
+    this._renderPoints();
     render(this._container, this._listEvents, RenderPosition.AFTERBEGIN);
   }
 }
