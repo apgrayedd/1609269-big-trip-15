@@ -6,17 +6,19 @@ import Abstract from '../view/abstract.js';
 const KEY_TO_CLOSE_POINT = 27;
 
 export default class Point {
-  constructor(container) {
+  constructor(container, newData) {
     this._container = container;
     if (container instanceof Abstract) {
       this._container = container.getElement();
     }
+    this._newData = newData;
     this._point = null;
     this._editPoint = null;
 
     this._replacePointToEdit = this._replacePointToEdit.bind(this);
     this._replaceEditToPoint = this._replaceEditToPoint.bind(this);
     this._replacePointToEditByEsc = this._replacePointToEditByEsc.bind(this);
+    this._changeFavorite = this._changeFavorite.bind(this);
   }
 
   init(data) {
@@ -28,6 +30,8 @@ export default class Point {
 
     this._point.setHandler('click', '.event__rollup-btn', this._replacePointToEdit);
     this._editPoint.setHandler('click', '.event__rollup-btn', this._replaceEditToPoint);
+
+    this._point.setHandler('click', '.event__favorite-btn', this._changeFavorite);
 
     if (oldPoint === null || oldEditPoint === null) {
       render(this._container, this._point, RenderPosition.AFTERBEGIN);
@@ -59,5 +63,15 @@ export default class Point {
     if(evt.keyCode === KEY_TO_CLOSE_POINT) {
       this._replaceEditToPoint();
     }
+  }
+
+  _changeFavorite() {
+    this._newData = Object.assign(
+      this._point,
+      {
+        isFavorite: !this._point.isFavorite,
+      },
+    );
+    console.log(this._newData)
   }
 }

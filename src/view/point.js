@@ -99,9 +99,11 @@ export default class Point extends AbstractView {
   clickFavorite() {
     if (this._data.isFavorite === true) {
       this._data.isFavorite = false;
+      this.getElement().querySelector('.event__favorite-btn').classList.remove('event__favorite-btn--active');
       return;
     }
 
     this._data.isFavorite = true;
+    this.getElement().querySelector('.event__favorite-btn').classList.add('event__favorite-btn--active');
   }
 }

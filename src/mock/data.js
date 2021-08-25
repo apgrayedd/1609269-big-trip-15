@@ -1,6 +1,7 @@
 import dayjs from 'dayjs';
 import {types} from '../const.js';
 import {getRandomInt} from '../utils/common.js';
+import {nanoid} from 'nanoid';
 
 const descriptions = [
   'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
@@ -16,7 +17,6 @@ const descriptions = [
 const cities = ['Hong Kong', 'Bangkok', 'London', 'Macau', 'Singapore', 'Paris', 'Dubai', 'New York City'];
 const MIN_NUMBER_OFFERS = 0;
 const MAX_NUMBER_OFFERS = 10;
-const MAX_NUMBER_ID = 2000;
 const MAX_NUMBER_BASE_PRICE = 2000;
 const MAX_NUMBER_OFFER_PRICE = 200;
 const MIN_NUMBER_DESCRIPTION = 0;
@@ -43,12 +43,12 @@ const pointArr = () => {
   const offers = new Array(getRandomInt(MIN_NUMBER_OFFERS,MAX_NUMBER_OFFERS))
     .fill().map(() => ({title: 'Choose meal',price: getRandomInt(1,MAX_NUMBER_OFFER_PRICE)}));
   return {
+    id: nanoid(),
     basePrice: getRandomInt(1,MAX_NUMBER_BASE_PRICE),
     dateFrom: dayjs(dateStart).format('YYYY-MM-DDTHH:mm:ss'),
     dateTo: dayjs(dateStart).add(getRandomInt(1,MAX_POINT_TIME_DIFFERENCE_IN_MINUTES), 'minutes')
       .format('YYYY-MM-DDTHH:mm:ss'),
     destination: destination().name,
-    id: getRandomInt(1,MAX_NUMBER_ID),
     isFavorite: Boolean(getRandomInt(0,1)),
     offers,
     type: types[getRandomInt(0, types.length-1)],
