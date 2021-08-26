@@ -90,20 +90,33 @@ export default class Point extends AbstractView {
   constructor(data) {
     super();
     this._data = data;
+
+    this._callback = {};
+    this._callbackFavorite = this._callbackFavorite.bind(this);
+    this._callbackOpen = this._callbackOpen.bind(this);
   }
 
   getTemplate() {
     return point(this._data);
   }
 
-  clickFavorite() {
-    if (this._data.isFavorite === true) {
-      this._data.isFavorite = false;
-      this.getElement().querySelector('.event__favorite-btn').classList.remove('event__favorite-btn--active');
-      return;
-    }
+  _callbackOpen(evt) {
+    evt.preventDefault();
+    this._callback.open();
+  }
 
-    this._data.isFavorite = true;
-    this.getElement().querySelector('.event__favorite-btn').classList.add('event__favorite-btn--active');
+  setHandlerOpen (callback) {
+    this._callback.open = callback;
+    this.getElement().querySelector('.event__rollup-btn').addEventListener('click', this._callbackOpen);
+  }
+
+  _callbackFavorite(evt) {
+    evt.preventDefault();
+    this._callback.addFavorite();
+  }
+
+  setHandlerFavorite (callback) {
+    this._callback.addFavorite = callback;
+    this.getElement().querySelector('.event__favorite-btn').addEventListener('click', this._callbackFavorite);
   }
 }

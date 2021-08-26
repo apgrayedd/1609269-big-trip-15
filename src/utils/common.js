@@ -28,6 +28,8 @@ export function getStrFromArr (arr, functOnArrItems, firstItem = '') {
 }
 
 export const updateItem = (items, update) => {
+  console.log(items)
+  console.log(items.findIndex((item) => item.id === update.id))
   const index = items.findIndex((item) => item.id === update.id);
 
   if (index === -1) {

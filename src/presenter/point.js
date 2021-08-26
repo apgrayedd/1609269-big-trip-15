@@ -2,16 +2,17 @@ import PointView from '../view/point.js';
 import EditPointView from '../view/edit-point.js';
 import {render, RenderPosition, replace, remove} from '../utils/render.js';
 import Abstract from '../view/abstract.js';
+import cloneDeep from 'lodash.clonedeep';
 
 const KEY_TO_CLOSE_POINT = 27;
 
 export default class Point {
-  constructor(container, newData) {
+  constructor(container, newPointChanger) {
     this._container = container;
     if (container instanceof Abstract) {
       this._container = container.getElement();
     }
-    this._newData = newData;
+    this._newPointChanger = newPointChanger;
     this._point = null;
     this._editPoint = null;
 
@@ -28,10 +29,9 @@ export default class Point {
     this._point = new PointView(data);
     this._editPoint = new EditPointView(data);
 
-    this._point.setHandler('click', '.event__rollup-btn', this._replacePointToEdit);
+    this._point.setHandlerOpen(this._replacePointToEdit);
     this._editPoint.setHandler('click', '.event__rollup-btn', this._replaceEditToPoint);
-
-    this._point.setHandler('click', '.event__favorite-btn', this._changeFavorite);
+    this._point.setHandlerFavorite(this._changeFavorite);
 
     if (oldPoint === null || oldEditPoint === null) {
       render(this._container, this._point, RenderPosition.AFTERBEGIN);
@@ -66,12 +66,7 @@ export default class Point {
   }
 
   _changeFavorite() {
-    this._newData = Object.assign(
-      this._point,
-      {
-        isFavorite: !this._point.isFavorite,
-      },
-    );
-    console.log(this._newData)
+    this._newData = cloneDeep({...this._point._data, isFavorite: !this._point._data.isFavorite});
+    this._newPointChanger(this._newData);
   }
 }

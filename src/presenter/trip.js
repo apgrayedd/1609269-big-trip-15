@@ -16,7 +16,7 @@ export default class Trip {
     this._navigationList = new NavigationList();
     this._emptyList = new EmptyListView();
     this._sortList = new SortListView();
-    this._handleTaskChange = this._handleTaskChange.bind(this);
+    this._handlePointChange = this._handlePointChange.bind(this);
   }
 
   init(points) {
@@ -26,7 +26,7 @@ export default class Trip {
 
   _renderPoints() {
     this._points.slice().forEach((point) => {
-      const pointPresenter = new PointPresent(this._listEvents);
+      const pointPresenter = new PointPresent(this._listEvents, this._handlePointChange);
       pointPresenter.init(point);
       this._pointPresenter.set(point.id, pointPresenter);
     });
@@ -56,8 +56,8 @@ export default class Trip {
     this._taskPresenter.clear();
   }
 
-  _handleTaskChange(updatedTask) {
-    this._boardTasks = updateItem(this._boardTasks, updatedTask);
-    this._taskPresenter.get(updatedTask.id).init(updatedTask);
+  _handlePointChange(newPoint) {
+    this._pointPresenter = updateItem(this._pointPresenter, newPoint);
+    this._taskPresenter.get(newPoint.id).init(newPoint);
   }
 }
