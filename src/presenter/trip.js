@@ -10,7 +10,7 @@ import {updateItem} from '../utils/common.js';
 export default class Trip {
   constructor(container){
     this._container = container;
-    this._pointPresenter = new Map();
+    this._pointsMap = new Map();
 
     this._listEvents = new ListEventsView();
     this._navigationList = new NavigationList();
@@ -28,7 +28,7 @@ export default class Trip {
     this._points.slice().forEach((point) => {
       const pointPresenter = new PointPresent(this._listEvents, this._handlePointChange);
       pointPresenter.init(point);
-      this._pointPresenter.set(point.id, pointPresenter);
+      this._pointsMap.set(point.id, pointPresenter);
     });
   }
 
@@ -57,7 +57,7 @@ export default class Trip {
   }
 
   _handlePointChange(newPoint) {
-    this._pointPresenter = updateItem(this._pointPresenter, newPoint);
-    this._taskPresenter.get(newPoint.id).init(newPoint);
+    this._pointsMap.values = updateItem(this._pointsMap, newPoint);
+    this._pointsMap.get(newPoint.id).init(newPoint);
   }
 }

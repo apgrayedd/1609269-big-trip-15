@@ -27,18 +27,9 @@ export function getStrFromArr (arr, functOnArrItems, firstItem = '') {
   },firstItem);
 }
 
-export const updateItem = (items, update) => {
-  console.log(items)
-  console.log(items.findIndex((item) => item.id === update.id))
-  const index = items.findIndex((item) => item.id === update.id);
-
-  if (index === -1) {
-    return items;
-  }
-
-  return [
-    ...items.slice(0, index),
-    update,
-    ...items.slice(index + 1),
-  ];
-};
+export const updateItem = (items, update) =>
+  [items].map((item) => {
+    if (item.id === update.id) {
+      return update;
+    }
+  });

@@ -57,7 +57,7 @@ export const remove = (component) => {
   component.removeElement();
 };
 
-// Сreating Items
+// Creating Items
 
 export const eventTypeItem = (typeValue) => {
   const lowerTypeValue = typeValue.toLowerCase();
