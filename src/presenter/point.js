@@ -7,12 +7,13 @@ import cloneDeep from 'lodash.clonedeep';
 const KEY_TO_CLOSE_POINT = 27;
 
 export default class Point {
-  constructor(container, newPointChanger) {
+  constructor(container, newPointChanger, closeAllPoints) {
     this._container = container;
     if (container instanceof Abstract) {
       this._container = container.getElement();
     }
     this._newPointChanger = newPointChanger;
+    this._closeAllPoints = closeAllPoints;
     this._point = null;
     this._editPoint = null;
 
@@ -30,7 +31,7 @@ export default class Point {
     this._editPoint = new EditPointView(data);
 
     this._point.setHandlerOpen(this._replacePointToEdit);
-    this._editPoint.setHandler('click', '.event__rollup-btn', this._replaceEditToPoint);
+    this._editPoint.setHandlerClose(this._replaceEditToPoint);
     this._point.setHandlerFavorite(this._changeFavorite);
 
     if (oldPoint === null || oldEditPoint === null) {
@@ -50,6 +51,7 @@ export default class Point {
   }
 
   _replacePointToEdit() {
+    this._closeAllPoints();
     replace(this._editPoint, this._point);
     window.addEventListener('keydown', this._replaceEditToPoint);
   }

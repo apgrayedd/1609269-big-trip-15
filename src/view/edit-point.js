@@ -31,18 +31,20 @@ export default class EditPoint extends AbstractView {
   constructor(data) {
     super();
     this._data = data;
+    this._callbackClose = this._callbackClose.bind(this);
   }
 
   getTemplate() {
     return editPoint(this._data);
   }
 
-  clickFavorite() {
-    if (this._data.isFavorite === true) {
-      this._data.isFavorite = false;
-      return;
-    }
+  _callbackClose(evt) {
+    evt.preventDefault();
+    this._callback.close();
+  }
 
-    this._data.isFavorite = true;
+  setHandlerClose (callback) {
+    this._callback.close = callback;
+    this.getElement().querySelector('.event__rollup-btn').addEventListener('click', this._callbackClose);
   }
 }
