@@ -5,22 +5,23 @@ import Abstract from '../view/abstract.js';
 import cloneDeep from 'lodash.clonedeep';
 
 const KEY_TO_CLOSE_POINT = 27;
+const Mode = {
+  DEFAULT: 'DEFAULT',
+  EDITING: 'EDITING',
+};
 
 export default class Point {
-  constructor(container, newPointChanger, closeAllPoints) {
+  constructor(container, newPointChanger, changeModePoint) {
     this._container = container;
     if (container instanceof Abstract) {
       this._container = container.getElement();
     }
     this._newPointChanger = newPointChanger;
-    this._closeAllPoints = closeAllPoints;
+    this._changeModePoint = changeModePoint;
     this._point = null;
     this._editPoint = null;
-
-    this._replacePointToEdit = this._replacePointToEdit.bind(this);
-    this._replaceEditToPoint = this._replaceEditToPoint.bind(this);
-    this._replacePointToEditByEsc = this._replacePointToEditByEsc.bind(this);
-    this._changeFavorite = this._changeFavorite.bind(this);
+    this._mode = Mode.DEFAULT;
+    this._bindHandles();
   }
 
   init(data) {
@@ -50,15 +51,23 @@ export default class Point {
     remove(oldEditPoint);
   }
 
+  resetView() {
+    if (this._mode !== Mode.DEFAULT) {
+      this._replaceEditToPoint();
+    }
+  }
+
   _replacePointToEdit() {
-    this._closeAllPoints();
     replace(this._editPoint, this._point);
     window.addEventListener('keydown', this._replaceEditToPoint);
+    this._changeModePoint();
+    this._mode = Mode.EDITING;
   }
 
   _replaceEditToPoint() {
     replace(this._point, this._editPoint);
     window.removeEventListener('keydown', this._replacePointToEdit);
+    this._mode = Mode.DEFAULT;
   }
 
   _replacePointToEditByEsc(evt) {
@@ -70,5 +79,12 @@ export default class Point {
   _changeFavorite() {
     this._newData = cloneDeep({...this._point._data, isFavorite: !this._point._data.isFavorite});
     this._newPointChanger(this._newData);
+  }
+
+  _bindHandles() {
+    this._replacePointToEdit = this._replacePointToEdit.bind(this);
+    this._replaceEditToPoint = this._replaceEditToPoint.bind(this);
+    this._replacePointToEditByEsc = this._replacePointToEditByEsc.bind(this);
+    this._changeFavorite = this._changeFavorite.bind(this);
   }
 }

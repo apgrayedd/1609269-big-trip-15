@@ -8,7 +8,6 @@ export default class Abstract {
 
     this._callback = [];
     this._element = null;
-    this._callbackHandler = this._callbackHandler.bind(this);
   }
 
   getElement() {
@@ -25,15 +24,5 @@ export default class Abstract {
 
   removeElement() {
     this._element = null;
-  }
-
-  _callbackHandler(evt) {
-    evt.preventDefault();
-    this._callback.Handler();
-  }
-
-  setHandler (typeEvent, htmlQuery, callback) {
-    this._callback.Handler = callback;
-    this.getElement().querySelector(htmlQuery).addEventListener(typeEvent, this._callbackHandler);
   }
 }

@@ -2,7 +2,6 @@ import ListEventsView from '../view/list.js';
 import NavigationList from '../view/navigation-list.js';
 import EmptyListView from '../view/empty-list.js';
 import SortListView from '../view/sort-list.js';
-import EditPointView from '../view/edit-point.js';
 
 import PointPresent from './point.js';
 import {render, RenderPosition} from '../utils/render.js';
@@ -17,8 +16,7 @@ export default class Trip {
     this._navigationList = new NavigationList();
     this._emptyList = new EmptyListView();
     this._sortList = new SortListView();
-    this._handlePointChange = this._handlePointChange.bind(this);
-    this._closeAllPoints = this._closeAllPoints.bind(this);
+    this._bindHandles();
   }
 
   init(points) {
@@ -28,7 +26,7 @@ export default class Trip {
 
   _renderPoints() {
     this._points.slice().forEach((point) => {
-      const pointPresenter = new PointPresent(this._listEvents, this._handlePointChange, this._closeAllPoints);
+      const pointPresenter = new PointPresent(this._listEvents, this._handlePointChange, this._handleModChanger);
       pointPresenter.init(point);
       this._pointsMap.set(point.id, pointPresenter);
     });
@@ -58,18 +56,17 @@ export default class Trip {
     this._taskPresenter.clear();
   }
 
+  _handleModChanger() {
+    this._pointsMap.forEach((point) => point.resetView());
+  }
+
   _handlePointChange(newPoint) {
     this._pointsMap.values = updateItem(this._pointsMap, newPoint);
     this._pointsMap.get(newPoint.id).init(newPoint);
   }
 
-  _closeAllPoints() {
-    for (let elem of this._pointsMap) {
-      console.log(elem[1])
-      elem[1]._replaceEditToPoint();
-    }
-    // this._pointsMap.forEach((point) => {
-    //   point._replaceEditToPoint();
-    // });
+  _bindHandles() {
+    this._handlePointChange = this._handlePointChange.bind(this);
+    this._handleModChanger = this._handleModChanger.bind(this);
   }
 }
