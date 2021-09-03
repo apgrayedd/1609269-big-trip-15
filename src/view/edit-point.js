@@ -4,9 +4,11 @@ import {
   getEventFieldGroupDestination,
   getEventFieldGroupPrice,
   getEventAvailableOffers,
-  getEventAvailableDestination
+  getEventAvailableDestination,
+  replace
 } from '../utils/render.js';
-import AbstractView from './abstract.js';
+import SmartView from './smart.js';
+import cloneDeep from 'lodash.clonedeep';
 
 const editPoint = ({type, basePrice, offers, description, pictures}) => (
   `<form class="event event--edit" action="#" method="post">
@@ -27,11 +29,18 @@ const editPoint = ({type, basePrice, offers, description, pictures}) => (
   </form>`
 );
 
-export default class EditPoint extends AbstractView {
+const Mode = {
+  DEFAULT: 'DEFAULT',
+  EDITING: 'EDITING',
+};
+
+export default class EditPoint extends SmartView {
   constructor(data) {
     super();
     this._data = data;
     this._callbackClose = this._callbackClose.bind(this);
+    this._typeEventHandler = this._typeEventHandler.bind(this);
+    this.restoreHandlers();
   }
 
   getTemplate() {
@@ -46,5 +55,45 @@ export default class EditPoint extends AbstractView {
   setHandlerClose (callback) {
     this._callback.close = callback;
     this.getElement().querySelector('.event__rollup-btn').addEventListener('click', this._callbackClose);
+  }
+
+  updateElement() {
+    const prevElement = this.getElement();
+    const parent = prevElement.parentElement;
+    this.removeElement();
+
+    const newElement = this.getElement();
+
+    parent.replaceChild(newElement, prevElement);
+    this.restoreHandlers();
+  }
+
+  updateData(update, notUpdateElement) {
+    if (!update) {
+      return;
+    }
+    this._data = Object.assign({},this._data,update);
+
+    if (notUpdateElement) {
+      return;
+    }
+
+    this.updateElement();
+  }
+
+  _typeEventHandler(evt) {
+    this.updateData({
+      type: evt.target.value,
+    }, false);
+  }
+
+  restoreHandlers() {
+    this.getElement().
+      querySelectorAll('.event__type-input').forEach((input) => {
+        input.addEventListener('click', this._typeEventHandler);
+      });
+    this.getElement().
+      querySelector('.event__rollup-btn').
+      addEventListener('click', this._callbackClose);
   }
 }
