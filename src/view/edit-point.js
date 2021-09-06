@@ -50,6 +50,12 @@ export default class EditPoint extends SmartView {
     this.getElement().querySelector('.event__rollup-btn').addEventListener('click', this._callbackClose);
   }
 
+  _typeEventHandler(evt) {
+    this.updateData({
+      type: evt.target.value,
+    }, false);
+  }
+
   _nameEventHandler(evt) {
     this.updateData({
       name: evt.target.value,
@@ -64,7 +70,7 @@ export default class EditPoint extends SmartView {
 
   _submitHandler(evt) {
     evt.preventDefault();
-    this._functSubmit(this._data);
+    this._functSubmit();
     this._callbackClose(evt);
   }
 
