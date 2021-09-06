@@ -4,17 +4,15 @@ import {
   getEventFieldGroupDestination,
   getEventFieldGroupPrice,
   getEventAvailableOffers,
-  getEventAvailableDestination,
-  replace
+  getEventAvailableDestination
 } from '../utils/render.js';
 import SmartView from './smart.js';
-import cloneDeep from 'lodash.clonedeep';
 
-const editPoint = ({type, basePrice, offers, description, pictures}) => (
+const editPoint = ({type, basePrice, offers, name, description, pictures}) => (
   `<form class="event event--edit" action="#" method="post">
     <header class="event__header">
       ${getEventTypeWrapper(type)}
-      ${getEventFieldGroupDestination(type, destinations)}
+      ${getEventFieldGroupDestination(type, name, destinations)}
       ${getEventFieldGroupPrice(basePrice)}
       <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
       <button class="event__reset-btn" type="reset">Delete</button>
@@ -29,17 +27,12 @@ const editPoint = ({type, basePrice, offers, description, pictures}) => (
   </form>`
 );
 
-const Mode = {
-  DEFAULT: 'DEFAULT',
-  EDITING: 'EDITING',
-};
-
 export default class EditPoint extends SmartView {
-  constructor(data) {
+  constructor(data, functSubmit) {
     super();
     this._data = data;
-    this._callbackClose = this._callbackClose.bind(this);
-    this._typeEventHandler = this._typeEventHandler.bind(this);
+    this._functSubmit = functSubmit;
+    this._bindHandles();
     this.restoreHandlers();
   }
 
@@ -57,34 +50,22 @@ export default class EditPoint extends SmartView {
     this.getElement().querySelector('.event__rollup-btn').addEventListener('click', this._callbackClose);
   }
 
-  updateElement() {
-    const prevElement = this.getElement();
-    const parent = prevElement.parentElement;
-    this.removeElement();
-
-    const newElement = this.getElement();
-
-    parent.replaceChild(newElement, prevElement);
-    this.restoreHandlers();
-  }
-
-  updateData(update, notUpdateElement) {
-    if (!update) {
-      return;
-    }
-    this._data = Object.assign({},this._data,update);
-
-    if (notUpdateElement) {
-      return;
-    }
-
-    this.updateElement();
-  }
-
-  _typeEventHandler(evt) {
+  _nameEventHandler(evt) {
     this.updateData({
-      type: evt.target.value,
-    }, false);
+      name: evt.target.value,
+    }, true);
+  }
+
+  _priceEventHandler(evt) {
+    this.updateData({
+      basePrice: evt.target.value,
+    }, true);
+  }
+
+  _submitHandler(evt) {
+    evt.preventDefault();
+    this._functSubmit(this._data);
+    this._callbackClose(evt);
   }
 
   restoreHandlers() {
@@ -95,5 +76,22 @@ export default class EditPoint extends SmartView {
     this.getElement().
       querySelector('.event__rollup-btn').
       addEventListener('click', this._callbackClose);
+    this.getElement().
+      querySelector('#event-destination-1').
+      addEventListener('input', this._nameEventHandler);
+    this.getElement().
+      querySelector('#event-price-1').
+      addEventListener('input', this._priceEventHandler);
+    this.getElement().
+      querySelector('.event__save-btn').
+      addEventListener('click', this._submitHandler);
+  }
+
+  _bindHandles() {
+    this._callbackClose = this._callbackClose.bind(this);
+    this._typeEventHandler = this._typeEventHandler.bind(this);
+    this._submitHandler = this._submitHandler.bind(this);
+    this._nameEventHandler = this._nameEventHandler.bind(this);
+    this._priceEventHandler = this._priceEventHandler.bind(this);
   }
 }

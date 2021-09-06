@@ -88,13 +88,13 @@ export const getPicturesItem = ({src,imgDescription}) => (
 
 // Creating big blocks
 
-export const getEventFieldGroupDestination = (type, destinationArr) => (
+export const getEventFieldGroupDestination = (type, name, destinationArr) => (
   `<div class="event__field-group  event__field-group--destination">
     <label class="event__label  event__type-output" for="event-destination-1">
       ${type}
     </label>
     <input class="event__input  event__input--destination" id="event-destination-1"
-    type="text" name="event-destination" value="Chamonix" list="destination-list-1">
+    type="text" name="event-destination" value="${name}" list="destination-list-1">
     <datalist id="destination-list-1">
       ${getStrFromArr(destinationArr,destinationItem)}
     </datalist>
@@ -184,8 +184,4 @@ export const updateElement = (elem, update) => {
   elem.getElement();
   elem._data = updateData(elem._data, update);
   elem.restoreHandlers();
-  //удалить старый DOM-элемент компонента;
-  //создать новый DOM-элемент;
-  //поместить новый элемент вместо старого;
-  //восстановить обработчики событий, вызвав restoreHandlers.
 };

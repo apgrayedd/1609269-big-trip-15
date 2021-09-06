@@ -1,8 +1,5 @@
+import { cloneDeep } from 'lodash';
 import AbstractView from './abstract.js';
-import {
-  updateElement,
-  updateData
-} from '../utils/render.js';
 
 export default class Smart extends AbstractView {
   constructor() {
@@ -10,6 +7,38 @@ export default class Smart extends AbstractView {
   }
 
   restoreHandlers() {
-    //восстанавливать обработчики событий после перерисовки;
+    throw new Error('Необходимоть создать restoreHandlers');
+  }
+
+  updateElement() {
+    const prevElement = this.getElement();
+    const parent = prevElement.parentElement;
+    this.removeElement();
+
+    const newElement = this.getElement();
+
+    if (parent) {
+      parent.replaceChild(newElement, prevElement);
+    }
+    this.restoreHandlers();
+  }
+
+  updateData(update, notUpdateElement) {
+    if (!update) {
+      return;
+    }
+    this._data = cloneDeep({...this._data, ...update});
+
+    if (notUpdateElement) {
+      return;
+    }
+
+    this.updateElement();
+  }
+
+  _typeEventHandler(evt) {
+    this.updateData({
+      type: evt.target.value,
+    }, false);
   }
 }

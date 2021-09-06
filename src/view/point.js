@@ -6,7 +6,7 @@ import {
   timeAdapter,
   timeAdapterDiff
 } from '../utils/adapters.js';
-import AbstractView from './abstract.js';
+import SmartView from './smart.js';
 
 const getEventDate = (dateFrom) => {
   const dateForDateTime = timeAdapter(dateFrom, 'YYYY-MM-DD');
@@ -59,7 +59,7 @@ const getEventPrice = (price) => (
   </p>`
 );
 
-const getEventTitle = (type, destination) => `<h3 class="event__title">${type} ${destination}</h3>`;
+const getEventTitle = (type, name) => `<h3 class="event__title">${type} ${name}</h3>`;
 const getEventFavoriteBtn = (isFavorite) => (
   `<button class="event__favorite-btn${isFavorite ? ' event__favorite-btn--active' : ''}" type="button">
     <span class="visually-hidden">Add to favorite</span>
@@ -69,12 +69,12 @@ const getEventFavoriteBtn = (isFavorite) => (
     </svg>
   </button>`
 );
-const point = ({basePrice, destination, type, dateFrom, dateTo, offers, isFavorite}) => (
+const point = ({basePrice, name, type, dateFrom, dateTo, offers, isFavorite}) => (
   `<li class="trip-events__item">
     <div class="event">
       ${getEventDate(dateFrom)}
       ${getEventType(type)}
-      ${getEventTitle(type, destination)}
+      ${getEventTitle(type, name)}
       ${getEventSchedule(dateFrom, dateTo)}
       ${getEventPrice(basePrice)}
       ${getEventOffers(offers)}
@@ -86,14 +86,14 @@ const point = ({basePrice, destination, type, dateFrom, dateTo, offers, isFavori
   </li>`
 );
 
-export default class Point extends AbstractView {
+export default class Point extends SmartView {
   constructor(data) {
     super();
     this._data = data;
 
     this._callback = {};
-    this._callbackFavorite = this._callbackFavorite.bind(this);
-    this._callbackOpen = this._callbackOpen.bind(this);
+    this._bindHandles();
+    this.restoreHandlers();
   }
 
   getTemplate() {
@@ -118,5 +118,19 @@ export default class Point extends AbstractView {
   setHandlerFavorite (callback) {
     this._callback.addFavorite = callback;
     this.getElement().querySelector('.event__favorite-btn').addEventListener('click', this._callbackFavorite);
+  }
+
+  restoreHandlers() {
+    this.getElement().
+      querySelector('.event__favorite-btn').
+      addEventListener('click', this._callbackFavorite);
+    this.getElement().
+      querySelector('.event__rollup-btn').
+      addEventListener('click', this._callbackOpen);
+  }
+
+  _bindHandles() {
+    this._callbackFavorite = this._callbackFavorite.bind(this);
+    this._callbackOpen = this._callbackOpen.bind(this);
   }
 }

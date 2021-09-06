@@ -29,7 +29,7 @@ export default class Point {
     const oldEditPoint = this._editPoint;
 
     this._point = new PointView(data);
-    this._editPoint = new EditPointView(data);
+    this._editPoint = new EditPointView(data, this._clickSubmit);
 
     this._point.setHandlerOpen(this._replacePointToEdit);
     this._editPoint.setHandlerClose(this._replaceEditToPoint);
@@ -59,14 +59,14 @@ export default class Point {
 
   _replacePointToEdit() {
     replace(this._editPoint, this._point);
-    window.addEventListener('keydown', this._replaceEditToPoint);
+    window.addEventListener('keydown', this._replacePointToEditByEsc);
     this._changeModePoint();
     this._mode = Mode.EDITING;
   }
 
   _replaceEditToPoint() {
     replace(this._point, this._editPoint);
-    window.removeEventListener('keydown', this._replacePointToEdit);
+    window.removeEventListener('keydown', this._replacePointToEditByEsc);
     this._mode = Mode.DEFAULT;
   }
 
@@ -81,10 +81,15 @@ export default class Point {
     this._newPointChanger(this._newData);
   }
 
+  _clickSubmit() {
+    this._point.updateData(this._editPoint._data, false);
+  }
+
   _bindHandles() {
     this._replacePointToEdit = this._replacePointToEdit.bind(this);
     this._replaceEditToPoint = this._replaceEditToPoint.bind(this);
     this._replacePointToEditByEsc = this._replacePointToEditByEsc.bind(this);
     this._changeFavorite = this._changeFavorite.bind(this);
+    this._clickSubmit = this._clickSubmit.bind(this);
   }
 }
