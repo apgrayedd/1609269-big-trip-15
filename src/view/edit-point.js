@@ -4,15 +4,20 @@ import {
   getEventFieldGroupDestination,
   getEventFieldGroupPrice,
   getEventAvailableOffers,
-  getEventAvailableDestination
+  getEventAvailableDestination,
+  getEventFieldGroupTime
 } from '../utils/render.js';
 import SmartView from './smart.js';
+import flatpickr from 'flatpickr';
+import '../../node_modules/flatpickr/dist/flatpickr.min.css';
+import dayjs from 'dayjs';
 
-const editPoint = ({type, basePrice, offers, name, description, pictures}) => (
+const editPoint = ({type, basePrice, offers, name, description, pictures, dateFrom, dateTo}) => (
   `<form class="event event--edit" action="#" method="post">
     <header class="event__header">
       ${getEventTypeWrapper(type)}
       ${getEventFieldGroupDestination(type, name, destinations)}
+      ${getEventFieldGroupTime(dateFrom, dateTo)}
       ${getEventFieldGroupPrice(basePrice)}
       <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
       <button class="event__reset-btn" type="reset">Delete</button>
@@ -32,6 +37,9 @@ export default class EditPoint extends SmartView {
     super();
     this._data = data;
     this._functSubmit = functSubmit;
+    this._dateStartPicker = null;
+    this._dateEndPicker = null;
+
     this._bindHandles();
     this.restoreHandlers();
   }
@@ -68,10 +76,37 @@ export default class EditPoint extends SmartView {
     }, true);
   }
 
+  _dateStartEventHandler([date]) {
+    this.updateData({
+      dateFrom: dayjs(date).format('YYYY-MM-DDTHH:mm:ss'),
+    }, true);
+  }
+
+  _dateEndEventHandler([date]) {
+    this.updateData({
+      dateTo: dayjs(date).format('YYYY-MM-DDTHH:mm:ss'),
+    }, true);
+  }
+
   _submitHandler(evt) {
     evt.preventDefault();
     this._functSubmit();
     this._callbackClose(evt);
+  }
+
+  _addDatePicker(datePicker, dateClicker, dateHandler) {
+    if (datePicker) {
+      datePicker.destroy();
+      datePicker = null;
+    }
+    datePicker = flatpickr(
+      this.getElement().querySelector(dateClicker),
+      {
+        dateFormat: 'd/m/Y H:m',
+        onChange: dateHandler,
+        enableTime: true,
+      },
+    );
   }
 
   restoreHandlers() {
@@ -91,6 +126,8 @@ export default class EditPoint extends SmartView {
     this.getElement().
       querySelector('.event__save-btn').
       addEventListener('click', this._submitHandler);
+    this._addDatePicker(this._dateStartPicker, '#event-start-time-1', this._dateStartEventHandler);
+    this._addDatePicker(this._dateEndPicker, '#event-end-time-1', this._dateEndEventHandler);
   }
 
   _bindHandles() {
@@ -99,5 +136,7 @@ export default class EditPoint extends SmartView {
     this._submitHandler = this._submitHandler.bind(this);
     this._nameEventHandler = this._nameEventHandler.bind(this);
     this._priceEventHandler = this._priceEventHandler.bind(this);
+    this._dateStartEventHandler = this._dateStartEventHandler.bind(this);
+    this._dateEndEventHandler = this._dateEndEventHandler.bind(this);
   }
 }
