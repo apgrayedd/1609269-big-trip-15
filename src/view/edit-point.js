@@ -102,7 +102,7 @@ export default class EditPoint extends SmartView {
     datePicker = flatpickr(
       this.getElement().querySelector(dateClicker),
       {
-        dateFormat: 'd/m/Y H:m',
+        dateFormat: 'd/m/Y H:i',
         onChange: dateHandler,
         enableTime: true,
       },
