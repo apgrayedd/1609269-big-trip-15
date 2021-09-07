@@ -1,4 +1,7 @@
-import {destinations} from '../const.js';
+import {
+  destinations,
+  dateStandartFormat
+} from '../const.js';
 import {
   getEventTypeWrapper,
   getEventFieldGroupDestination,
@@ -78,13 +81,13 @@ export default class EditPoint extends SmartView {
 
   _dateStartEventHandler([date]) {
     this.updateData({
-      dateFrom: dayjs(date).format('YYYY-MM-DDTHH:mm:ss'),
+      dateFrom: dayjs(date).format(dateStandartFormat),
     }, true);
   }
 
   _dateEndEventHandler([date]) {
     this.updateData({
-      dateTo: dayjs(date).format('YYYY-MM-DDTHH:mm:ss'),
+      dateTo: dayjs(date).format(dateStandartFormat),
     }, true);
   }
 

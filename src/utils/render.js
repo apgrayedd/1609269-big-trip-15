@@ -170,18 +170,3 @@ export const getEventFieldGroupTime = (dateFrom, dateTo) => (
     type="text" name="event-end-time" value="${timeAdapter(dateTo,'DD/MM/YYYY HH:mm')}">
   </div>`
 );
-
-export const updateData = (data, update) => Object.assign({},...data,update);
-
-export const updateElement = (elem, update) => {
-  if (!elem) {
-    return;
-  }
-  if (elem instanceof Abstract) {
-    elem = elem.getElement();
-  }
-  elem.removeElement();
-  elem.getElement();
-  elem._data = updateData(elem._data, update);
-  elem.restoreHandlers();
-};

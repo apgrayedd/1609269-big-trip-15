@@ -1,4 +1,4 @@
-import { cloneDeep } from 'lodash';
+import cloneDeep from 'lodash.clonedeep';
 import AbstractView from './abstract.js';
 
 export default class Smart extends AbstractView {
