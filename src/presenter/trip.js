@@ -8,10 +8,10 @@ import {render, RenderPosition} from '../utils/render.js';
 import {updateItem} from '../utils/common.js';
 
 export default class Trip {
-  constructor(container){
+  constructor(container, pointModels){
     this._container = container;
     this._pointsMap = new Map();
-
+    this._pointModels = pointModels;
     this._listEvents = new ListEventsView();
     this._navigationList = new NavigationList();
     this._emptyList = new EmptyListView();
@@ -19,14 +19,26 @@ export default class Trip {
     this._bindHandles();
   }
 
-  init(points) {
-    this._points = points.slice();
-    this._init();
+  init() {
+    const pointLength = this._getPointModel.length;
+
+    if (pointLength < 0) {
+      this._renderNoPoints();
+      return;
+    }
+
+    this._renderSort();
+    this._renderPoints();
+    render(this._container, this._listEvents, RenderPosition.AFTERBEGIN);
   }
 
-  _renderPoints() {
-    this._points.slice().forEach((point) => {
-      const pointPresenter = new PointPresent(this._listEvents, this._handlePointChange, this._handleModChanger);
+  _getPointModel() {
+    return this._pointModels.getPoints();
+  }
+
+  _renderPoints(points) {
+    points.forEach((point) => {
+      const pointPresenter = new PointPresent(this._listEvents, this._handleViewAction, this._handleModChanger);
       pointPresenter.init(point);
       this._pointsMap.set(point.id, pointPresenter);
     });
@@ -40,17 +52,6 @@ export default class Trip {
     render(this._container, this._sortList, RenderPosition.AFTERBEGIN);
   }
 
-  _init() {
-    if (this._points.length < 0) {
-      this._renderNoPoints();
-      return;
-    }
-
-    this._renderSort();
-    this._renderPoints();
-    render(this._container, this._listEvents, RenderPosition.AFTERBEGIN);
-  }
-
   _clearTaskList() {
     this._taskPresenter.forEach((presenter) => presenter.destroy());
     this._taskPresenter.clear();
@@ -60,13 +61,32 @@ export default class Trip {
     this._pointsMap.forEach((point) => point.resetView());
   }
 
-  _handlePointChange(newPoint) {
-    this._pointsMap.values = updateItem(this._pointsMap, newPoint);
-    this._pointsMap.get(newPoint.id).init(newPoint);
+  _handleViewAction(actionType, updateType, update) {
+    console.log(actionType, updateType, update);
+    // Здесь будем вызывать обновление модели.
+    // actionType - действие пользователя, нужно чтобы понять, какой метод модели вызвать
+    // updateType - тип изменений, нужно чтобы понять, что после нужно обновить
+    // update - обновленные данные
   }
 
+
+  _handleModelEvent(updateType, data) {
+    console.log(updateType, data);
+    // В зависимости от типа изменений решаем, что делать:
+    // - обновить часть списка (например, когда поменялось описание)
+    // - обновить список (например, когда задача ушла в архив)
+    // - обновить всю доску (например, при переключении фильтра)
+  }
+  }
+
+  // _handlePointChange(newPoint) {
+  //   this._pointsMap.values = updateItem(this._pointsMap, newPoint);
+  //   this._pointsMap.get(newPoint.id).init(newPoint);
+  // }
+
   _bindHandles() {
-    this._handlePointChange = this._handlePointChange.bind(this);
     this._handleModChanger = this._handleModChanger.bind(this);
+    this._handleViewAction = this._handleViewAction.bind(this);
+    this._handleModelEvent = this._handleModelEvent.bind(this);
   }
 }

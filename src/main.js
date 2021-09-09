@@ -1,4 +1,5 @@
 import TripPresenter from './presenter/trip.js';
+import PointModel from './model/point.js';
 
 import {
   dataAdapter
@@ -9,7 +10,10 @@ import {
 } from './mock/data.js';
 
 const data = dataAdapter(dataPoints);
-const tripEvents = document.querySelector('.trip-events');
-const presenterTrip = new TripPresenter(tripEvents);
+const pointModel = new PointModel();
+pointModel.setPoints(data);
 
-presenterTrip.init(data);
+const tripEvents = document.querySelector('.trip-events');
+const presenterTrip = new TripPresenter(tripEvents, pointModel);
+
+presenterTrip.init();

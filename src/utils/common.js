@@ -26,10 +26,3 @@ export function getStrFromArr (arr, functOnArrItems, firstItem = '') {
     return str + arrItem;
   },firstItem);
 }
-
-export const updateItem = (items, update) =>
-  [items].map((item) => {
-    if (item.id === update.id) {
-      return update;
-    }
-  });
