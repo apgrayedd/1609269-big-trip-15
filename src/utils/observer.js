@@ -16,16 +16,12 @@ export default class Observer {
   }
 
   updatePoint (updateType, update) {
-    console.log(this._points);
-
     this._points = this._points.map((item) => {
       if (item.id === update.id) {
-        console.log(update);
         return update;
       }
+      return item;
     });
-
-    console.log(this._points);
 
     this._notify(updateType, update);
   }

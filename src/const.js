@@ -18,10 +18,8 @@ export const UpdateType = {
 };
 export const SortType = {
   DEFAULT:{name: 'default',funct: (point) => point} ,
-  PRICE_UP:{name: 'price-up',funct: (pointA, pointB) => (pointA > pointB)},
-  PRICE_DOWN:{name: 'price-down',funct: (pointA, pointB) => (pointA < pointB)},
-  TIME_UP:{name: 'time-up',funct: (pointA, pointB) => dayjs(pointA._data.dateFrom).diff(dayjs(pointB._data.dateFrom))},
-  TIME_DOWN:{name: 'time-down',funct: (pointA, pointB) => dayjs(pointB._data.dateFrom).diff(dayjs(pointA._data.dateFrom))},
+  PRICE_DOWN:{name: 'sort-price',funct: (pointA, pointB) => (pointA.basePrice - pointB.basePrice)},
+  TIME_DOWN:{name: 'sort-time',funct: (pointA, pointB) => dayjs(pointA.dateFrom).diff(dayjs(pointB.dateFrom))},
 };
 export const FilterType = {
   EVERYTHING: 'everything',

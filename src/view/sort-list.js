@@ -30,7 +30,7 @@ export default class SortList extends AbstractView {
 
   _callbackSortChanger(evt) {
     evt.preventDefault();
-    this._callback.sortChanger();
+    this._callback.sortChanger(evt.target.value);
   }
 
   setHandlerSortChanger(callback) {

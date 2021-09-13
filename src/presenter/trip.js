@@ -22,16 +22,16 @@ export default class Trip {
     this._filterModel = filterModel;
     this._newPointPresenter = new NewPointPresenter(this._listEvents, this._handleViewAction);
     this._bindHandles();
+    this._filterModel.addObserver(this._handleModelEvent);
+    this._pointModels.addObserver(this._handleModelEvent);
   }
 
   init() {
     const pointLength = this._getPoints().length;
-
     if (pointLength < 0) {
       this._renderNoPoints();
       return;
     }
-
     this._renderSort();
     this._renderPoints();
     render(this._container, this._listEvents, RenderPosition.AFTERBEGIN);
@@ -46,17 +46,12 @@ export default class Trip {
   _getPoints() {
     this._filterType = this._filterModel.getFilter();
     const points = this._pointModels.getPoints();
-    const filtredTasks = filter[this._filterType](points);
-
+    const filteredTasks = filter[this._filterType](points);
     switch(this._currentSortType){
       case SortType.PRICE_DOWN.name:
-        return filtredTasks.sort(SortType.PRICE_DOWN.funct);
-      case SortType.PRICE_UP.name:
-        return filtredTasks.sort(SortType.PRICE_UP.funct);
+        return filteredTasks.sort(SortType.PRICE_DOWN.funct);
       case SortType.TIME_DOWN.name:
-        return filtredTasks.sort(SortType.TIME_DOWN.funct);
-      case SortType.TIME_UP.name:
-        return filtredTasks.sort(SortType.TIME_UP.funct);
+        return filteredTasks.sort(SortType.TIME_DOWN.funct);
     }
 
     return this._pointModels.getPoints();
@@ -88,6 +83,9 @@ export default class Trip {
 
   _clear(resetSortType = false) {
     this._newPointPresenter.destroy();
+    this._pointsMap.forEach((point) => {
+      console.log(point)
+    });
     this._pointsMap.clear();
 
     remove(this._sortList);
