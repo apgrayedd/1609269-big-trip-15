@@ -1,4 +1,3 @@
-import {filters} from '../const.js';
 import {
   getStrFromArr
 } from '../utils/common.js';
@@ -13,7 +12,7 @@ const filterItem = (filter) => (
 `
 );
 
-const getFiltersList = () => (
+const getFiltersList = (filters) => (
   `<div class="trip-controls__filters">
     <h2 class="visually-hidden">Filter events</h2>
     <form class="trip-filters" action="#" method="get">
@@ -24,7 +23,25 @@ const getFiltersList = () => (
 );
 
 export default class FiltersList extends AbstractView{
+  constructor(filters, currentFilter) {
+    super();
+    this._filter = filters;
+    this._currentFilter = currentFilter;
+  }
+
   getTemplate() {
-    return getFiltersList();
+    return getFiltersList(this._filter);
+  }
+
+  _handlerChangeFilter(evt) {
+    evt.preventDefault();
+    this._callback.changeFilter(evt.target.value);
+  }
+
+  setChangeFilter (callback) {
+    this._callback.changeFilter = callback;
+    this.getElement().querySelectorAll('.trip-filters__filter-input').forEach((filter) => {
+      filter.addEventListener('change', this._handlerChangeFilter);
+    });
   }
 }

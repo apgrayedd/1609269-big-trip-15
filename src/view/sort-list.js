@@ -19,7 +19,28 @@ const getSortList = () => (
 );
 
 export default class SortList extends AbstractView {
+  constructor() {
+    super();
+    this._bindHandles();
+  }
+
   getTemplate() {
     return getSortList();
+  }
+
+  _callbackSortChanger(evt) {
+    evt.preventDefault();
+    this._callback.sortChanger();
+  }
+
+  setHandlerSortChanger(callback) {
+    this._callback.sortChanger = callback;
+    this.getElement().querySelectorAll('.trip-sort__item').forEach((sortItem) => {
+      sortItem.addEventListener('change', this._callbackSortChanger);
+    });
+  }
+
+  _bindHandles() {
+    this._callbackSortChanger = this._callbackSortChanger.bind(this);
   }
 }

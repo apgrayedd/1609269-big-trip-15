@@ -2,6 +2,7 @@ import {types} from '../const.js';
 import Abstract from '../view/abstract.js';
 import {timeAdapter} from './adapters.js';
 import {getStrFromArr} from './common.js';
+import he from 'he';
 
 export const RenderPosition = {
   AFTERBEGIN: 'afterbegin',
@@ -49,6 +50,10 @@ export const replace = (newElement, oldElement) => {
 };
 
 export const remove = (component) => {
+  if (component === null) {
+    return;
+  }
+
   if (!(component instanceof Abstract)) {
     throw new Error('Can remove only components');
   }
@@ -69,7 +74,7 @@ export const eventTypeItem = (typeValue) => {
   </div>`;
 };
 
-export const destinationItem = (destination) => `<option value="${destination}"></option>`;
+export const destinationItem = (destination) => `<option value="${he.encode(destination)}"></option>`;
 
 export const offerItem = ({title,price}) => (
   `<div class="event__offer-selector">
@@ -163,10 +168,10 @@ export const getEventFieldGroupTime = (dateFrom, dateTo) => (
   `<div class="event__field-group  event__field-group--time">
     <label class="visually-hidden" for="event-start-time-1">From</label>
     <input class="event__input  event__input--time" id="event-start-time-1"
-    type="text" name="event-start-time" value="${timeAdapter(dateFrom,'DD/MM/YYYY HH:mm')}">
+    type="text" name="event-start-time" value="${he.encode(timeAdapter(dateFrom,'DD/MM/YYYY HH:mm'))}">
     &mdash;
     <label class="visually-hidden" for="event-end-time-1">To</label>
     <input class="event__input  event__input--time" id="event-end-time-1"
-    type="text" name="event-end-time" value="${timeAdapter(dateTo,'DD/MM/YYYY HH:mm')}">
+    type="text" name="event-end-time" value="${he.encode(timeAdapter(dateTo,'DD/MM/YYYY HH:mm'))}">
   </div>`
 );

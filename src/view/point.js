@@ -96,6 +96,13 @@ export default class Point extends SmartView {
     this.restoreHandlers();
   }
 
+  getDate() {
+    return {
+      dateFrom: this._data.dateFrom,
+      dateTo: this._data.dateTo,
+    };
+  }
+
   getTemplate() {
     return point(this._data);
   }

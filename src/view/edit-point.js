@@ -36,10 +36,9 @@ const editPoint = ({type, basePrice, offers, name, description, pictures, dateFr
 );
 
 export default class EditPoint extends SmartView {
-  constructor(data, functSubmit) {
+  constructor(data) {
     super();
     this._data = data;
-    this._functSubmit = functSubmit;
     this._dateStartPicker = null;
     this._dateEndPicker = null;
 
@@ -59,6 +58,16 @@ export default class EditPoint extends SmartView {
   setHandlerClose (callback) {
     this._callback.close = callback;
     this.getElement().querySelector('.event__rollup-btn').addEventListener('click', this._callbackClose);
+  }
+
+  _callbackDelete(evt) {
+    evt.preventDefault();
+    this._callback.delete(this._data);
+  }
+
+  setHandlerDelete (callback) {
+    this._callback.delte = callback;
+    this.getElement().querySelector('.event__reset-btn').addEventListener('click', this._callbackDelete);
   }
 
   _typeEventHandler(evt) {
@@ -93,8 +102,13 @@ export default class EditPoint extends SmartView {
 
   _submitHandler(evt) {
     evt.preventDefault();
-    this._functSubmit();
+    this._callback.submit(this._data);
     this._callbackClose(evt);
+  }
+
+  setSubmitClick(callback) {
+    this._callback.submit = callback;
+    this.getElement().querySelector('.event__save-btn').addEventListener('click', this._submitHandler);
   }
 
   _addDatePicker(datePicker, dateClicker, dateHandler) {
@@ -112,6 +126,19 @@ export default class EditPoint extends SmartView {
     );
   }
 
+  removeElement() {
+    super.removeElement();
+
+    if(this._dateStartPicker) {
+      this._dateStartPicker.destroy();
+      this._dateStartPicker = null;
+    }
+    if (this._dateEndPicker) {
+      this._dateEndPicker.destroy();
+      this._dateEndPicker = null;
+    }
+  }
+
   restoreHandlers() {
     this.getElement().
       querySelectorAll('.event__type-input').forEach((input) => {
@@ -126,9 +153,7 @@ export default class EditPoint extends SmartView {
     this.getElement().
       querySelector('#event-price-1').
       addEventListener('input', this._priceEventHandler);
-    this.getElement().
-      querySelector('.event__save-btn').
-      addEventListener('click', this._submitHandler);
+    this.setSubmitClick(this._callback.submit);
     this._addDatePicker(this._dateStartPicker, '#event-start-time-1', this._dateStartEventHandler);
     this._addDatePicker(this._dateEndPicker, '#event-end-time-1', this._dateEndEventHandler);
   }

@@ -1,3 +1,5 @@
+import dayjs from 'dayjs';
+
 const MAX_MINUTES_DAY = 1440;
 const MAX_MINUTES_HOUR = 60;
 
@@ -26,3 +28,7 @@ export function getStrFromArr (arr, functOnArrItems, firstItem = '') {
     return str + arrItem;
   },firstItem);
 }
+
+export const isDatesEqual = (dateA, dateB) => (dateA === null && dateB === null) ? true : dayjs(dateA).isSame(dateB, 'D');
+export const isDateFuture = (date) => (dayjs(date).isAfter(dayjs()));
+export const isDatePast = (date) => (dayjs(date).isBefore(dayjs()));

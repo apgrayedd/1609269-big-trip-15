@@ -2,25 +2,30 @@ import ListEventsView from '../view/list.js';
 import NavigationList from '../view/navigation-list.js';
 import EmptyListView from '../view/empty-list.js';
 import SortListView from '../view/sort-list.js';
-
+import {filter} from '../utils/filter.js';
 import PointPresent from './point.js';
-import {render, RenderPosition} from '../utils/render.js';
-import {updateItem} from '../utils/common.js';
+import NewPointPresenter from './newPoint.js';
+import {remove, render, RenderPosition} from '../utils/render.js';
+import {SortType, UserAction, UpdateType, FilterType} from '../const.js';
 
 export default class Trip {
-  constructor(container, pointModels){
+  constructor(container, pointModels, filterModel){
     this._container = container;
     this._pointsMap = new Map();
+    this._filterType = FilterType.EVERYTHING;
     this._pointModels = pointModels;
     this._listEvents = new ListEventsView();
     this._navigationList = new NavigationList();
-    this._emptyList = new EmptyListView();
-    this._sortList = new SortListView();
+    this._emptyList = null;
+    this._sortList = null;
+    this._currentSortType = SortType.DEFAULT;
+    this._filterModel = filterModel;
+    this._newPointPresenter = new NewPointPresenter(this._listEvents, this._handleViewAction);
     this._bindHandles();
   }
 
   init() {
-    const pointLength = this._getPointModel.length;
+    const pointLength = this._getPoints().length;
 
     if (pointLength < 0) {
       this._renderNoPoints();
@@ -32,12 +37,33 @@ export default class Trip {
     render(this._container, this._listEvents, RenderPosition.AFTERBEGIN);
   }
 
-  _getPointModel() {
+  createPoint() {
+    this._currentSortType = SortType.DEFAULT;
+    this._filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
+    this._newPointPresenter().init();
+  }
+
+  _getPoints() {
+    this._filterType = this._filterModel.getFilter();
+    const points = this._pointModels.getPoints();
+    const filtredTasks = filter[this._filterType](points);
+
+    switch(this._currentSortType){
+      case SortType.PRICE_DOWN.name:
+        return filtredTasks.sort(SortType.PRICE_DOWN.funct);
+      case SortType.PRICE_UP.name:
+        return filtredTasks.sort(SortType.PRICE_UP.funct);
+      case SortType.TIME_DOWN.name:
+        return filtredTasks.sort(SortType.TIME_DOWN.funct);
+      case SortType.TIME_UP.name:
+        return filtredTasks.sort(SortType.TIME_UP.funct);
+    }
+
     return this._pointModels.getPoints();
   }
 
-  _renderPoints(points) {
-    points.forEach((point) => {
+  _renderPoints() {
+    this._getPoints().forEach((point) => {
       const pointPresenter = new PointPresent(this._listEvents, this._handleViewAction, this._handleModChanger);
       pointPresenter.init(point);
       this._pointsMap.set(point.id, pointPresenter);
@@ -45,48 +71,86 @@ export default class Trip {
   }
 
   _renderNoPoints() {
+    this._emptyList = new EmptyListView(this._filterType);
     render(this._listEvents, this._emptyList, RenderPosition.AFTERBEGIN);
   }
 
   _renderSort() {
+    if (this._sortList !== null) {
+      this._sortList = null;
+    }
+
+    this._sortList = new SortListView();
+    this._sortList.setHandlerSortChanger(this._handleSortTypeChanger);
+
     render(this._container, this._sortList, RenderPosition.AFTERBEGIN);
   }
 
-  _clearTaskList() {
-    this._taskPresenter.forEach((presenter) => presenter.destroy());
-    this._taskPresenter.clear();
+  _clear(resetSortType = false) {
+    this._newPointPresenter.destroy();
+    this._pointsMap.clear();
+
+    remove(this._sortList);
+    if(this._emptyList) {
+      remove(this._emptyList);
+    }
+
+    if(resetSortType){
+      this._currentSortType = SortType.DEFAULT;
+    }
   }
 
   _handleModChanger() {
+    this._newPointPresenter.destroy();
     this._pointsMap.forEach((point) => point.resetView());
   }
 
   _handleViewAction(actionType, updateType, update) {
-    console.log(actionType, updateType, update);
-    // Здесь будем вызывать обновление модели.
-    // actionType - действие пользователя, нужно чтобы понять, какой метод модели вызвать
-    // updateType - тип изменений, нужно чтобы понять, что после нужно обновить
-    // update - обновленные данные
+
+    switch(actionType){
+      case UserAction.UPDATE_POINT:
+        this._pointModels.updatePoint(updateType, update);
+        break;
+      case UserAction.ADD_POINT:
+        this._pointModels.addPoints(updateType, update);
+        break;
+      case UserAction.DELETE_POINT:
+        this._pointModels.deletePoint(updateType, update);
+        break;
+    }
   }
 
 
   _handleModelEvent(updateType, data) {
-    console.log(updateType, data);
-    // В зависимости от типа изменений решаем, что делать:
-    // - обновить часть списка (например, когда поменялось описание)
-    // - обновить список (например, когда задача ушла в архив)
-    // - обновить всю доску (например, при переключении фильтра)
-  }
+    switch (updateType) {
+      case UpdateType.PATCH:
+        this._pointsMap.get(data.id).init(data);
+        break;
+      case UpdateType.MINOR:
+        this._clear();
+        this.init();
+        break;
+      case UpdateType.MAJOR:
+        this._clear({resetSortType: true});
+        this.init();
+        break;
+    }
   }
 
-  // _handlePointChange(newPoint) {
-  //   this._pointsMap.values = updateItem(this._pointsMap, newPoint);
-  //   this._pointsMap.get(newPoint.id).init(newPoint);
-  // }
+  _handleSortTypeChanger(sortType) {
+    if (this._currentSortType === sortType) {
+      return;
+    }
+
+    this._currentSortType = sortType;
+    this._clear();
+    this.init();
+  }
 
   _bindHandles() {
     this._handleModChanger = this._handleModChanger.bind(this);
     this._handleViewAction = this._handleViewAction.bind(this);
     this._handleModelEvent = this._handleModelEvent.bind(this);
+    this._handleSortTypeChanger = this._handleSortTypeChanger.bind(this);
   }
 }

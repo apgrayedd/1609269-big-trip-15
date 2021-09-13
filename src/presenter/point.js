@@ -3,6 +3,8 @@ import EditPointView from '../view/edit-point.js';
 import {render, RenderPosition, replace, remove} from '../utils/render.js';
 import Abstract from '../view/abstract.js';
 import cloneDeep from 'lodash.clonedeep';
+import {UserAction, UpdateType} from '../const.js';
+import {isDatesEqual} from '../utils/common.js';
 
 const KEY_TO_CLOSE_POINT = 27;
 const Mode = {
@@ -11,12 +13,12 @@ const Mode = {
 };
 
 export default class Point {
-  constructor(container, newPointChanger, changeModePoint) {
+  constructor(container, pointUpdateData, changeModePoint) {
     this._container = container;
     if (container instanceof Abstract) {
       this._container = container.getElement();
     }
-    this._newPointChanger = newPointChanger;
+    this._pointUpdateData = pointUpdateData;
     this._changeModePoint = changeModePoint;
     this._point = null;
     this._editPoint = null;
@@ -29,11 +31,13 @@ export default class Point {
     const oldEditPoint = this._editPoint;
 
     this._point = new PointView(data);
-    this._editPoint = new EditPointView(data, this._clickSubmit);
+    this._editPoint = new EditPointView(data);
 
     this._point.setHandlerOpen(this._replacePointToEdit);
-    this._editPoint.setHandlerClose(this._replaceEditToPoint);
     this._point.setHandlerFavorite(this._changeFavorite);
+    this._editPoint.setHandlerClose(this._replaceEditToPoint);
+    this._editPoint.setHandlerDelete(this._handlerDeleteClick);
+    this._editPoint.setSubmitClick(this._handlerClickSubmit);
 
     if (oldPoint === null || oldEditPoint === null) {
       render(this._container, this._point, RenderPosition.AFTERBEGIN);
@@ -77,19 +81,43 @@ export default class Point {
   }
 
   _changeFavorite() {
-    this._newData = cloneDeep({...this._point._data, isFavorite: !this._point._data.isFavorite});
-    this._newPointChanger(this._newData);
+    this._newData = cloneDeep(
+      UserAction.UPDATE_POINT,
+      UpdateType.MINOR,
+      {
+        ...this._point._data,
+        isFavorite: !this._point._data.isFavorite,
+      });
+    this._pointUpdateData(this._newData);
   }
 
-  _clickSubmit() {
-    this._point.updateData(this._editPoint._data, false);
+  _handlerClickSubmit(update) {
+    const isMinorUpdate =
+    !isDatesEqual(this._point._data.dateFrom, update.dateFrom) ||
+    !isDatesEqual(this._point._data.dateTo, update.dateTo) ||
+    this._point._data.basePrice === update.basePrice;
+
+    this._pointUpdateData(
+      UserAction.UPDATE_POINT,
+      isMinorUpdate ? UpdateType.MINOR : UpdateType.PATCH,
+      update,
+    );
+  }
+
+  _handlerDeleteClick(point) {
+    this._pointUpdateData(
+      UserAction.DELETE_POINT,
+      UpdateType.MINOR,
+      point,
+    );
   }
 
   _bindHandles() {
+    this._handlerDeleteClick = this._handlerDeleteClick.bind(this);
     this._replacePointToEdit = this._replacePointToEdit.bind(this);
     this._replaceEditToPoint = this._replaceEditToPoint.bind(this);
     this._replacePointToEditByEsc = this._replacePointToEditByEsc.bind(this);
     this._changeFavorite = this._changeFavorite.bind(this);
-    this._clickSubmit = this._clickSubmit.bind(this);
+    this._handlerClickSubmit = this._handlerClickSubmit.bind(this);
   }
 }
