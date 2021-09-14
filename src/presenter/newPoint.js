@@ -1,5 +1,5 @@
-import {remove, render, RenderPosition} from '../utils/render';
-import EditPointView from '../view/edit-point';
+import {remove, render, RenderPosition} from '../utils/render.js';
+import EditPointView from '../view/edit-point.js';
 import {UserAction, UpdateType} from '../const.js';
 import { cloneDeep } from 'lodash';
 import { nanoid } from 'nanoid';
@@ -16,7 +16,7 @@ export default class NewPoint {
   }
 
   init() {
-    if (this._editPoint === null) {
+    if (this._editPoint !== null) {
       return;
     }
 
@@ -24,7 +24,7 @@ export default class NewPoint {
     this._editPoint.setHandlerDelete(this._handlerDeleteClick);
     this._editPoint.setSubmitClick(this._handlerClickSubmit);
 
-    render(this._pointConrainer, this._editPoint, RenderPosition.AFTERBEGIN);
+    render(this._pointConrainer, this._editPoint, RenderPosition.BEFOREEND);
 
     document.addEventListener('keydown', this._closeNewPointByEsc);
   }

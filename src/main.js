@@ -18,6 +18,7 @@ pointModel.setPoints(data);
 
 const tripEvents = document.querySelector('.trip-events');
 const tripControls = document.querySelector('.trip-controls');
+// const tripList = document.querySelector('.trip-events__list');
 const presenterTrip = new TripPresenter(tripEvents, pointModel, filterModel);
 const filterPresenter = new FilterPresenter(tripControls, filterModel, pointModel);
 

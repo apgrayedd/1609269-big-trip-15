@@ -20,8 +20,8 @@ export default class Trip {
     this._sortList = null;
     this._currentSortType = SortType.DEFAULT;
     this._filterModel = filterModel;
-    this._newPointPresenter = new NewPointPresenter(this._listEvents, this._handleViewAction);
     this._bindHandles();
+    this._newPointPresenter = new NewPointPresenter(this._listEvents.getElement(), this._handleViewAction);
     this._filterModel.addObserver(this._handleModelEvent);
     this._pointModels.addObserver(this._handleModelEvent);
   }
@@ -41,7 +41,7 @@ export default class Trip {
   createPoint() {
     this._currentSortType = SortType.DEFAULT;
     this._filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
-    this._newPointPresenter().init();
+    this._newPointPresenter.init();
   }
 
   _getPoints() {
@@ -105,7 +105,7 @@ export default class Trip {
   }
 
   _handleViewAction(actionType, updateType, update) {
-
+    console.log(this._pointModels)
     switch(actionType){
       case UserAction.UPDATE_POINT:
         this._pointModels.updatePoint(updateType, update);

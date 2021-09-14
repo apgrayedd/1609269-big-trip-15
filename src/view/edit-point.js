@@ -15,6 +15,18 @@ import flatpickr from 'flatpickr';
 import '../../node_modules/flatpickr/dist/flatpickr.min.css';
 import dayjs from 'dayjs';
 
+const dataForNewPoint = {
+  type: 'Taxi',
+  name: '',
+  destinations: '',
+  pictures: '',
+  dateFrom: dayjs(),
+  dateTo: dayjs(),
+  basePrice: 0,
+  offers: [],
+  description: '',
+};
+
 const editPoint = ({type, basePrice, offers, name, description, pictures, dateFrom, dateTo}) => (
   `<form class="event event--edit" action="#" method="post">
     <header class="event__header">
@@ -36,7 +48,7 @@ const editPoint = ({type, basePrice, offers, name, description, pictures, dateFr
 );
 
 export default class EditPoint extends SmartView {
-  constructor(data) {
+  constructor(data = dataForNewPoint) {
     super();
     this._data = data;
     this._dateStartPicker = null;
