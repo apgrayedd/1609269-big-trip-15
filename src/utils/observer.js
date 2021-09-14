@@ -36,12 +36,7 @@ export default class Observer {
   }
 
   deletePoint (updateType, update) {
-    [this._points].map((item) => {
-      if (item.id === update.id) {
-        return false;
-      }
-    });
-
+    this._points = this._points.filter((item) => item.id !== update.id);
     this._notify(updateType);
   }
 }

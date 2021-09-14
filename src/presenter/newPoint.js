@@ -21,6 +21,7 @@ export default class NewPoint {
     }
 
     this._editPoint = new EditPointView();
+    this._editPoint.setHandlerClose(this._handlerDeleteClick)
     this._editPoint.setHandlerDelete(this._handlerDeleteClick);
     this._editPoint.setSubmitClick(this._handlerClickSubmit);
 

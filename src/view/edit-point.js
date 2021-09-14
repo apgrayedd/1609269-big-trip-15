@@ -78,7 +78,7 @@ export default class EditPoint extends SmartView {
   }
 
   setHandlerDelete (callback) {
-    this._callback.delte = callback;
+    this._callback.delete = callback;
     this.getElement().querySelector('.event__reset-btn').addEventListener('click', this._callbackDelete);
   }
 
@@ -171,6 +171,7 @@ export default class EditPoint extends SmartView {
   }
 
   _bindHandles() {
+    this._callbackDelete = this._callbackDelete.bind(this);
     this._callbackClose = this._callbackClose.bind(this);
     this._typeEventHandler = this._typeEventHandler.bind(this);
     this._submitHandler = this._submitHandler.bind(this);

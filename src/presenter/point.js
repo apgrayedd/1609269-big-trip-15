@@ -81,14 +81,14 @@ export default class Point {
   }
 
   _changeFavorite() {
-    this._newData = cloneDeep(
+    this._pointUpdateData(
       UserAction.UPDATE_POINT,
       UpdateType.MINOR,
-      {
+      cloneDeep({
         ...this._point._data,
         isFavorite: !this._point._data.isFavorite,
-      });
-    this._pointUpdateData(this._newData);
+      }),
+    );
   }
 
   _handlerClickSubmit(update) {

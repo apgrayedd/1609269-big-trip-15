@@ -105,7 +105,6 @@ export default class Trip {
   }
 
   _handleViewAction(actionType, updateType, update) {
-    console.log(this._pointModels)
     switch(actionType){
       case UserAction.UPDATE_POINT:
         this._pointModels.updatePoint(updateType, update);
