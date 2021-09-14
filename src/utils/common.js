@@ -22,9 +22,13 @@ export function getTimeFromMins(mins) {
   return str;
 }
 
-export function getStrFromArr (arr, functOnArrItems, firstItem = '') {
+export function getStrFromArr (arr, functOnArrItems, activeStr = false, functWithActStr = false, firstItem = '') {
   return arr.reduce((str,arrItem) => {
-    arrItem = functOnArrItems ? functOnArrItems(arrItem) : arrItem;
+    if (activeStr && arrItem === activeStr) {
+      arrItem = functWithActStr(activeStr);
+    } else {
+      arrItem = functOnArrItems ? functOnArrItems(arrItem) : arrItem;
+    }
     return str + arrItem;
   },firstItem);
 }

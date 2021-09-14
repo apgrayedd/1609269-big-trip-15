@@ -18,7 +18,7 @@ export default class Trip {
     this._navigationList = new NavigationList();
     this._emptyList = null;
     this._sortList = null;
-    this._currentSortType = SortType.DEFAULT;
+    this._currentSortType = SortType.DEFAULT.name;
     this._filterModel = filterModel;
     this._bindHandles();
     this._newPointPresenter = new NewPointPresenter(this._listEvents.getElement(), this._handleViewAction);
@@ -39,7 +39,7 @@ export default class Trip {
   }
 
   createPoint() {
-    this._currentSortType = SortType.DEFAULT;
+    this._currentSortType = SortType.DEFAULT.name;
     this._filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
     this._newPointPresenter.init();
   }
@@ -76,7 +76,7 @@ export default class Trip {
       this._sortList = null;
     }
 
-    this._sortList = new SortListView();
+    this._sortList = new SortListView(this._currentSortType);
     this._sortList.setHandlerSortChanger(this._handleSortTypeChanger);
 
     render(this._container, this._sortList, RenderPosition.AFTERBEGIN);
@@ -95,7 +95,7 @@ export default class Trip {
     }
 
     if(resetSortType){
-      this._currentSortType = SortType.DEFAULT;
+      this._currentSortType = SortType.DEFAULT.name;
     }
   }
 
@@ -139,8 +139,10 @@ export default class Trip {
     if (this._currentSortType === sortType) {
       return;
     }
-
     this._currentSortType = sortType;
+    remove(this._sortList);
+    this._renderSort(this._currentSortType);
+
     this._clear();
     this.init();
   }
