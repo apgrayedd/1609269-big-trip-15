@@ -6,7 +6,7 @@ import AbstractView from './abstract.js';
 const filterItem = (filter) => (
   `<div class="trip-filters__filter">
     <input id="filter-${filter.toLowerCase()}" class="trip-filters__filter-input
-    visually-hidden" type="radio" name="trip-filter" value="everything">
+    visually-hidden" type="radio" name="trip-filter" value="${filter.toLowerCase()}">
     <label class="trip-filters__filter-label" for="filter-${filter.toLowerCase()}">${filter}</label>
   </div>
 `
@@ -27,6 +27,7 @@ export default class FiltersList extends AbstractView{
     super();
     this._filter = filters;
     this._currentFilter = currentFilter;
+    this._bindHandles();
   }
 
   getTemplate() {
@@ -40,8 +41,12 @@ export default class FiltersList extends AbstractView{
 
   setChangeFilter (callback) {
     this._callback.changeFilter = callback;
-    this.getElement().querySelectorAll('.trip-filters__filter-input').forEach((filter) => {
-      filter.addEventListener('change', this._handlerChangeFilter);
+    this.getElement().querySelectorAll('.trip-filters__filter').forEach((filter) => {
+      filter.querySelector('.trip-filters__filter-input').addEventListener('change', this._handlerChangeFilter);
     });
+  }
+
+  _bindHandles() {
+    this._handlerChangeFilter = this._handlerChangeFilter.bind(this);
   }
 }

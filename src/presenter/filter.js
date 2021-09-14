@@ -20,6 +20,7 @@ export default class Filter {
     const prevFilterList = this._filterList;
 
     this._filterList = new FilterView(filters, this._filterModel.getFilter());
+    this._filterList.setChangeFilter(this._handleFilterChanger);
 
     if (prevFilterList === null) {
       render(this._filterContainer, this._filterList, RenderPosition.BEFOREEND);
@@ -38,7 +39,6 @@ export default class Filter {
     if (this._filterModel.getFilter() === filterType) {
       return;
     }
-
     this._filterModel.setFilter(UpdateType.MAJOR, filterType);
   }
 

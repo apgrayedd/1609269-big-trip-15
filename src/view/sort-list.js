@@ -30,13 +30,15 @@ export default class SortList extends AbstractView {
 
   _callbackSortChanger(evt) {
     evt.preventDefault();
+    evt.target.checked = true;
     this._callback.sortChanger(evt.target.value);
   }
 
   setHandlerSortChanger(callback) {
     this._callback.sortChanger = callback;
     this.getElement().querySelectorAll('.trip-sort__item').forEach((sortItem) => {
-      sortItem.addEventListener('change', this._callbackSortChanger);
+      sortItem.querySelector('.trip-sort__input').checked = false;
+      sortItem.querySelector('.trip-sort__input').addEventListener('change', this._callbackSortChanger);
     });
   }
 

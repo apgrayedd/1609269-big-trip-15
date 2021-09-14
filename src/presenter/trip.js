@@ -28,6 +28,7 @@ export default class Trip {
 
   init() {
     const pointLength = this._getPoints().length;
+
     if (pointLength < 0) {
       this._renderNoPoints();
       return;
@@ -54,7 +55,7 @@ export default class Trip {
         return filteredTasks.sort(SortType.TIME_DOWN.funct);
     }
 
-    return this._pointModels.getPoints();
+    return filteredTasks;
   }
 
   _renderPoints() {
@@ -84,7 +85,7 @@ export default class Trip {
   _clear(resetSortType = false) {
     this._newPointPresenter.destroy();
     this._pointsMap.forEach((point) => {
-      console.log(point)
+      point.destroy();
     });
     this._pointsMap.clear();
 

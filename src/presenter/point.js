@@ -112,6 +112,11 @@ export default class Point {
     );
   }
 
+  destroy() {
+    remove(this._point);
+    remove(this._editPoint);
+  }
+
   _bindHandles() {
     this._handlerDeleteClick = this._handlerDeleteClick.bind(this);
     this._replacePointToEdit = this._replacePointToEdit.bind(this);
