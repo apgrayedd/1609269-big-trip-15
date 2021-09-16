@@ -2,7 +2,9 @@ import TripPresenter from './presenter/trip.js';
 import FilterPresenter from './presenter/filter.js';
 import PointModel from './model/point.js';
 import FilterModel from './model/filter.js';
+import NavigationListView from './view/navigation-list.js';
 import StatsView from './view/stats.js';
+import {navType} from './const.js';
 
 import {
   dataAdapter
@@ -20,7 +22,6 @@ pointModel.setPoints(data);
 
 const tripEvents = document.querySelector('.trip-events');
 const tripControls = document.querySelector('.trip-controls');
-const tripList = document.querySelector('.trip-events__list');
 const presenterTrip = new TripPresenter(tripEvents, pointModel, filterModel);
 const filterPresenter = new FilterPresenter(tripControls, filterModel, pointModel);
 
@@ -31,8 +32,11 @@ document.querySelector('.trip-main__event-add-btn').addEventListener('click', (e
   evt.preventDefault();
   presenterTrip.createPoint();
 });
-console.log(data)
+
+const newNav = new NavigationListView();
 const newSort = new StatsView(data);
 
-console.log(newSort.getElement())
+newNav.setChangeNavigation()
+
+render(tripControls, newNav, RenderPosition.BEFOREEND);
 render(tripEvents, newSort, RenderPosition.AFTERBEGIN);

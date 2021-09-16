@@ -6,6 +6,26 @@ import { createElement } from '../utils/render';
 import {getTimeFromMins} from '../utils/common.js';
 import {timeAdapterDiff} from '../utils/adapters';
 
+const createObjWithCount = (objdata, objKeys, functWithValues) => {
+  const objWithCount = {};
+  objdata.forEach((dataItem) => {
+    const type = dataItem[objKeys].toUpperCase();
+    let value = 1;
+
+    if (functWithValues) {
+      value = functWithValues(dataItem);
+    }
+
+    if (type in objWithCount) {
+      objWithCount[type] += value;
+    } else {
+      objWithCount[type] = value;
+    }
+  });
+
+  return objWithCount;
+};
+
 const getStats = () => (
   `<section class="statistics">
     <h2 class="visually-hidden">Trip statistics</h2>
@@ -34,7 +54,6 @@ export default class Stats extends AbstractView {
   }
 
   _getChartOptions(data, name, funct = (info) => (info)) {
-    console.log(Math.max(...Object.values(data))/100*15)
     return {
       plugins: [chartPlugin],
       type: 'bar',
@@ -77,7 +96,7 @@ export default class Stats extends AbstractView {
       },
       scales: {
         yAxes: [{
-          minBarLength: Math.max(...Object.values(data))/100*15,
+          minBarLength: Math.round(Math.max(...Object.values(data))/100*15),
           ticks: {
             fontColor: '#000000',
             padding: 5,
@@ -85,7 +104,7 @@ export default class Stats extends AbstractView {
           },
         }],
         xAxes: [{
-          minBarLength: Math.max(...Object.values(data))/100*15,
+          minBarLength: Math.round(Math.max(...Object.values(data))/100*15),
           ticks: {
             fontColor: '#000000',
             padding: 5,
@@ -103,46 +122,35 @@ export default class Stats extends AbstractView {
     }
 
     if (this._moneyStatsChart === null) {
-      const moneyStatsChart = {};
-      this._data.forEach((dataItem) => {
-        const type = dataItem.type.toUpperCase();
-
-        if (type in moneyStatsChart) {
-          moneyStatsChart[type] += dataItem.basePrice;
-        } else {
-          moneyStatsChart[type] = dataItem.basePrice;
-        }
-      });
-      this._moneyStatsChart = new Chart(this._element.querySelector('#money'), this._getChartOptions(moneyStatsChart, 'MONEY', (val) => `€ ${val} `));
+      this._moneyStatsChart = new Chart(
+        this._element.querySelector('#money'),
+        this._getChartOptions(
+          createObjWithCount(this._data, 'type', (item) => item.basePrice),
+          'MONEY',
+          (val) => `€ ${val} `,
+        ),
+      );
     }
 
     if (this._typeStatsChart === null) {
-      const typeStatsChart = {};
-      this._data.forEach((dataItem) => {
-        const type = dataItem.type.toUpperCase();
-
-        if (type in typeStatsChart) {
-          typeStatsChart[type] += 1;
-        } else {
-          typeStatsChart[type] = 1;
-        }
-      });
-      this._typeStatsChart = new Chart(this._element.querySelector('#type'), this._getChartOptions(typeStatsChart, 'TYPE', (val) => `${val}x `));
+      this._typeStatsChart = new Chart(
+        this._element.querySelector('#type'),
+        this._getChartOptions(
+          createObjWithCount(this._data, 'type'),
+          'TYPE',
+          (val) => `${val}x `,
+        ),
+      );
     }
 
     if (this._timeSpendStatsChart === null) {
-      const spendTimeChart = {};
-      this._data.forEach((dataItem) => {
-        const type = dataItem.type.toUpperCase();
-        if (type in spendTimeChart) {
-          spendTimeChart[type] += timeAdapterDiff(dataItem.dateTo, dataItem.dateFrom);
-        } else {
-          spendTimeChart[type] = timeAdapterDiff(dataItem.dateTo, dataItem.dateFrom);
-        }
-      });
       this._timeSpendStatsChart = new Chart(
         this._element.querySelector('#time-spend'),
-        this._getChartOptions(spendTimeChart, 'TIME', (val) => `${getTimeFromMins(val)} `),
+        this._getChartOptions(
+          createObjWithCount(this._data, 'type', (item) => timeAdapterDiff(item.dateTo, item.dateFrom)),
+          'TIME',
+          (val) => `${getTimeFromMins(val)} `,
+        ),
       );
     }
 
@@ -153,7 +161,16 @@ export default class Stats extends AbstractView {
     return getStats();
   }
 
-  render() {
+  _callbackChangeNavigation(evt) {
+    evt.preventDefault();
+    console.log(evt)
+    this._callback.change(evt.target);
+  }
 
+  setChangeNavigation(callback) {
+    this._callback.change = callback;
+    this.getElement().
+      querySelectorAll('.trip-tabs__btn').
+      addEventListener('click', )
   }
 }

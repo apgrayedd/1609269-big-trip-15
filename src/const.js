@@ -26,4 +26,7 @@ export const FilterType = {
   FUTURE: 'future',
   PAST: 'past',
 };
-
+export const navType = {
+  TABLE: 'Table',
+  STATS: 'Stats',
+};
