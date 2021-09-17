@@ -160,17 +160,4 @@ export default class Stats extends AbstractView {
   getTemplate() {
     return getStats();
   }
-
-  _callbackChangeNavigation(evt) {
-    evt.preventDefault();
-    console.log(evt)
-    this._callback.change(evt.target);
-  }
-
-  setChangeNavigation(callback) {
-    this._callback.change = callback;
-    this.getElement().
-      querySelectorAll('.trip-tabs__btn').
-      addEventListener('click', )
-  }
 }

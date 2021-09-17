@@ -1,5 +1,4 @@
 import ListEventsView from '../view/list.js';
-import NavigationList from '../view/navigation-list.js';
 import EmptyListView from '../view/empty-list.js';
 import SortListView from '../view/sort-list.js';
 import {filter} from '../utils/filter.js';
@@ -15,7 +14,6 @@ export default class Trip {
     this._filterType = FilterType.EVERYTHING;
     this._pointModels = pointModels;
     this._listEvents = new ListEventsView();
-    this._navigationList = new NavigationList();
     this._emptyList = null;
     this._sortList = null;
     this._currentSortType = SortType.DEFAULT.name;

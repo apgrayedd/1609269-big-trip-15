@@ -23,7 +23,7 @@ export default class Filter {
     this._filterList.setChangeFilter(this._handleFilterChanger);
 
     if (prevFilterList === null) {
-      render(this._filterContainer, this._filterList, RenderPosition.BEFOREEND);
+      render(this._filterContainer, this._filterList, RenderPosition.AFTERBEGIN);
       return;
     }
 
