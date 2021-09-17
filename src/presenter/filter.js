@@ -31,6 +31,13 @@ export default class Filter {
     remove(prevFilterList);
   }
 
+  _clear() {
+    if (this._filterList) {
+      remove(this._filterList);
+      this._filterList = null;
+    }
+  }
+
   _handleModelEvent() {
     this.init();
   }

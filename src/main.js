@@ -24,9 +24,8 @@ const tripControls = document.querySelector('.trip-controls');
 const presenterTrip = new TripPresenter(tripEvents, pointModel, filterModel);
 const filterPresenter = new FilterPresenter(tripControls, filterModel, pointModel);
 const statsPresenter = new StatsPresenter(tripEvents, pointModel);
-const navigationPresenter = new NavigationPresenter(tripControls, pointModel, presenterTrip, statsPresenter);
+const navigationPresenter = new NavigationPresenter(tripControls, pointModel, presenterTrip, statsPresenter, filterPresenter);
 
-filterPresenter.init();
 navigationPresenter.init();
 
 document.querySelector('.trip-main__event-add-btn').addEventListener('click', (evt) => {

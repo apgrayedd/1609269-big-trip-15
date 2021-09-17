@@ -5,7 +5,7 @@ import {filter} from '../utils/filter.js';
 import PointPresent from './point.js';
 import NewPointPresenter from './newPoint.js';
 import {remove, render, RenderPosition} from '../utils/render.js';
-import {SortType, UserAction, UpdateType, FilterType} from '../const.js';
+import {SortType, UserAction, UpdateType, FilterType, NavType} from '../const.js';
 
 export default class Trip {
   constructor(container, pointModels, filterModel){
@@ -19,12 +19,13 @@ export default class Trip {
     this._currentSortType = SortType.DEFAULT.name;
     this._filterModel = filterModel;
     this._bindHandles();
-    this._newPointPresenter = new NewPointPresenter(this._listEvents.getElement(), this._handleViewAction);
+    this._newPointPresenter = null;
     this._filterModel.addObserver(this._handleModelEvent);
     this._pointModels.addObserver(this._handleModelEvent);
   }
 
   init() {
+    this._newPointPresenter = new NewPointPresenter(this._listEvents.getElement(), this._handleViewAction);
     const pointLength = this._getPoints().length;
 
     if (pointLength < 0) {
@@ -36,7 +37,13 @@ export default class Trip {
     render(this._container, this._listEvents, RenderPosition.AFTERBEGIN);
   }
 
+  _removeButtonNewPoint() {
+    this._newPointPresenter.destroy();
+    this._newPointPresenter = null;
+  }
+
   createPoint() {
+    this._changeNavToTable(NavType.TABLE);
     this._currentSortType = SortType.DEFAULT.name;
     this._filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
     this._newPointPresenter.init();
@@ -81,7 +88,11 @@ export default class Trip {
   }
 
   _clear(resetSortType = false) {
-    this._newPointPresenter.destroy();
+    if (this._newPointPresenter !== null) {
+      this._newPointPresenter.destroy();
+      this._newPointPresenter = null;
+    }
+
     this._pointsMap.forEach((point) => {
       point.destroy();
     });
@@ -98,7 +109,10 @@ export default class Trip {
   }
 
   _handleModChanger() {
-    this._newPointPresenter.destroy();
+    if (this._newPointPresenter !== null) {
+      this._newPointPresenter.destroy();
+    }
+
     this._pointsMap.forEach((point) => point.resetView());
   }
 
@@ -116,6 +130,9 @@ export default class Trip {
     }
   }
 
+  setChangeNavToTable(funct) {
+    this._changeNavToTable = funct;
+  }
 
   _handleModelEvent(updateType, data) {
     switch (updateType) {
