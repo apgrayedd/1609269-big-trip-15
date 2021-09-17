@@ -112,7 +112,7 @@ export const getEventFieldGroupPrice = (basePrice) => `
     &euro;
   </label>
   <input class="event__input  event__input--price" id="event-price-1"
-  type="text" name="event-price" value="${basePrice}">
+  type="text" name="event-price" value="${basePrice}" autocomplete = "off">
 </div>`;
 
 export const getEventAvailableOffers = (offers) => (

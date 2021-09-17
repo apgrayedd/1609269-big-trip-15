@@ -36,3 +36,22 @@ export function getStrFromArr (arr, functOnArrItems, activeStr = false, functWit
 export const isDatesEqual = (dateA, dateB) => (dateA === null && dateB === null) ? true : dayjs(dateA).isSame(dateB, 'D');
 export const isDateFuture = (date) => (dayjs(date).isAfter(dayjs()));
 export const isDatePast = (date) => (dayjs(date).isBefore(dayjs()));
+
+export const matchValidationInteger = (fieldValue) => {
+  const match = fieldValue.match(/[0-9]*/);
+
+  if (!match) {
+    return 'Поле может содержать только числа!';
+  }
+
+  const result = match[0] === match['input'] ? fieldValue : false;
+  if (!result) {
+    return 'Поле может содержать только числа!';
+  }
+};
+export const dateValidation = (dateA, dateB) => {
+  if (dayjs(dateA).diff(dayjs(dateB)) < 0) {
+    console.log(dayjs(dateA).diff(dayjs(dateB)))
+    return 'Дата конца не может превышать дату начала!';
+  }
+};

@@ -10,9 +10,13 @@ import {
   getEventAvailableDestination,
   getEventFieldGroupTime
 } from '../utils/render.js';
+import {
+  matchValidationInteger,
+  dateValidation
+} from '../utils/common.js';
 import SmartView from './smart.js';
 import flatpickr from 'flatpickr';
-import '../../node_modules/flatpickr/dist/flatpickr.min.css';
+import '../../node_modules/flatpickr/dist/themes/dark.css';
 import dayjs from 'dayjs';
 
 const dataForNewPoint = {
@@ -95,9 +99,15 @@ export default class EditPoint extends SmartView {
   }
 
   _priceEventHandler(evt) {
-    this.updateData({
-      basePrice: evt.target.value,
-    }, true);
+    const message = matchValidationInteger(evt.target.value);
+    if (!message) {
+      this.updateData({
+        basePrice: parseInt(evt.target.value, 10),
+      }, true);
+      evt.target.setCustomValidity('');
+    }
+    evt.target.setCustomValidity(message);
+    evt.target.reportValidity();
   }
 
   _dateStartEventHandler([date]) {
@@ -106,10 +116,16 @@ export default class EditPoint extends SmartView {
     }, true);
   }
 
-  _dateEndEventHandler([date]) {
-    this.updateData({
-      dateTo: dayjs(date).format(dateStandartFormat),
-    }, true);
+  _dateEndEventHandler(evt, [date]) {
+    const message = dateValidation(this._data.dateFrom, this._data.dateTo);
+    if (!message) {
+      this.updateData({
+        dateTo: dayjs(date).format(dateStandartFormat),
+      }, true);
+      evt.target.setCustomValidity('');
+    }
+    evt.target.setCustomValidity(message);
+    evt.target.reportValidity();
   }
 
   _submitHandler(evt) {
