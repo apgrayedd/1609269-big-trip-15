@@ -18,6 +18,7 @@ export default class Navigation {
 
   init() {
     if (this._navigationList !== null) {
+      remove(this._navigationList);
       this._navigationList = null;
     }
 
@@ -30,7 +31,6 @@ export default class Navigation {
         this._filterPresenter.init();
         break;
       case NavType.STATS:
-        this._tripPresenter._removeButtonNewPoint();
         this._tripPresenter._clear();
         this._filterPresenter._clear();
         this._statsPresenter.init();
@@ -47,7 +47,6 @@ export default class Navigation {
     if (this._currentNavType === innerText) {
       return;
     }
-    remove(this._navigationList);
     this._currentNavType = innerText;
     this.init();
   }

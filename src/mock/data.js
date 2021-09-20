@@ -55,4 +55,3 @@ const pointArr = () => {
   };};
 
 export const dataPoints = new Array(POINT_NUMBER).fill().map(() => Object.assign(pointArr(), destination()));
-// export const data = dayjs('2019-01-25').format('DD/MM/YYYY');

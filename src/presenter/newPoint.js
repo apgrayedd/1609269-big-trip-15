@@ -1,7 +1,7 @@
 import {remove, render, RenderPosition} from '../utils/render.js';
 import EditPointView from '../view/edit-point.js';
 import {UserAction, UpdateType} from '../const.js';
-import { cloneDeep } from 'lodash';
+import cloneDeep from 'lodash.clonedeep';
 import { nanoid } from 'nanoid';
 
 const KEY_TO_CLOSE_POINT = 27;

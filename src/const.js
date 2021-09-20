@@ -17,7 +17,7 @@ export const UpdateType = {
   MAJOR: 'MAJOR',
 };
 export const SortType = {
-  DEFAULT:{name: 'sort-event',funct: (point) => point} ,
+  EVENT_DOWN:{name: 'sort-event',funct: (pointA, pointB) => pointA.name.localeCompare(pointB.name)},
   PRICE_DOWN:{name: 'sort-price',funct: (pointA, pointB) => (pointA.basePrice - pointB.basePrice)},
   TIME_DOWN:{name: 'sort-time',funct: (pointA, pointB) => dayjs(pointA.dateFrom).diff(dayjs(pointB.dateFrom))},
 };

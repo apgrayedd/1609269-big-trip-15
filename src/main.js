@@ -4,6 +4,7 @@ import NavigationPresenter from './presenter/navigation.js';
 import StatsPresenter from './presenter/stats.js';
 import PointModel from './model/point.js';
 import FilterModel from './model/filter.js';
+import Api from './api.js';
 
 import {
   dataAdapter
@@ -12,6 +13,14 @@ import {
 import {
   dataPoints
 } from './mock/data.js';
+
+const AUTORIZATION = 'Basic apgrayedd/1609269-big-trip-15';
+const LINK = 'https://15.ecmascript.pages.academy/big-trip';
+const api = new Api(LINK, AUTORIZATION);
+
+api.getPoints().then((points) => {
+  console.log(points);
+});
 
 const data = dataAdapter(dataPoints);
 const pointModel = new PointModel();

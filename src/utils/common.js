@@ -38,6 +38,10 @@ export const isDateFuture = (date) => (dayjs(date).isAfter(dayjs()));
 export const isDatePast = (date) => (dayjs(date).isBefore(dayjs()));
 
 export const matchValidationInteger = (fieldValue) => {
+  if (!fieldValue) {
+    return;
+  }
+
   const match = fieldValue.match(/[0-9]*/);
 
   if (!match) {
@@ -51,7 +55,6 @@ export const matchValidationInteger = (fieldValue) => {
 };
 export const dateValidation = (dateA, dateB) => {
   if (dayjs(dateA).diff(dayjs(dateB)) < 0) {
-    console.log(dayjs(dateA).diff(dayjs(dateB)))
     return 'Дата конца не может превышать дату начала!';
   }
 };

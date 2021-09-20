@@ -16,7 +16,7 @@ export default class Trip {
     this._listEvents = new ListEventsView();
     this._emptyList = null;
     this._sortList = null;
-    this._currentSortType = SortType.DEFAULT.name;
+    this._currentSortType = SortType.EVENT_DOWN.name;
     this._filterModel = filterModel;
     this._bindHandles();
     this._newPointPresenter = null;
@@ -37,14 +37,9 @@ export default class Trip {
     render(this._container, this._listEvents, RenderPosition.AFTERBEGIN);
   }
 
-  _removeButtonNewPoint() {
-    this._newPointPresenter.destroy();
-    this._newPointPresenter = null;
-  }
-
   createPoint() {
     this._changeNavToTable(NavType.TABLE);
-    this._currentSortType = SortType.DEFAULT.name;
+    this._currentSortType = SortType.EVENT_DOWN.name;
     this._filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
     this._newPointPresenter.init();
   }
@@ -58,6 +53,8 @@ export default class Trip {
         return filteredTasks.sort(SortType.PRICE_DOWN.funct);
       case SortType.TIME_DOWN.name:
         return filteredTasks.sort(SortType.TIME_DOWN.funct);
+      case SortType.EVENT_DOWN.name:
+        return filteredTasks.sort(SortType.EVENT_DOWN.funct);
     }
 
     return filteredTasks;
@@ -104,7 +101,7 @@ export default class Trip {
     }
 
     if(resetSortType){
-      this._currentSortType = SortType.DEFAULT.name;
+      this._currentSortType = SortType.EVENT_DOWN.name;
     }
   }
 

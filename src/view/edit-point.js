@@ -11,8 +11,8 @@ import {
   getEventFieldGroupTime
 } from '../utils/render.js';
 import {
-  matchValidationInteger,
-  dateValidation
+  matchValidationInteger
+  // dateValidation
 } from '../utils/common.js';
 import SmartView from './smart.js';
 import flatpickr from 'flatpickr';
@@ -105,6 +105,8 @@ export default class EditPoint extends SmartView {
         basePrice: parseInt(evt.target.value, 10),
       }, true);
       evt.target.setCustomValidity('');
+      evt.target.reportValidity();
+      return;
     }
     evt.target.setCustomValidity(message);
     evt.target.reportValidity();
@@ -116,16 +118,11 @@ export default class EditPoint extends SmartView {
     }, true);
   }
 
-  _dateEndEventHandler(evt, [date]) {
-    const message = dateValidation(this._data.dateFrom, this._data.dateTo);
-    if (!message) {
-      this.updateData({
-        dateTo: dayjs(date).format(dateStandartFormat),
-      }, true);
-      evt.target.setCustomValidity('');
-    }
-    evt.target.setCustomValidity(message);
-    evt.target.reportValidity();
+  _dateEndEventHandler([date]) {
+    this.updateData({
+      dateTo: dayjs(date).format(dateStandartFormat),
+    }, true);
+    //dateValidation
   }
 
   _submitHandler(evt) {
