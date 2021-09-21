@@ -31,12 +31,12 @@ export default class NewPoint {
   }
 
   destroy() {
-    if (this._editPoint === null) {
-      return;
-    }
+    // if (this._editPoint === null) {
+    //   return;
+    // }
 
-    remove(this._editPoint);
-    this._editPoint = null;
+    // remove(this._editPoint);
+    // this._editPoint = null;
 
     document.removeEventListener('keydown', this._closeNewPointByEsc);
   }
@@ -47,6 +47,7 @@ export default class NewPoint {
       UpdateType.MINOR,
 
       cloneDeep({...point, id: nanoid()}),
+      this.destroy(),
     );
   }
 

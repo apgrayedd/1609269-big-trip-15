@@ -90,7 +90,7 @@ export default class Point {
     );
   }
 
-  _handlerClickSubmit(update, button) {
+  _handlerClickSubmit(update) {
     const isMinorUpdate =
     !isDatesEqual(this._point._data.dateFrom, update.dateFrom) ||
     !isDatesEqual(this._point._data.dateTo, update.dateTo) ||
@@ -100,7 +100,7 @@ export default class Point {
       UserAction.UPDATE_POINT,
       isMinorUpdate ? UpdateType.MINOR : UpdateType.PATCH,
       update,
-      button,
+      this._replaceEditToPoint,
     );
   }
 

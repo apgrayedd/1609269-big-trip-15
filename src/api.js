@@ -23,10 +23,21 @@ export default class Api {
       url: `points/${point.id}`,
       method: Method.PUT,
       body: JSON.stringify(PointModel.adaptToServer(point)),
-      headers: new Headers({'Context-Type': 'application/json'}),
+      headers: new Headers({'Content-Type': 'application/json'}),
     })
       .then(Api.toJson)
-      .then((points) => points.map(PointModel.adaptToClient));
+      .then(PointModel.adaptToClient);
+  }
+
+  addPoint(point) {
+    return this._load({
+      url: `points`,
+      method: Method.POST,
+      body: JSON.stringify(PointModel.adaptToServer(point)),
+      headers: new Headers({'Content-Type': 'application/json'}),
+    })
+      .then(Api.toJSON)
+      .then(PointModel.adaptToClient);
   }
 
   _load({

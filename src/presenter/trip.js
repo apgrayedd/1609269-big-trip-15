@@ -123,21 +123,33 @@ export default class Trip {
     this._pointsMap.forEach((point) => point.resetView());
   }
 
-  _handleViewAction(actionType, updateType, update, button) {
+  _handleViewAction(actionType, updateType, update, closeFunct) {
+    const saveBtn = document.querySelector('.event__save-btn');
+    saveBtn.textContent = 'Сохраняем...';
     switch(actionType){
       case UserAction.UPDATE_POINT:
         this._api.updatePoint(update)
           .then((response) => {
             this._pointModels.updatePoint(updateType, response);
           })
+          .then(closeFunct())
           .catch((err) => {
-            button.disabled = true;
-            button.textContent = 'Ошибка';
-            button.value = err;
+            saveBtn.disabled = true;
+            saveBtn.textContent = 'Ошибка';
+            saveBtn.value = err;
           });
         break;
       case UserAction.ADD_POINT:
-        this._pointModels.addPoints(updateType, update);
+        this._api.addPoint(update)
+          .then((response) => {
+            this._pointModels.addPoints(updateType, response);
+          })
+          // .then(closeFunct())
+          .catch((err) => {
+            saveBtn.disabled = true;
+            saveBtn.textContent = 'Ошибка';
+            saveBtn.value = err;
+          });
         break;
       case UserAction.DELETE_POINT:
         this._pointModels.deletePoint(updateType, update);

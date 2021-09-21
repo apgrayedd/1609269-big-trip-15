@@ -94,15 +94,42 @@ export default class EditPoint extends SmartView {
     }, false);
   }
 
+  _disableSaveBtn() {
+    const saveBtn = document.querySelector('.event__save-btn');
+    if (!this.checkInputDestination() && !this.checkInputPrice()) {
+      saveBtn.disabled = false;
+      return;
+    }
+    saveBtn.disabled = true;
+  }
+
+  checkInputDestination() {
+    return document.querySelector('#event-destination-1').value.length === 0
+      ? 'Имя должно содержать хотя бы 1 символ'
+      : false;
+  }
+
+  checkInputPrice() {
+    return matchValidationInteger(document.querySelector('#event-price-1').value);
+  }
+
   _nameEventHandler(evt) {
-    this.updateData({
-      name: evt.target.value,
-    }, true);
+    this._disableSaveBtn();
+    if (!this.checkInputDestination()) {
+      this.updateData({
+        name: evt.target.value,
+      }, true);
+      evt.target.setCustomValidity('');
+      evt.target.reportValidity();
+      return;
+    }
+    evt.target.setCustomValidity(this.checkInputDestination());
+    evt.target.reportValidity();
   }
 
   _priceEventHandler(evt) {
-    const message = matchValidationInteger(evt.target.value);
-    if (!message) {
+    this._disableSaveBtn();
+    if (!this.checkInputPrice()) {
       this.updateData({
         basePrice: parseInt(evt.target.value, 10),
       }, true);
@@ -110,7 +137,7 @@ export default class EditPoint extends SmartView {
       evt.target.reportValidity();
       return;
     }
-    evt.target.setCustomValidity(message);
+    evt.target.setCustomValidity(this.checkInputPrice());
     evt.target.reportValidity();
   }
 
@@ -130,7 +157,7 @@ export default class EditPoint extends SmartView {
   _submitHandler(evt) {
     evt.preventDefault();
     this._data.destination.name = this._data.name;
-    this._callback.submit(this._data, evt.target);
+    this._callback.submit(this._data);
   }
 
   setSubmitClick(callback) {

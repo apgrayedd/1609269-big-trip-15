@@ -39,7 +39,7 @@ export const isDatePast = (date) => (dayjs(date).isBefore(dayjs()));
 
 export const matchValidationInteger = (fieldValue) => {
   if (!fieldValue) {
-    return;
+    return false;
   }
 
   const match = fieldValue.match(/[0-9]*/);
@@ -52,6 +52,8 @@ export const matchValidationInteger = (fieldValue) => {
   if (!result) {
     return 'Поле может содержать только числа!';
   }
+
+  return false;
 };
 export const dateValidation = (dateA, dateB) => {
   if (dayjs(dateA).diff(dayjs(dateB)) < 0) {
