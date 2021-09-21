@@ -15,9 +15,10 @@ export const UpdateType = {
   PATCH: 'PATCH',
   MINOR: 'MINOR',
   MAJOR: 'MAJOR',
+  INIT: 'INIT',
 };
 export const SortType = {
-  EVENT_DOWN:{name: 'sort-event',funct: (pointA, pointB) => pointA.name.localeCompare(pointB.name)},
+  EVENT_DOWN:{name: 'sort-event',funct: (pointA, pointB) => pointA.destination.name.localeCompare(pointB.destination.name)},
   PRICE_DOWN:{name: 'sort-price',funct: (pointA, pointB) => (pointA.basePrice - pointB.basePrice)},
   TIME_DOWN:{name: 'sort-time',funct: (pointA, pointB) => dayjs(pointA.dateFrom).diff(dayjs(pointB.dateFrom))},
 };

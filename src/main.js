@@ -5,39 +5,33 @@ import StatsPresenter from './presenter/stats.js';
 import PointModel from './model/point.js';
 import FilterModel from './model/filter.js';
 import Api from './api.js';
+import { UpdateType } from './const.js';
 
-import {
-  dataAdapter
-} from './utils/adapters.js';
-
-import {
-  dataPoints
-} from './mock/data.js';
+const createNewPoint = document.querySelector('.trip-main__event-add-btn');
+createNewPoint.disabled = true;
 
 const AUTORIZATION = 'Basic apgrayedd/1609269-big-trip-15';
-const LINK = 'https://15.ecmascript.pages.academy/big-trip';
+const LINK = 'https://14.ecmascript.pages.academy/big-trip';
+
 const api = new Api(LINK, AUTORIZATION);
-
-api.getPoints().then((points) => {
-  console.log(points);
-});
-
-const data = dataAdapter(dataPoints);
 const pointModel = new PointModel();
 const filterModel = new FilterModel();
-pointModel.setPoints(data);
-
 const tripEvents = document.querySelector('.trip-events');
-const tripControls = document.querySelector('.trip-controls');
 
-const presenterTrip = new TripPresenter(tripEvents, pointModel, filterModel);
+const presenterTrip = new TripPresenter(tripEvents, pointModel, filterModel, api);
+presenterTrip.init();
+
+const tripControls = document.querySelector('.trip-controls');
 const filterPresenter = new FilterPresenter(tripControls, filterModel, pointModel);
 const statsPresenter = new StatsPresenter(tripEvents, pointModel);
 const navigationPresenter = new NavigationPresenter(tripControls, pointModel, presenterTrip, statsPresenter, filterPresenter);
 
-navigationPresenter.init();
-
-document.querySelector('.trip-main__event-add-btn').addEventListener('click', (evt) => {
-  evt.preventDefault();
-  presenterTrip.createPoint();
-});
+api.getPoints()
+  .then((points) => {
+    pointModel.setPoints(UpdateType.INIT, points);
+    navigationPresenter.init();
+    createNewPoint.disabled = false;
+  })
+  .catch((err) => {
+    throw new Error(err);
+  });

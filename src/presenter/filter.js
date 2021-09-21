@@ -16,6 +16,10 @@ export default class Filter {
   }
 
   init() {
+    if (this._filterList !== null){
+      this._clear();
+      this._filterList = null;
+    }
     const filters = Object.values(FilterType);
     const prevFilterList = this._filterList;
 

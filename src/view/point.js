@@ -59,7 +59,7 @@ const getEventPrice = (price) => (
   </p>`
 );
 
-const getEventTitle = (type, name) => `<h3 class="event__title">${type} ${name}</h3>`;
+const getEventTitle = (type, {name}) => `<h3 class="event__title">${type} ${name}</h3>`;
 const getEventFavoriteBtn = (isFavorite) => (
   `<button class="event__favorite-btn${isFavorite ? ' event__favorite-btn--active' : ''}" type="button">
     <span class="visually-hidden">Add to favorite</span>
@@ -69,12 +69,12 @@ const getEventFavoriteBtn = (isFavorite) => (
     </svg>
   </button>`
 );
-const point = ({basePrice, name, type, dateFrom, dateTo, offers, isFavorite}) => (
+const point = ({basePrice, destination, type, dateFrom, dateTo, offers, isFavorite}) => (
   `<li class="trip-events__item">
     <div class="event">
       ${getEventDate(dateFrom)}
       ${getEventType(type)}
-      ${getEventTitle(type, name)}
+      ${getEventTitle(type, destination)}
       ${getEventSchedule(dateFrom, dateTo)}
       ${getEventPrice(basePrice)}
       ${getEventOffers(offers)}

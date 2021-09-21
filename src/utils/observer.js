@@ -22,7 +22,6 @@ export default class Observer {
       }
       return item;
     });
-
     this._notify(updateType, update);
   }
 

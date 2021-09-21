@@ -29,7 +29,6 @@ export default class Point {
   init(data) {
     const oldPoint = this._point;
     const oldEditPoint = this._editPoint;
-
     this._point = new PointView(data);
     this._editPoint = new EditPointView(data);
 
@@ -91,7 +90,7 @@ export default class Point {
     );
   }
 
-  _handlerClickSubmit(update) {
+  _handlerClickSubmit(update, button) {
     const isMinorUpdate =
     !isDatesEqual(this._point._data.dateFrom, update.dateFrom) ||
     !isDatesEqual(this._point._data.dateTo, update.dateTo) ||
@@ -101,6 +100,7 @@ export default class Point {
       UserAction.UPDATE_POINT,
       isMinorUpdate ? UpdateType.MINOR : UpdateType.PATCH,
       update,
+      button,
     );
   }
 

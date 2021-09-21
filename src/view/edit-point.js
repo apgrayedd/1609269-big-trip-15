@@ -21,17 +21,19 @@ import dayjs from 'dayjs';
 
 const dataForNewPoint = {
   type: 'Taxi',
-  name: '',
-  destinations: '',
-  pictures: '',
+  destination: {
+    description: '',
+    pictures: '',
+    name: 'New point',
+  },
+  name: 'New point',
   dateFrom: dayjs(),
   dateTo: dayjs(),
   basePrice: 0,
   offers: [],
-  description: '',
 };
 
-const editPoint = ({type, basePrice, offers, name, description, pictures, dateFrom, dateTo}) => (
+const editPoint = ({type, basePrice, offers, name, destination, dateFrom, dateTo}) => (
   `<form class="event event--edit" action="#" method="post">
     <header class="event__header">
       ${getEventTypeWrapper(type)}
@@ -46,7 +48,7 @@ const editPoint = ({type, basePrice, offers, name, description, pictures, dateFr
     </header>
     <section class="event__details">
       ${getEventAvailableOffers(offers)}
-      ${getEventAvailableDestination(description, pictures)}
+      ${getEventAvailableDestination(destination)}
     </section>
   </form>`
 );
@@ -127,8 +129,8 @@ export default class EditPoint extends SmartView {
 
   _submitHandler(evt) {
     evt.preventDefault();
-    this._callback.submit(this._data);
-    this._callbackClose(evt);
+    this._data.destination.name = this._data.name;
+    this._callback.submit(this._data, evt.target);
   }
 
   setSubmitClick(callback) {

@@ -3,7 +3,7 @@ import { remove, render, RenderPosition } from '../utils/render';
 import NavigationListView from '../view/navigation-list.js';
 
 export default class Navigation {
-  constructor(container, data,  tripPresenter, statsPresenter,filterPresenter) {
+  constructor(container, data,  tripPresenter, statsPresenter, filterPresenter) {
     this._data = data;
     this._container = container;
     this._tripPresenter = tripPresenter;
@@ -41,6 +41,11 @@ export default class Navigation {
     this._navigationList.setChangeNavigation(this._handleNavChanger);
 
     render(this._container, this._navigationList, RenderPosition.BEFOREEND);
+
+    document.querySelector('.trip-main__event-add-btn').addEventListener('click', (evt) => {
+      evt.preventDefault();
+      this._tripPresenter.createPoint();
+    });
   }
 
   _handleNavChanger(innerText) {

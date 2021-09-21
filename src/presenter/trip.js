@@ -1,6 +1,7 @@
 import ListEventsView from '../view/list.js';
 import EmptyListView from '../view/empty-list.js';
 import SortListView from '../view/sort-list.js';
+import LoadingView from '../view/loading.js';
 import {filter} from '../utils/filter.js';
 import PointPresent from './point.js';
 import NewPointPresenter from './newPoint.js';
@@ -8,7 +9,7 @@ import {remove, render, RenderPosition} from '../utils/render.js';
 import {SortType, UserAction, UpdateType, FilterType, NavType} from '../const.js';
 
 export default class Trip {
-  constructor(container, pointModels, filterModel){
+  constructor(container, pointModels, filterModel, api){
     this._container = container;
     this._pointsMap = new Map();
     this._filterType = FilterType.EVERYTHING;
@@ -16,6 +17,9 @@ export default class Trip {
     this._listEvents = new ListEventsView();
     this._emptyList = null;
     this._sortList = null;
+    this._api = api;
+    this._loadingView = new LoadingView();
+    this._isLoading = true;
     this._currentSortType = SortType.EVENT_DOWN.name;
     this._filterModel = filterModel;
     this._bindHandles();
@@ -25,6 +29,11 @@ export default class Trip {
   }
 
   init() {
+    if (this._isLoading) {
+      this._renderLoading();
+      return;
+    }
+
     this._newPointPresenter = new NewPointPresenter(this._listEvents.getElement(), this._handleViewAction);
     const pointLength = this._getPoints().length;
 
@@ -75,6 +84,7 @@ export default class Trip {
 
   _renderSort() {
     if (this._sortList !== null) {
+      remove(this._sortList);
       this._sortList = null;
     }
 
@@ -113,10 +123,18 @@ export default class Trip {
     this._pointsMap.forEach((point) => point.resetView());
   }
 
-  _handleViewAction(actionType, updateType, update) {
+  _handleViewAction(actionType, updateType, update, button) {
     switch(actionType){
       case UserAction.UPDATE_POINT:
-        this._pointModels.updatePoint(updateType, update);
+        this._api.updatePoint(update)
+          .then((response) => {
+            this._pointModels.updatePoint(updateType, response);
+          })
+          .catch((err) => {
+            button.disabled = true;
+            button.textContent = 'Ошибка';
+            button.value = err;
+          });
         break;
       case UserAction.ADD_POINT:
         this._pointModels.addPoints(updateType, update);
@@ -144,7 +162,16 @@ export default class Trip {
         this._clear({resetSortType: true});
         this.init();
         break;
+      case UpdateType.INIT:
+        this._isLoading = false;
+        remove(this._loadingView);
+        this._clear();
+        break;
     }
+  }
+
+  _renderLoading() {
+    render(this._container, this._loadingView, RenderPosition.AFTERBEGIN);
   }
 
   _handleSortTypeChanger(sortType) {
