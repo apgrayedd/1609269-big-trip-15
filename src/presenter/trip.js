@@ -33,7 +33,6 @@ export default class Trip {
       this._renderLoading();
       return;
     }
-    console.log(this._getPoints())
     this._newPointPresenter = new NewPointPresenter(this._listEvents.getElement(), this._handleViewAction);
     const pointLength = this._getPoints().length;
 

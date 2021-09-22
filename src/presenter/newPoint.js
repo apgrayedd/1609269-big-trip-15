@@ -1,4 +1,4 @@
-import {remove, render, RenderPosition, replace} from '../utils/render.js';
+import {remove, render, RenderPosition} from '../utils/render.js';
 import EditPointView from '../view/edit-point.js';
 import {UserAction, UpdateType} from '../const.js';
 import cloneDeep from 'lodash.clonedeep';
