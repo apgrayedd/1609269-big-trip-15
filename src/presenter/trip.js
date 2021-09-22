@@ -46,7 +46,7 @@ export default class Trip {
     this._renderTripInfo();
     this._renderSort();
     this._renderPoints();
-    render(this._container, this._listEvents, RenderPosition.BEFOREEND);
+    render(this._container, this._listEvents, RenderPosition.AFTERBEGIN);
   }
 
   createPoint() {
