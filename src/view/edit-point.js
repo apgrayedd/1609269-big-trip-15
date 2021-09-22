@@ -12,7 +12,6 @@ import {
 } from '../utils/render.js';
 import {
   matchValidationInteger
-  // dateValidation
 } from '../utils/common.js';
 import SmartView from './smart.js';
 import flatpickr from 'flatpickr';
@@ -95,7 +94,7 @@ export default class EditPoint extends SmartView {
   }
 
   _disableSaveBtn() {
-    const saveBtn = document.querySelector('.event__save-btn');
+    const saveBtn = this.getElement().querySelector('.event__save-btn');
     if (!this.checkInputDestination() && !this.checkInputPrice()) {
       saveBtn.disabled = false;
       return;
@@ -104,13 +103,13 @@ export default class EditPoint extends SmartView {
   }
 
   checkInputDestination() {
-    return document.querySelector('#event-destination-1').value.length === 0
+    return this.getElement().querySelector('#event-destination-1').value.length === 0
       ? 'Имя должно содержать хотя бы 1 символ'
       : false;
   }
 
   checkInputPrice() {
-    return matchValidationInteger(document.querySelector('#event-price-1').value);
+    return matchValidationInteger(this.getElement().querySelector('#event-price-1').value);
   }
 
   _nameEventHandler(evt) {
@@ -151,7 +150,6 @@ export default class EditPoint extends SmartView {
     this.updateData({
       dateTo: dayjs(date).format(dateStandartFormat),
     }, true);
-    //dateValidation
   }
 
   _submitHandler(evt) {

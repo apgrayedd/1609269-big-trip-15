@@ -57,12 +57,15 @@ export default class Trip {
     const points = this._pointModels.getPoints();
     const filteredTasks = filter[this._filterType](points);
     switch(this._currentSortType){
-      case SortType.PRICE_DOWN.name:
+      case SortType.PRICE_DOWN.name: {
         return filteredTasks.sort(SortType.PRICE_DOWN.funct);
-      case SortType.TIME_DOWN.name:
+      }
+      case SortType.TIME_DOWN.name: {
         return filteredTasks.sort(SortType.TIME_DOWN.funct);
-      case SortType.EVENT_DOWN.name:
+      }
+      case SortType.EVENT_DOWN.name: {
         return filteredTasks.sort(SortType.EVENT_DOWN.funct);
+      }
     }
 
     return filteredTasks;
@@ -122,25 +125,26 @@ export default class Trip {
     this._pointsMap.forEach((point) => point.resetView());
   }
 
-  _changeTextSaveBtn(text, attributes) {
-    const saveBtn = document.querySelector('.event__save-btn');
+  _changeTextSaveBtn(view, text, attributes) {
+    const saveBtn = view.getElement().querySelector('.event__save-btn');
     if (saveBtn === null) {
       return;
     }
 
     saveBtn.textContent = text;
 
-    if (attributes) {
+    if (attributes && !attributes.isEmpty()) {
       for (const attribute in attributes) {
         saveBtn[attribute] = attributes[attributes];
       }
     }
   }
 
-  _handleViewAction(actionType, updateType, update, closeFunct) {
-    this._changeTextSaveBtn('Загрузка...');
+  _handleViewAction(actionType, updateType, updateView, closeFunct) {
+    const update = updateView._data;
+    this._changeTextSaveBtn(updateView, 'Загрузка...');
     switch(actionType){
-      case UserAction.UPDATE_POINT:
+      case UserAction.UPDATE_POINT: {
         this._api.updatePoint(update)
           .then((answer) => {
             this._pointModels.updatePoint(updateType, answer);
@@ -157,7 +161,8 @@ export default class Trip {
             );
           });
         break;
-      case UserAction.ADD_POINT:
+      }
+      case UserAction.ADD_POINT: {
         this._api.addPoint(update)
           .then((answer) => {
             this._pointModels.addPoints(updateType, answer);
@@ -174,7 +179,8 @@ export default class Trip {
             );
           });
         break;
-      case UserAction.DELETE_POINT:
+      }
+      case UserAction.DELETE_POINT: {
         this._api.deletePoint(update)
           .then(() => {
             this._pointModels.deletePoint(updateType, update);
@@ -191,6 +197,7 @@ export default class Trip {
             );
           });
         break;
+      }
     }
   }
 
@@ -200,22 +207,26 @@ export default class Trip {
 
   _handleModelEvent(updateType, data) {
     switch (updateType) {
-      case UpdateType.PATCH:
+      case UpdateType.PATCH: {
         this._pointsMap.get(data.id).init(data);
         break;
-      case UpdateType.MINOR:
+      }
+      case UpdateType.MINOR: {
         this._clear();
         this.init();
         break;
-      case UpdateType.MAJOR:
+      }
+      case UpdateType.MAJOR: {
         this._clear({resetSortType: true});
         this.init();
         break;
-      case UpdateType.INIT:
+      }
+      case UpdateType.INIT: {
         this._isLoading = false;
         remove(this._loadingView);
         this._clear();
         break;
+      }
     }
   }
 

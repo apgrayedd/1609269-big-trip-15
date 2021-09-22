@@ -1,5 +1,4 @@
 import dayjs from 'dayjs';
-import cloneDeep from 'lodash.clonedeep';
 import ObserverModel from '../utils/observer';
 
 export default class PointModel extends ObserverModel {
@@ -19,7 +18,7 @@ export default class PointModel extends ObserverModel {
   }
 
   static adaptToClient(point) {
-    const adaptedPoint = cloneDeep({
+    const adaptedPoint = Object.assign({
       ...point,
       name: point.destination.name,
       basePrice: point.base_price ? point.base_price : 0,
@@ -36,7 +35,7 @@ export default class PointModel extends ObserverModel {
   }
 
   static adaptToServer(point) {
-    const adaptedPoint = cloneDeep({
+    const adaptedPoint = Object.assign({
       ...point,
       type: point.type.toLowerCase(),
       'base_price': point.basePrice ? point.basePrice : 0,

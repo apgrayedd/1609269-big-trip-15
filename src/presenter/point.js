@@ -99,7 +99,7 @@ export default class Point {
     this._pointUpdateData(
       UserAction.UPDATE_POINT,
       isMinorUpdate ? UpdateType.MINOR : UpdateType.PATCH,
-      update,
+      this._editPoint,
       this._replaceEditToPoint,
     );
   }
