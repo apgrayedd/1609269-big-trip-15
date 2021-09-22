@@ -16,7 +16,6 @@ const LINK = 'https://15.ecmascript.pages.academy/big-trip';
 const api = new Api(LINK, AUTORIZATION);
 const pointModel = new PointModel();
 const filterModel = new FilterModel();
-
 const tripEvents = document.querySelector('.trip-events');
 const tripMain = document.querySelector('.trip-main');
 const tripControls = document.querySelector('.trip-controls');

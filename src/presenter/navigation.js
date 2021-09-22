@@ -14,7 +14,6 @@ export default class Navigation {
     this._currentNavType = NavType.TABLE;
     this._navigationList = null;
     this._statsView = null;
-    this._tripInfo = null;
     this._bindHandles();
   }
 
@@ -23,8 +22,10 @@ export default class Navigation {
       remove(this._navigationList);
       this._navigationList = null;
     }
-
     this._tripPresenter.setChangeNavToTable(this._handleNavChanger);
+    this._navigationList = new NavigationListView(this._currentNavType);
+    this._navigationList.setChangeNavigation(this._handleNavChanger);
+    render(this._container, this._navigationList, RenderPosition.AFTERBEGIN);
 
     switch(this._currentNavType) {
       case NavType.TABLE:
@@ -38,11 +39,6 @@ export default class Navigation {
         this._statsPresenter.init();
         break;
     }
-
-    this._navigationList = new NavigationListView(this._currentNavType);
-    this._navigationList.setChangeNavigation(this._handleNavChanger);
-
-    render(this._container, this._navigationList, RenderPosition.BEFOREEND);
 
     document.querySelector('.trip-main__event-add-btn').addEventListener('click', (evt) => {
       evt.preventDefault();

@@ -106,7 +106,7 @@ export default class Trip {
       this._tripInfoView = null;
     }
     this._tripInfoView = new TripInfoView(this._pointModels.getPoints());
-    render(this._mainContainer, this._tripInfoView, RenderPosition.AFTERBEGIN);
+    render(this._mainContainer, this._tripInfoView, RenderPosition.BEFOREEND);
   }
 
   _clear(resetSortType = false) {
@@ -121,6 +121,7 @@ export default class Trip {
     this._pointsMap.clear();
 
     remove(this._sortList);
+    remove(this._tripInfoView);
     if(this._emptyList) {
       remove(this._emptyList);
     }
