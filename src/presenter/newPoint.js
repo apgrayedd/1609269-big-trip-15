@@ -1,4 +1,4 @@
-import {remove, render, RenderPosition} from '../utils/render.js';
+import {remove, render, RenderPosition, replace} from '../utils/render.js';
 import EditPointView from '../view/edit-point.js';
 import {UserAction, UpdateType} from '../const.js';
 import cloneDeep from 'lodash.clonedeep';
@@ -31,12 +31,10 @@ export default class NewPoint {
   }
 
   destroy() {
-    // if (this._editPoint === null) {
-    //   return;
-    // }
-
-    // remove(this._editPoint);
-    // this._editPoint = null;
+    if (this._editPoint !== null) {
+      remove(this._editPoint);
+      this._editPoint = null;
+    }
 
     document.removeEventListener('keydown', this._closeNewPointByEsc);
   }
@@ -47,7 +45,7 @@ export default class NewPoint {
       UpdateType.MINOR,
 
       cloneDeep({...point, id: nanoid()}),
-      this.destroy(),
+      this.destroy,
     );
   }
 
@@ -63,6 +61,7 @@ export default class NewPoint {
   }
 
   _bindHandles() {
+    this.destroy = this.destroy.bind(this);
     this._handlerClickSubmit = this._handlerClickSubmit.bind(this);
     this._handlerDeleteClick = this._handlerDeleteClick.bind(this);
     this._closeNewPointByEsc = this._closeNewPointByEsc.bind(this);

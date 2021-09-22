@@ -22,8 +22,8 @@ import dayjs from 'dayjs';
 const dataForNewPoint = {
   type: 'Taxi',
   destination: {
-    description: '',
-    pictures: '',
+    description: 'Desition',
+    pictures: [],
     name: 'New point',
   },
   name: 'New point',

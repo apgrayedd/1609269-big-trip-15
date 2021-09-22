@@ -41,10 +41,12 @@ const getEventOffer = ({title, price}) => (
 );
 
 const getEventOffers = (offers) => (
-  `<h4 class="visually-hidden">Offers:</h4>
-  <ul class="event__selected-offers">
-   ${getStrFromArr(offers, getEventOffer)}
-  </ul>`
+  getStrFromArr(offers, getEventOffer)
+    ? `<h4 class="visually-hidden">Offers:</h4>
+        <ul class="event__selected-offers">
+          ${getStrFromArr(offers, getEventOffer)}
+        </ul>`
+    : ''
 );
 
 const getEventType = (type) => (

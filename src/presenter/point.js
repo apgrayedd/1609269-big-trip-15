@@ -109,6 +109,7 @@ export default class Point {
       UserAction.DELETE_POINT,
       UpdateType.MINOR,
       point,
+      this._replaceEditToPoint,
     );
   }
 

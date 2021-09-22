@@ -4,6 +4,7 @@ const Method = {
   GET: 'GET',
   POST: 'POST',
   PUT: 'PUT',
+  DELETE: 'DELETE',
 };
 
 export default class Api {
@@ -31,13 +32,20 @@ export default class Api {
 
   addPoint(point) {
     return this._load({
-      url: `points`,
+      url: 'points',
       method: Method.POST,
       body: JSON.stringify(PointModel.adaptToServer(point)),
       headers: new Headers({'Content-Type': 'application/json'}),
     })
       .then(Api.toJSON)
       .then(PointModel.adaptToClient);
+  }
+
+  deletePoint(point) {
+    return this._load({
+      url: `points/${point.id}`,
+      method: Method.DELETE,
+    });
   }
 
   _load({

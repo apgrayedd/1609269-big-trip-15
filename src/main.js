@@ -28,6 +28,7 @@ const navigationPresenter = new NavigationPresenter(tripControls, pointModel, pr
 
 api.getPoints()
   .then((points) => {
+    console.log(points);
     pointModel.setPoints(UpdateType.INIT, points);
     navigationPresenter.init();
     createNewPoint.disabled = false;

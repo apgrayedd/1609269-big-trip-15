@@ -116,7 +116,7 @@ export const getEventFieldGroupPrice = (basePrice) => `
 </div>`;
 
 export const getEventAvailableOffers = (offers) => (
-  offers.length > 0
+  getStrFromArr(offers, offerItem)
     ? `<section class="event__section  event__section--offers">
         <h3 class="event__section-title  event__section-title--offers">Offers</h3>
         <div class="event__available-offers">
@@ -127,7 +127,7 @@ export const getEventAvailableOffers = (offers) => (
 );
 
 export const getEventAvailableDestination = ({description, pictures}) => {
-  const picturesList = pictures
+  const picturesList = getStrFromArr(pictures, getPicturesItem)
     ? (
       `<div class="event__photos-container">
         <div class="event__photos-tape">
@@ -135,14 +135,17 @@ export const getEventAvailableDestination = ({description, pictures}) => {
         </div>
       </div>`)
     : '';
+  const descriptionText = description
+    ? `<p class="event__destination-description">${description}</p>`
+    : '';
 
   return (
-    description.length > 0
+    picturesList || descriptionText
       ? (
         `<section class="event__section  event__section--destination">
           <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-          <p class="event__destination-description">${description}</p>
-            ${picturesList}
+          ${descriptionText}
+          ${picturesList}
         </section>`)
       : '');
 };

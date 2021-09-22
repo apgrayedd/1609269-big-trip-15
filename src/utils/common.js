@@ -23,6 +23,13 @@ export function getTimeFromMins(mins) {
 }
 
 export function getStrFromArr (arr, functOnArrItems, activeStr = false, functWithActStr = false, firstItem = '') {
+  if (typeof arr === 'object') {
+    arr = Object.values(arr);
+  }
+  if (arr.length <= 0) {
+    return false;
+  }
+
   return arr.reduce((str,arrItem) => {
     if (activeStr && arrItem === activeStr) {
       arrItem = functWithActStr(activeStr);
