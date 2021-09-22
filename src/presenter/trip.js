@@ -124,9 +124,12 @@ export default class Trip {
 
   _changeTextSaveBtn(text, attributes) {
     const saveBtn = document.querySelector('.event__save-btn');
-    if (saveBtn !== null) {
-      saveBtn.textContent = text;
+    if (saveBtn === null) {
+      return;
     }
+
+    saveBtn.textContent = text;
+
     if (attributes) {
       for (const attribute in attributes) {
         saveBtn[attribute] = attributes[attributes];
@@ -139,8 +142,8 @@ export default class Trip {
     switch(actionType){
       case UserAction.UPDATE_POINT:
         this._api.updatePoint(update)
-          .then(() => {
-            this._pointModels.updatePoint(updateType, update);
+          .then((answer) => {
+            this._pointModels.updatePoint(updateType, answer);
           })
           .then(() => {
             if (closeFunct) {
@@ -156,8 +159,8 @@ export default class Trip {
         break;
       case UserAction.ADD_POINT:
         this._api.addPoint(update)
-          .then(() => {
-            this._pointModels.addPoints(updateType, update);
+          .then((answer) => {
+            this._pointModels.addPoints(updateType, answer);
           })
           .then(() => {
             if (closeFunct) {

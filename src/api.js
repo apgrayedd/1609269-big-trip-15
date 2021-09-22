@@ -15,7 +15,7 @@ export default class Api {
 
   getPoints() {
     return this._load({url: 'points'})
-      .then(Api.toJson)
+      .then((answer) => answer.json())
       .then((points) => points.map(PointModel.adaptToClient));
   }
 
@@ -26,9 +26,8 @@ export default class Api {
       body: JSON.stringify(PointModel.adaptToServer(point)),
       headers: new Headers({'Content-Type': 'application/json'}),
     })
-      .then(Api.toJson)
-      .then(PointModel.adaptToClient)
-      .then(() => console.log(this.getPoints()))
+      .then((answer) => answer.json())
+      .then(PointModel.adaptToClient);
   }
 
   addPoint(point) {
@@ -38,7 +37,7 @@ export default class Api {
       body: JSON.stringify(PointModel.adaptToServer(point)),
       headers: new Headers({'Content-Type': 'application/json'}),
     })
-      .then(Api.toJSON)
+      .then((answer) => answer.json())
       .then(PointModel.adaptToClient);
   }
 
@@ -74,9 +73,5 @@ export default class Api {
 
   static catchError(err) {
     throw err;
-  }
-
-  static toJson(response) {
-    return response.json();
   }
 }
