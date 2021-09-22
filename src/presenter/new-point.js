@@ -1,6 +1,6 @@
 import {remove, render, RenderPosition} from '../utils/render.js';
 import EditPointView from '../view/edit-point.js';
-import {UserAction, UpdateType} from '../const.js';
+import {UserActions, UpdateTypes} from '../const.js';
 import cloneDeep from 'lodash.clonedeep';
 import { nanoid } from 'nanoid';
 
@@ -42,8 +42,8 @@ export default class NewPoint {
   _handlerClickSubmit(point) {
     this._editPoint._data = cloneDeep({...point, id: nanoid()});
     return this._changeDataFucnt(
-      UserAction.ADD_POINT,
-      UpdateType.MINOR,
+      UserActions.ADD_POINT,
+      UpdateTypes.MINOR,
       this._editPoint,
       this.destroy,
     );

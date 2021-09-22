@@ -1,4 +1,4 @@
-import {controls} from '../const.js';
+import {CONTROLS} from '../const.js';
 import {
   getStrFromArr
 } from '../utils/common.js';
@@ -12,7 +12,7 @@ const getNavigationList = (checkedNav) => (
   `<div class="trip-controls__navigation">
     <h2 class="visually-hidden">Switch trip view</h2>
     <nav class="trip-controls__trip-tabs  trip-tabs">
-      ${getStrFromArr(controls, getNavigationItem, checkedNav, getNavigationItemActive)}
+      ${getStrFromArr(CONTROLS, getNavigationItem, checkedNav, getNavigationItemActive)}
     </nav>
   </div>`);
 

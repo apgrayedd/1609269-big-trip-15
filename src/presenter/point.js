@@ -3,7 +3,7 @@ import EditPointView from '../view/edit-point.js';
 import {render, RenderPosition, replace, remove} from '../utils/render.js';
 import Abstract from '../view/abstract.js';
 import cloneDeep from 'lodash.clonedeep';
-import {UserAction, UpdateType} from '../const.js';
+import {UserActions, UpdateTypes} from '../const.js';
 import {isDatesEqual} from '../utils/common.js';
 
 const KEY_TO_CLOSE_POINT = 27;
@@ -85,8 +85,8 @@ export default class Point {
       isFavorite: !this._point._data.isFavorite,
     });
     this._pointUpdateData(
-      UserAction.UPDATE_POINT,
-      UpdateType.MINOR,
+      UserActions.UPDATE_POINT,
+      UpdateTypes.MINOR,
       this._editPoint,
     );
   }
@@ -98,8 +98,8 @@ export default class Point {
     this._point._data.basePrice === update.basePrice;
 
     this._pointUpdateData(
-      UserAction.UPDATE_POINT,
-      isMinorUpdate ? UpdateType.MINOR : UpdateType.PATCH,
+      UserActions.UPDATE_POINT,
+      isMinorUpdate ? UpdateTypes.MINOR : UpdateTypes.PATCH,
       this._editPoint,
       this._replaceEditToPoint,
     );
@@ -107,8 +107,8 @@ export default class Point {
 
   _handlerDeleteClick() {
     this._pointUpdateData(
-      UserAction.DELETE_POINT,
-      UpdateType.MINOR,
+      UserActions.DELETE_POINT,
+      UpdateTypes.MINOR,
       this._editPoint,
       this._replaceEditToPoint,
     );

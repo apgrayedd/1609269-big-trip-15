@@ -1,7 +1,7 @@
 import {
   getStrFromArr
 } from '../utils/common.js';
-import {sorts} from '../const.js';
+import {SORTS} from '../const.js';
 import AbstractView from './abstract.js';
 
 const getSortItem = (sortItem) => (
@@ -22,7 +22,7 @@ const getSortItemChecked = (sortItem) => (
 
 const getSortList = (checkedSortType) => (
   `<form class="trip-events__trip-sort  trip-sort" action="#" method="get">
-    ${getStrFromArr(sorts, getSortItem, checkedSortType, getSortItemChecked)}
+    ${getStrFromArr(SORTS, getSortItem, checkedSortType, getSortItemChecked)}
   </form>`
 );
 

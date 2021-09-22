@@ -5,15 +5,15 @@ import StatsPresenter from './presenter/stats.js';
 import PointModel from './model/point.js';
 import FilterModel from './model/filter.js';
 import Api from './api.js';
-import { UpdateType } from './const.js';
+import { UpdateTypes } from './const.js';
 
 const createNewPoint = document.querySelector('.trip-main__event-add-btn');
 createNewPoint.disabled = true;
 
-const AUTORIZATION = 'Basic apgrayedd/1609269-big-trip-15';
+const AUTHORIZATION = 'Basic apgrayedd/1609269-big-trip-15';
 const LINK = 'https://15.ecmascript.pages.academy/big-trip';
 
-const api = new Api(LINK, AUTORIZATION);
+const api = new Api(LINK, AUTHORIZATION);
 const pointModel = new PointModel();
 const filterModel = new FilterModel();
 const tripEvents = document.querySelector('.trip-events');
@@ -29,10 +29,10 @@ const navigationPresenter = new NavigationPresenter(tripMain, pointModel, presen
 
 api.getPoints()
   .then((points) => {
-    pointModel.setPoints(UpdateType.INIT, points);
+    pointModel.setPoints(UpdateTypes.INIT, points);
     navigationPresenter.init();
     createNewPoint.disabled = false;
   })
-  // .catch((err) => {
-  //   throw new Error(err);
-  // });
+  .catch((err) => {
+    throw new Error(err);
+  });

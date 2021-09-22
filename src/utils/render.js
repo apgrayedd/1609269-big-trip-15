@@ -1,4 +1,4 @@
-import {types} from '../const.js';
+import {TYPES} from '../const.js';
 import Abstract from '../view/abstract.js';
 import {timeAdapter} from './adapters.js';
 import {getStrFromArr} from './common.js';
@@ -167,7 +167,7 @@ export const getEventTypeWrapper = (type) => (
     <div class="event__type-list">
       <fieldset class="event__type-group">
         <legend class="visually-hidden">Event type</legend>
-        ${getStrFromArr(types,eventTypeItem)}
+        ${getStrFromArr(TYPES,eventTypeItem)}
       </fieldset>
     </div>
   </div>`

@@ -1,4 +1,4 @@
-import {FilterType, UpdateType} from '../const';
+import {FilterTypes, UpdateTypes} from '../const';
 import {remove, render, RenderPosition, replace} from '../utils/render';
 import FilterView from '../view/filters-list';
 
@@ -20,7 +20,7 @@ export default class Filter {
       this._clear();
       this._filterList = null;
     }
-    const filters = Object.values(FilterType);
+    const filters = Object.values(FilterTypes);
     const prevFilterList = this._filterList;
 
     this._filterList = new FilterView(filters, this._filterModel.getFilter());
@@ -50,7 +50,7 @@ export default class Filter {
     if (this._filterModel.getFilter() === filterType) {
       return;
     }
-    this._filterModel.setFilter(UpdateType.MAJOR, filterType);
+    this._filterModel.setFilter(UpdateTypes.MAJOR, filterType);
   }
 
   _bindHandles() {

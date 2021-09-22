@@ -4,17 +4,17 @@ import SortListView from '../view/sort-list.js';
 import LoadingView from '../view/loading.js';
 import {filter} from '../utils/filter.js';
 import PointPresent from './point.js';
-import NewPointPresenter from './newPoint.js';
+import NewPointPresenter from './new-point.js';
 import TripInfoView from '../view/trip-info.js';
 import {remove, render, RenderPosition} from '../utils/render.js';
-import {SortType, UserAction, UpdateType, FilterType, NavType} from '../const.js';
+import {SortTypes, UserActions, UpdateTypes, FilterTypes, NavTypes} from '../const.js';
 
 export default class Trip {
   constructor(container, pointModels, filterModel, api){
     this._mainContainer = document.querySelector('.trip-main');
     this._container = container;
     this._pointsMap = new Map();
-    this._filterType = FilterType.EVERYTHING;
+    this._filterType = FilterTypes.EVERYTHING;
     this._pointModels = pointModels;
     this._listEvents = new ListEventsView();
     this._emptyList = null;
@@ -23,7 +23,7 @@ export default class Trip {
     this._api = api;
     this._loadingView = new LoadingView();
     this._isLoading = true;
-    this._currentSortType = SortType.EVENT_DOWN.name;
+    this._currentSortType = SortTypes.EVENT_DOWN.name;
     this._filterModel = filterModel;
     this._bindHandles();
     this._newPointPresenter = null;
@@ -50,9 +50,9 @@ export default class Trip {
   }
 
   createPoint() {
-    this._changeNavToTable(NavType.TABLE);
-    this._currentSortType = SortType.EVENT_DOWN.name;
-    this._filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
+    this._changeNavToTable(NavTypes.TABLE);
+    this._currentSortType = SortTypes.EVENT_DOWN.name;
+    this._filterModel.setFilter(UpdateTypes.MAJOR, FilterTypes.EVERYTHING);
     this._newPointPresenter.init();
   }
 
@@ -61,14 +61,14 @@ export default class Trip {
     const points = this._pointModels.getPoints();
     const filteredTasks = filter[this._filterType](points);
     switch(this._currentSortType){
-      case SortType.PRICE_DOWN.name: {
-        return filteredTasks.sort(SortType.PRICE_DOWN.funct);
+      case SortTypes.PRICE_DOWN.name: {
+        return filteredTasks.sort(SortTypes.PRICE_DOWN.funct);
       }
-      case SortType.TIME_DOWN.name: {
-        return filteredTasks.sort(SortType.TIME_DOWN.funct);
+      case SortTypes.TIME_DOWN.name: {
+        return filteredTasks.sort(SortTypes.TIME_DOWN.funct);
       }
-      case SortType.EVENT_DOWN.name: {
-        return filteredTasks.sort(SortType.EVENT_DOWN.funct);
+      case SortTypes.EVENT_DOWN.name: {
+        return filteredTasks.sort(SortTypes.EVENT_DOWN.funct);
       }
     }
 
@@ -127,7 +127,7 @@ export default class Trip {
     }
 
     if(resetSortType){
-      this._currentSortType = SortType.EVENT_DOWN.name;
+      this._currentSortType = SortTypes.EVENT_DOWN.name;
     }
   }
 
@@ -147,7 +147,8 @@ export default class Trip {
 
     saveBtn.textContent = text;
 
-    if (attributes && !attributes.isEmpty()) {
+    // eslint-disable-next-line no-undef
+    if (attributes && !_.isEmpty(attributes)) {
       for (const attribute in attributes) {
         saveBtn[attribute] = attributes[attributes];
       }
@@ -158,7 +159,7 @@ export default class Trip {
     const update = updateView._data;
     this._changeTextSaveBtn(updateView, 'Загрузка...');
     switch(actionType){
-      case UserAction.UPDATE_POINT: {
+      case UserActions.UPDATE_POINT: {
         this._api.updatePoint(update)
           .then((answer) => {
             this._pointModels.updatePoint(updateType, answer);
@@ -176,7 +177,7 @@ export default class Trip {
           });
         break;
       }
-      case UserAction.ADD_POINT: {
+      case UserActions.ADD_POINT: {
         this._api.addPoint(update)
           .then((answer) => {
             this._pointModels.addPoints(updateType, answer);
@@ -194,7 +195,7 @@ export default class Trip {
           });
         break;
       }
-      case UserAction.DELETE_POINT: {
+      case UserActions.DELETE_POINT: {
         this._api.deletePoint(update)
           .then(() => {
             this._pointModels.deletePoint(updateType, update);
@@ -222,21 +223,21 @@ export default class Trip {
   _handleModelEvent(updateType, data) {
     this._renderTripInfo();
     switch (updateType) {
-      case UpdateType.PATCH: {
+      case UpdateTypes.PATCH: {
         this._pointsMap.get(data.id).init(data);
         break;
       }
-      case UpdateType.MINOR: {
+      case UpdateTypes.MINOR: {
         this._clear();
         this.init();
         break;
       }
-      case UpdateType.MAJOR: {
+      case UpdateTypes.MAJOR: {
         this._clear({resetSortType: true});
         this.init();
         break;
       }
-      case UpdateType.INIT: {
+      case UpdateTypes.INIT: {
         this._isLoading = false;
         remove(this._loadingView);
         this._clear();

@@ -1,10 +1,10 @@
 import AbstractView from './abstract.js';
-import {FilterType} from '../const.js';
+import {FilterTypes} from '../const.js';
 
 const EmptyListTextType = {
-  [FilterType.EVERYTHING]: 'Click New Event to create your first point',
-  [FilterType.PAST]: 'There are no points at "PAST"',
-  [FilterType.FUTURE]: 'There are no points at "FUTURE"',
+  [FilterTypes.EVERYTHING]: 'Click New Event to create your first point',
+  [FilterTypes.PAST]: 'There are no points at "PAST"',
+  [FilterTypes.FUTURE]: 'There are no points at "FUTURE"',
 };
 const getEmptyList = (filterType) => {
   const textForEmptyList = EmptyListTextType[filterType];

@@ -68,10 +68,18 @@ export const dateValidation = (dateA, dateB) => {
   }
 };
 
-export const getObjValuesFromArrayByKey = (array, key) => {
+export const getArrayValuesFromObjByKey = (array, key) => {
   const rezult = [];
   array.forEach((obj) => {
     rezult.push(obj[key]);
   });
   return rezult;
+};
+
+export const getArrayByObj = (obj) => {
+  const array = [];
+  obj.forEach((objElem) => {
+    array.push(objElem);
+  });
+  return array;
 };

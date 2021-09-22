@@ -1,4 +1,4 @@
-import { NavType } from '../const';
+import { NavTypes } from '../const';
 import { remove, render, RenderPosition } from '../utils/render';
 import NavigationListView from '../view/navigation-list.js';
 
@@ -11,7 +11,7 @@ export default class Navigation {
     this._statsPresenter = statsPresenter;
     this._filterPresenter = filterPresenter;
     this._newPointPresenter = null;
-    this._currentNavType = NavType.TABLE;
+    this._currentNavType = NavTypes.TABLE;
     this._navigationList = null;
     this._statsView = null;
     this._bindHandles();
@@ -28,12 +28,12 @@ export default class Navigation {
     render(this._container, this._navigationList, RenderPosition.AFTERBEGIN);
 
     switch(this._currentNavType) {
-      case NavType.TABLE:
+      case NavTypes.TABLE:
         this._statsPresenter._clear();
         this._tripPresenter.init();
         this._filterPresenter.init();
         break;
-      case NavType.STATS:
+      case NavTypes.STATS:
         this._tripPresenter._clear();
         this._filterPresenter._clear();
         this._statsPresenter.init();

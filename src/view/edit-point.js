@@ -1,6 +1,6 @@
 import {
-  destinations,
-  dateStandartFormat
+  DESTINATIONS,
+  DATE_STANDARD_FORMAT
 } from '../const.js';
 import {
   getEventTypeWrapper,
@@ -36,7 +36,7 @@ const editPoint = ({type, basePrice, offers, name, destination, dateFrom, dateTo
   `<form class="event event--edit" action="#" method="post">
     <header class="event__header">
       ${getEventTypeWrapper(type)}
-      ${getEventFieldGroupDestination(type, name, destinations)}
+      ${getEventFieldGroupDestination(type, name, DESTINATIONS)}
       ${getEventFieldGroupTime(dateFrom, dateTo)}
       ${getEventFieldGroupPrice(basePrice)}
       <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
@@ -142,13 +142,13 @@ export default class EditPoint extends SmartView {
 
   _dateStartEventHandler([date]) {
     this.updateData({
-      dateFrom: dayjs(date).format(dateStandartFormat),
+      dateFrom: dayjs(date).format(DATE_STANDARD_FORMAT),
     }, true);
   }
 
   _dateEndEventHandler([date]) {
     this.updateData({
-      dateTo: dayjs(date).format(dateStandartFormat),
+      dateTo: dayjs(date).format(DATE_STANDARD_FORMAT),
     }, true);
   }
 

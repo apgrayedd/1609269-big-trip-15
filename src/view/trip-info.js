@@ -1,32 +1,31 @@
-import { SortType } from '../const';
+import { SortTypes } from '../const';
 import {timeAdapter} from '../utils/adapters';
-import {getObjValuesFromArrayByKey} from '../utils/common';
+import {
+  getArrayValuesFromObjByKey,
+  getArrayByObj
+} from '../utils/common';
 import AbstractView from './abstract';
 
 const getTripInfo  = (data) => {
-  data = data.sort(SortType.TIME_DOWN.funct);
-  const getTriptInfo = data.length <= 3
-    ? data.reduce((point, accumulator = []) => {
-      console.log(accumulator)
-      accumulator.append(point);
-    })
+  data = data.sort(SortTypes.TIME_DOWN.funct);
+  const getTripeInfo = data.length <= 3
+    ? getArrayByObj(data)
     : [data[0], data[data.length - 1]];
-
-  const getTriptInfoTitle = getTriptInfo <= 3
-    ? getObjValuesFromArrayByKey(getTriptInfo, 'name').join('&nbsp;—&nbsp;')
-    : getObjValuesFromArrayByKey(getTriptInfo, 'name').join('&nbsp;—&nbsp;...&nbsp;—&nbsp;');
-  const getTriptInfoDays = [
-    timeAdapter(getTriptInfo[0].dateFrom, 'MMM D'),
-    timeAdapter(getTriptInfo[getTriptInfo.length - 1].dateFrom, 'MMM D'),
+  const getTripeInfoTitle = getTripeInfo.length <= 3
+    ? getArrayValuesFromObjByKey(getTripeInfo, 'name').join('&nbsp;—&nbsp;')
+    : getArrayValuesFromObjByKey(getTripeInfo, 'name').join('&nbsp;—&nbsp;...&nbsp;—&nbsp;');
+  const getTripeInfoDays = [
+    timeAdapter(getTripeInfo[0].dateFrom, 'MMM D'),
+    timeAdapter(getTripeInfo[getTripeInfo.length - 1].dateFrom, 'MMM D'),
   ].join('&nbsp;—&nbsp;');
-  const getCostValue = getObjValuesFromArrayByKey(data, 'basePrice')
+  const getCostValue = getArrayValuesFromObjByKey(data, 'basePrice')
     .reduce((value, summ) => summ += value);
 
   return `<section class="trip-main__trip-info  trip-info">
   <div class="trip-info__main">
     <h1 class="trip-info__title"></h1>
-    <h1 class="trip-info__title">${getTriptInfoTitle}</h1>
-    <p class="trip-info__dates">${getTriptInfoDays}</p>
+    <h1 class="trip-info__title">${getTripeInfoTitle}</h1>
+    <p class="trip-info__dates">${getTripeInfoDays}</p>
   </div>
     <p class="trip-info__cost">
     Total: €&nbsp;<span class="trip-info__cost-value">${getCostValue}</span>
