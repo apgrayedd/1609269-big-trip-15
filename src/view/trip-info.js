@@ -1,8 +1,10 @@
+import { SortType } from '../const';
 import {timeAdapter} from '../utils/adapters';
 import {getObjValuesFromArrayByKey} from '../utils/common';
 import AbstractView from './abstract';
 
 const getTripInfo  = (data) => {
+  data = data.sort(SortType.TIME_DOWN.funct);
   const getTriptInfo = data.length <= 3
     ? data.reduce((point, arr = []) => {
       arr.append(point);
