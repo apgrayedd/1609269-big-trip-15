@@ -93,6 +93,12 @@ export const getPicturesItem = ({src,imgDescription}) => (
 
 // Creating big blocks
 
+export const getEventDate = (dateFrom) => {
+  const dateForDateTime = timeAdapter(dateFrom, 'YYYY-MM-DD');
+  const dateForTime = timeAdapter(dateFrom, 'MMM D');
+  return `<time class="event__date" datetime="${dateForDateTime}">${dateForTime}</time>`;
+};
+
 export const getEventFieldGroupDestination = (type, name, destinationArr) => (
   `<div class="event__field-group  event__field-group--destination">
     <label class="event__label  event__type-output" for="event-destination-1">

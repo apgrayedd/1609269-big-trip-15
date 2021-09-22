@@ -7,12 +7,7 @@ import {
   timeAdapterDiff
 } from '../utils/adapters.js';
 import SmartView from './smart.js';
-
-const getEventDate = (dateFrom) => {
-  const dateForDateTime = timeAdapter(dateFrom, 'YYYY-MM-DD');
-  const dateForTime = timeAdapter(dateFrom, 'MMM D');
-  return `<time class="event__date" datetime="${dateForDateTime}">${dateForTime}</time>`;
-};
+import {getEventDate} from '../utils/render.js';
 
 const getEventSchedule = (dateFrom, dayTo) => {
   const dateStartDateTime = timeAdapter(dateFrom,'YYYY-MM-DDTHH:mm');

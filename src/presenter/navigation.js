@@ -3,9 +3,10 @@ import { remove, render, RenderPosition } from '../utils/render';
 import NavigationListView from '../view/navigation-list.js';
 
 export default class Navigation {
-  constructor(container, data,  tripPresenter, statsPresenter, filterPresenter) {
+  constructor(mainContainer, data,  tripPresenter, statsPresenter, filterPresenter) {
     this._data = data;
-    this._container = container;
+    this._mainContainer = mainContainer;
+    this._container = mainContainer.querySelector('.trip-controls');
     this._tripPresenter = tripPresenter;
     this._statsPresenter = statsPresenter;
     this._filterPresenter = filterPresenter;
@@ -13,6 +14,7 @@ export default class Navigation {
     this._currentNavType = NavType.TABLE;
     this._navigationList = null;
     this._statsView = null;
+    this._tripInfo = null;
     this._bindHandles();
   }
 

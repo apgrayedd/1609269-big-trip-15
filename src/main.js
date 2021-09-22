@@ -16,15 +16,17 @@ const LINK = 'https://15.ecmascript.pages.academy/big-trip';
 const api = new Api(LINK, AUTORIZATION);
 const pointModel = new PointModel();
 const filterModel = new FilterModel();
+
 const tripEvents = document.querySelector('.trip-events');
+const tripMain = document.querySelector('.trip-main');
+const tripControls = document.querySelector('.trip-controls');
 
 const presenterTrip = new TripPresenter(tripEvents, pointModel, filterModel, api);
 presenterTrip.init();
 
-const tripControls = document.querySelector('.trip-controls');
 const filterPresenter = new FilterPresenter(tripControls, filterModel, pointModel);
 const statsPresenter = new StatsPresenter(tripEvents, pointModel);
-const navigationPresenter = new NavigationPresenter(tripControls, pointModel, presenterTrip, statsPresenter, filterPresenter);
+const navigationPresenter = new NavigationPresenter(tripMain, pointModel, presenterTrip, statsPresenter, filterPresenter);
 
 api.getPoints()
   .then((points) => {

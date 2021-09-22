@@ -46,7 +46,7 @@ export const isDatePast = (date) => (dayjs(date).isBefore(dayjs()));
 
 export const matchValidationInteger = (fieldValue) => {
   if (!fieldValue) {
-    return false;
+    return 'Имя должно содержать хотя бы 1 символ';
   }
 
   const match = fieldValue.match(/[0-9]*/);
@@ -66,4 +66,12 @@ export const dateValidation = (dateA, dateB) => {
   if (dayjs(dateA).diff(dayjs(dateB)) < 0) {
     return 'Дата конца не может превышать дату начала!';
   }
+};
+
+export const getObjValuesFromArrayByKey = (array, key) => {
+  const rezult = [];
+  array.forEach((obj) => {
+    rezult.push(obj[key]);
+  });
+  return rezult;
 };

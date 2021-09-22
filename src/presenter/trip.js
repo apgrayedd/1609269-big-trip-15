@@ -5,11 +5,13 @@ import LoadingView from '../view/loading.js';
 import {filter} from '../utils/filter.js';
 import PointPresent from './point.js';
 import NewPointPresenter from './newPoint.js';
+import TripInfoView from '../view/trip-info.js';
 import {remove, render, RenderPosition} from '../utils/render.js';
 import {SortType, UserAction, UpdateType, FilterType, NavType} from '../const.js';
 
 export default class Trip {
   constructor(container, pointModels, filterModel, api){
+    this._mainContainer = document.querySelector('.trip-main');
     this._container = container;
     this._pointsMap = new Map();
     this._filterType = FilterType.EVERYTHING;
@@ -17,6 +19,7 @@ export default class Trip {
     this._listEvents = new ListEventsView();
     this._emptyList = null;
     this._sortList = null;
+    this._tripInfoView = null;
     this._api = api;
     this._loadingView = new LoadingView();
     this._isLoading = true;
@@ -40,9 +43,10 @@ export default class Trip {
       this._renderNoPoints();
       return;
     }
+    this._renderTripInfo();
     this._renderSort();
     this._renderPoints();
-    render(this._container, this._listEvents, RenderPosition.AFTERBEGIN);
+    render(this._container, this._listEvents, RenderPosition.BEFOREEND);
   }
 
   createPoint() {
@@ -94,6 +98,15 @@ export default class Trip {
     this._sortList.setHandlerSortChanger(this._handleSortTypeChanger);
 
     render(this._container, this._sortList, RenderPosition.AFTERBEGIN);
+  }
+
+  _renderTripInfo() {
+    if (this._tripInfoView !== null) {
+      remove(this._tripInfoView);
+      this._tripInfoView = null;
+    }
+    this._tripInfoView = new TripInfoView(this._pointModels.getPoints());
+    render(this._mainContainer, this._tripInfoView, RenderPosition.AFTERBEGIN);
   }
 
   _clear(resetSortType = false) {
@@ -206,6 +219,7 @@ export default class Trip {
   }
 
   _handleModelEvent(updateType, data) {
+    this._renderTripInfo();
     switch (updateType) {
       case UpdateType.PATCH: {
         this._pointsMap.get(data.id).init(data);
