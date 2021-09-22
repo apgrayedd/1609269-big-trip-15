@@ -40,11 +40,11 @@ export default class NewPoint {
   }
 
   _handlerClickSubmit(point) {
-    this._changeDataFucnt(
+    this._editPoint._data = cloneDeep({...point, id: nanoid()});
+    return this._changeDataFucnt(
       UserAction.ADD_POINT,
       UpdateType.MINOR,
-
-      cloneDeep({...point, id: nanoid()}),
+      this._editPoint,
       this.destroy,
     );
   }

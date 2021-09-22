@@ -104,11 +104,11 @@ export default class Point {
     );
   }
 
-  _handlerDeleteClick(point) {
+  _handlerDeleteClick() {
     this._pointUpdateData(
       UserAction.DELETE_POINT,
       UpdateType.MINOR,
-      point,
+      this._editPoint,
       this._replaceEditToPoint,
     );
   }
