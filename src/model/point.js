@@ -44,7 +44,6 @@ export default class PointModel extends ObserverModel {
       'date_to': point.dateTo ? point.dateTo : dayjs(),
       'is_favorite': point.isFavorite ? point.isFavorite : false,
     });
-
     delete adaptedPoint.basePrice;
     delete adaptedPoint.dateFrom;
     delete adaptedPoint.dateTo;

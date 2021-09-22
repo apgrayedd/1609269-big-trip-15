@@ -27,7 +27,8 @@ export default class Api {
       headers: new Headers({'Content-Type': 'application/json'}),
     })
       .then(Api.toJson)
-      .then(PointModel.adaptToClient);
+      .then(PointModel.adaptToClient)
+      .then(() => console.log(this.getPoints()))
   }
 
   addPoint(point) {

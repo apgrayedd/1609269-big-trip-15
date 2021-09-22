@@ -122,20 +122,36 @@ export default class Trip {
     this._pointsMap.forEach((point) => point.resetView());
   }
 
-  _handleViewAction(actionType, updateType, update, closeFunct) {
+  _changeTextSaveBtn(text, attributes) {
     const saveBtn = document.querySelector('.event__save-btn');
-    saveBtn.textContent = 'Загрузка...';
+    if (saveBtn !== null) {
+      saveBtn.textContent = text;
+    }
+    if (attributes) {
+      for (const attribute in attributes) {
+        saveBtn[attribute] = attributes[attributes];
+      }
+    }
+  }
+
+  _handleViewAction(actionType, updateType, update, closeFunct) {
+    this._changeTextSaveBtn('Загрузка...');
     switch(actionType){
       case UserAction.UPDATE_POINT:
         this._api.updatePoint(update)
-          .then((response) => {
-            this._pointModels.updatePoint(updateType, response);
+          .then(() => {
+            this._pointModels.updatePoint(updateType, update);
           })
-          .then(closeFunct())
-          .catch((err) => {
-            saveBtn.disabled = true;
-            saveBtn.textContent = 'Ошибка';
-            saveBtn.value = err;
+          .then(() => {
+            if (closeFunct) {
+              closeFunct();
+            }
+          })
+          .catch(() => {
+            this._changeTextSaveBtn(
+              'Ошибка',
+              {disabled: true},
+            );
           });
         break;
       case UserAction.ADD_POINT:
@@ -143,11 +159,16 @@ export default class Trip {
           .then(() => {
             this._pointModels.addPoints(updateType, update);
           })
-          .then(closeFunct())
-          .catch((err) => {
-            saveBtn.disabled = true;
-            saveBtn.textContent = 'Ошибка';
-            saveBtn.value = err;
+          .then(() => {
+            if (closeFunct) {
+              closeFunct();
+            }
+          })
+          .catch(() => {
+            this._changeTextSaveBtn(
+              'Ошибка',
+              {disabled: true},
+            );
           });
         break;
       case UserAction.DELETE_POINT:
@@ -155,11 +176,16 @@ export default class Trip {
           .then(() => {
             this._pointModels.deletePoint(updateType, update);
           })
-          .then(closeFunct())
-          .catch((err) => {
-            saveBtn.disabled = true;
-            saveBtn.textContent = 'Ошибка';
-            saveBtn.value = err;
+          .then(() => {
+            if (closeFunct) {
+              closeFunct();
+            }
+          })
+          .catch(() => {
+            this._changeTextSaveBtn(
+              'Ошибка',
+              {disabled: true},
+            );
           });
         break;
     }

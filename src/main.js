@@ -11,7 +11,7 @@ const createNewPoint = document.querySelector('.trip-main__event-add-btn');
 createNewPoint.disabled = true;
 
 const AUTORIZATION = 'Basic apgrayedd/1609269-big-trip-15';
-const LINK = 'https://14.ecmascript.pages.academy/big-trip';
+const LINK = 'https://15.ecmascript.pages.academy/big-trip';
 
 const api = new Api(LINK, AUTORIZATION);
 const pointModel = new PointModel();
