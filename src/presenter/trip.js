@@ -156,7 +156,6 @@ export default class Trip {
 
   _handleViewAction(actionType, updateType, updateView, closeFunct) {
     const update = updateView._data;
-    console.log(update)
     this._changeTextSaveBtn(updateView, 'Загрузка...');
     switch(actionType){
       case UserAction.UPDATE_POINT: {
