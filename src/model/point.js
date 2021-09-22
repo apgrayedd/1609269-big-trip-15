@@ -21,6 +21,7 @@ export default class PointModel extends ObserverModel {
   static adaptToClient(point) {
     const adaptedPoint = cloneDeep({
       ...point,
+      name: point.destination.name,
       basePrice: point.base_price ? point.base_price : 0,
       dateFrom: point.date_from ? point.date_from : dayjs(),
       dateTo: point.date_to ? point.date_to : dayjs(),
@@ -31,7 +32,7 @@ export default class PointModel extends ObserverModel {
     delete adaptedPoint.date_from;
     delete adaptedPoint.date_to;
     delete adaptedPoint.is_favorite;
-
+    console.log(adaptedPoint)
     return adaptedPoint;
   }
 
