@@ -6,8 +6,9 @@ import AbstractView from './abstract';
 const getTripInfo  = (data) => {
   data = data.sort(SortType.TIME_DOWN.funct);
   const getTriptInfo = data.length <= 3
-    ? data.reduce((point, arr = []) => {
-      arr.append(point);
+    ? data.reduce((point, accumulator = []) => {
+      console.log(accumulator)
+      accumulator.append(point);
     })
     : [data[0], data[data.length - 1]];
 

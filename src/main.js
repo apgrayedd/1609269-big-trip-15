@@ -33,6 +33,6 @@ api.getPoints()
     navigationPresenter.init();
     createNewPoint.disabled = false;
   })
-  .catch((err) => {
-    throw new Error(err);
-  });
+  // .catch((err) => {
+  //   throw new Error(err);
+  // });
