@@ -7,7 +7,7 @@ import {UserActions, UpdateTypes} from '../const.js';
 import {isDatesEqual} from '../utils/common.js';
 
 const KEY_TO_CLOSE_POINT = 27;
-const Mode = {
+const MODE = {
   DEFAULT: 'DEFAULT',
   EDITING: 'EDITING',
 };
@@ -22,7 +22,7 @@ export default class Point {
     this._changeModePoint = changeModePoint;
     this._point = null;
     this._editPoint = null;
-    this._mode = Mode.DEFAULT;
+    this._mode = MODE.DEFAULT;
     this._bindHandles();
   }
 
@@ -55,7 +55,7 @@ export default class Point {
   }
 
   resetView() {
-    if (this._mode !== Mode.DEFAULT) {
+    if (this._mode !== MODE.DEFAULT) {
       this._replaceEditToPoint();
     }
   }
@@ -64,13 +64,13 @@ export default class Point {
     replace(this._editPoint, this._point);
     window.addEventListener('keydown', this._replacePointToEditByEsc);
     this._changeModePoint();
-    this._mode = Mode.EDITING;
+    this._mode = MODE.EDITING;
   }
 
   _replaceEditToPoint() {
     replace(this._point, this._editPoint);
     window.removeEventListener('keydown', this._replacePointToEditByEsc);
-    this._mode = Mode.DEFAULT;
+    this._mode = MODE.DEFAULT;
   }
 
   _replacePointToEditByEsc(evt) {

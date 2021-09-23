@@ -7,8 +7,8 @@ import FilterModel from './model/filter.js';
 import Api from './api.js';
 import { UpdateTypes } from './const.js';
 
-const createNewPoint = document.querySelector('.trip-main__event-add-btn');
-createNewPoint.disabled = true;
+const buttonNewPoint = document.querySelector('.trip-main__event-add-btn');
+buttonNewPoint.disabled = true;
 
 const AUTHORIZATION = 'Basic apgrayedd/1609269-big-trip-15';
 const LINK = 'https://15.ecmascript.pages.academy/big-trip';
@@ -31,7 +31,7 @@ api.getPoints()
   .then((points) => {
     pointModel.setPoints(UpdateTypes.INIT, points);
     navigationPresenter.init();
-    createNewPoint.disabled = false;
+    buttonNewPoint.disabled = false;
   })
   .catch((err) => {
     throw new Error(err);
