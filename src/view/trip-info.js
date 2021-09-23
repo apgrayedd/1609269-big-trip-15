@@ -11,7 +11,7 @@ const getTripInfo  = (data) => {
   const getTripeInfo = data.length <= 3
     ? getArrayByObj(data)
     : [data[0], data[data.length - 1]];
-  const getTripeInfoTitle = getTripeInfo.length <= 3
+  const getTripeInfoTitle = data.length <= 3
     ? getArrayValuesFromObjByKey(getTripeInfo, 'name').join('&nbsp;—&nbsp;')
     : getArrayValuesFromObjByKey(getTripeInfo, 'name').join('&nbsp;—&nbsp;...&nbsp;—&nbsp;');
   const getTripeInfoDays = [
