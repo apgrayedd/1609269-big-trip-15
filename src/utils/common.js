@@ -1,13 +1,13 @@
 import dayjs from 'dayjs';
+import isEmpty from 'lodash.isempty';
+import { getOfferItemTemplate } from './render';
 
 const MAX_MINUTES_DAY = 1440;
 const MAX_MINUTES_HOUR = 60;
 
-export function getRandomInt (min, max) {
-  return Math.round(min - 0.5 + Math.random() * (max - min + 1));
-}
+export const getRandomInt = (min, max) => Math.round(min - 0.5 + Math.random() * (max - min + 1));
 
-export function getTimeFromMins(mins) {
+export const getTimeFromMins = (mins) => {
   const days = mins/MAX_MINUTES_DAY >= 1 ? Math.trunc(mins/MAX_MINUTES_DAY) : 0;
 
   const hours = (mins - days*MAX_MINUTES_DAY)/MAX_MINUTES_HOUR >= 1
@@ -20,31 +20,36 @@ export function getTimeFromMins(mins) {
   str += hours || days ? `${hours}H ` : '';
   str += `${minutes}M`;
   return str;
-}
+};
 
-export function getStrFromArr (arr, functOnArrItems, activeStr = false, functWithActStr = false, firstItem = '') {
-  if (typeof arr === 'object') {
-    arr = Object.values(arr);
-  }
-  if (arr.length <= 0) {
+export const getStrFromValues = (arr, functOnArrItems, activeStr = false, functWithActStr = false, firstItem = '') => {
+  let count = 1;
+  if (isEmpty(arr)) {
     return false;
   }
 
   return arr.reduce((str,arrItem) => {
     if (activeStr && arrItem === activeStr) {
-      arrItem = functWithActStr(activeStr);
+      arrItem = functWithActStr(activeStr, count);
     } else {
-      arrItem = functOnArrItems ? functOnArrItems(arrItem) : arrItem;
+      arrItem = functOnArrItems ? functOnArrItems(arrItem, count) : arrItem;
     }
+    count += 1;
     return str + arrItem;
   },firstItem);
-}
+};
+
+export const compareLists = (objMain, obj) => {
+  const mainValues = Object.values(objMain);
+  const values = Object.values(obj);
+  return mainValues.filter((elem) => values.indexOf(elem) !== 0);
+};
 
 export const isDatesEqual = (dateA, dateB) => (dateA === null && dateB === null) ? true : dayjs(dateA).isSame(dateB, 'D');
 export const isDateFuture = (date) => (dayjs(date).isAfter(dayjs()));
 export const isDatePast = (date) => (dayjs(date).isBefore(dayjs()));
 
-export const matchValidationInteger = (fieldValue) => {
+export const matchValidationInteger = (fieldValue, min = null, max = null) => {
   if (!fieldValue) {
     return 'Имя должно содержать хотя бы 1 символ';
   }
@@ -60,6 +65,14 @@ export const matchValidationInteger = (fieldValue) => {
     return 'Поле может содержать только числа!';
   }
 
+  if (min !== null && result <= min) {
+    return `Поле должно быть больше ${min}`;
+  }
+
+  if (max !== null && result >= max) {
+    return `Поле должно быть меньше ${max}`;
+  }
+
   return false;
 };
 export const dateValidation = (dateA, dateB) => {
@@ -68,18 +81,18 @@ export const dateValidation = (dateA, dateB) => {
   }
 };
 
-export const getArrayValuesFromObjByKey = (array, key) => {
-  const rezult = [];
+export const getValuesFromListByKey = (array, key) => {
+  const rezults = [];
   array.forEach((obj) => {
-    rezult.push(obj[key]);
+    rezults.push(obj[key]);
   });
-  return rezult;
+  return rezults;
 };
 
-export const getArrayByObj = (obj) => {
-  const array = [];
+export const getValueByList = (obj) => {
+  const rezults = [];
   obj.forEach((objElem) => {
-    array.push(objElem);
+    rezults.push(objElem);
   });
-  return array;
+  return rezults;
 };

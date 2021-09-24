@@ -6,6 +6,7 @@ import PointModel from './model/point.js';
 import FilterModel from './model/filter.js';
 import Api from './api.js';
 import { UpdateTypes } from './const.js';
+import ConstModel from './model/const.js';
 
 const buttonNewPoint = document.querySelector('.trip-main__event-add-btn');
 buttonNewPoint.disabled = true;
@@ -16,23 +17,26 @@ const LINK = 'https://15.ecmascript.pages.academy/big-trip';
 const api = new Api(LINK, AUTHORIZATION);
 const pointModel = new PointModel();
 const filterModel = new FilterModel();
-const tripEvents = document.querySelector('.trip-events');
-const tripMain = document.querySelector('.trip-main');
-const tripControls = document.querySelector('.trip-controls');
+const constModel = new ConstModel();
+const tripEventsElement = document.querySelector('.trip-events');
+const tripMainElement = document.querySelector('.trip-main');
+const tripControlsElement = document.querySelector('.trip-controls');
 
-const presenterTrip = new TripPresenter(tripEvents, pointModel, filterModel, api);
-presenterTrip.init();
+const tripPresenter = new TripPresenter(tripEventsElement, pointModel, filterModel, api, constModel);
+tripPresenter.init();
 
-const filterPresenter = new FilterPresenter(tripControls, filterModel, pointModel);
-const statsPresenter = new StatsPresenter(tripEvents, pointModel);
-const navigationPresenter = new NavigationPresenter(tripMain, pointModel, presenterTrip, statsPresenter, filterPresenter);
+const filterPresenter = new FilterPresenter(tripControlsElement, filterModel, pointModel);
+const statsPresenter = new StatsPresenter(tripEventsElement, pointModel);
+const navigationPresenter = new NavigationPresenter(tripMainElement, pointModel, tripPresenter, statsPresenter, filterPresenter);
 
-api.getPoints()
-  .then((points) => {
-    pointModel.setPoints(UpdateTypes.INIT, points);
+api.getAllData()
+  .then((data) => {
+    console.log(data)
+    constModel.setData(data);
+    pointModel.setPoints(UpdateTypes.INIT, data.points);
     navigationPresenter.init();
     buttonNewPoint.disabled = false;
   })
-  .catch((err) => {
-    throw new Error(err);
-  });
+  // .catch((err) => {
+  //   throw new Error(err);
+  // });

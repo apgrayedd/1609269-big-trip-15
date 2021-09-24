@@ -6,7 +6,7 @@ export default class Navigation {
   constructor(mainContainer, data,  tripPresenter, statsPresenter, filterPresenter) {
     this._data = data;
     this._mainContainer = mainContainer;
-    this._container = mainContainer.querySelector('.trip-controls');
+    this._containerElement = mainContainer.querySelector('.trip-controls');
     this._tripPresenter = tripPresenter;
     this._statsPresenter = statsPresenter;
     this._filterPresenter = filterPresenter;
@@ -25,7 +25,7 @@ export default class Navigation {
     this._tripPresenter.setChangeNavToTable(this._handleNavChanger);
     this._navigationList = new NavigationListView(this._currentNavType);
     this._navigationList.setChangeNavigation(this._handleNavChanger);
-    render(this._container, this._navigationList, RenderPosition.AFTERBEGIN);
+    render(this._containerElement, this._navigationList, RenderPosition.AFTERBEGIN);
 
     switch(this._currentNavType) {
       case NavTypes.TABLE:

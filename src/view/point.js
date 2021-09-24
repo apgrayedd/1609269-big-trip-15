@@ -1,15 +1,15 @@
 import {
   getTimeFromMins,
-  getStrFromArr
+  getStrFromValues
 } from '../utils/common.js';
 import {
   timeAdapter,
   timeAdapterDiff
 } from '../utils/adapters.js';
 import SmartView from './smart.js';
-import {getEventDate} from '../utils/render.js';
+import {getEventDateTemplate} from '../utils/render.js';
 
-const getEventSchedule = (dateFrom, dayTo) => {
+const getEventScheduleTemplate = (dateFrom, dayTo) => {
   const dateStartDateTime = timeAdapter(dateFrom,'YYYY-MM-DDTHH:mm');
   const dateStartTime = timeAdapter(dateFrom, 'HH-mm');
   const dateEndDateTime = timeAdapter(dayTo, 'YYYY-MM-DDTHH:mm');
@@ -27,7 +27,7 @@ const getEventSchedule = (dateFrom, dayTo) => {
   );
 };
 
-const getEventOffer = ({title, price}) => (
+const getEventOfferTemplate = ({title, price}) => (
   `<li class="event__offer">
     <span class="event__offer-title">${title}</span>
     &plus;&euro;&nbsp;
@@ -35,29 +35,29 @@ const getEventOffer = ({title, price}) => (
   </li>`
 );
 
-const getEventOffers = (offers) => (
-  getStrFromArr(offers, getEventOffer)
+const getEventOffersTemplate = (offers) => (
+  getStrFromValues(offers, getEventOfferTemplate)
     ? `<h4 class="visually-hidden">Offers:</h4>
         <ul class="event__selected-offers">
-          ${getStrFromArr(offers, getEventOffer)}
+          ${getStrFromValues(offers, getEventOfferTemplate)}
         </ul>`
     : ''
 );
 
-const getEventType = (type) => (
+const getEventTypeTemplate = (type) => (
   `<div class="event__type">
     <img class="event__type-icon" width="42" height="42" src="img/icons/${type}.png" alt="Event type icon"/>
   </div>`
 );
 
-const getEventPrice = (price) => (
+const getEventPriceTemplate = (price) => (
   `<p class="event__price">
     &euro;&nbsp;<span class="event__price-value">${price}</span>
   </p>`
 );
 
-const getEventTitle = (type, {name}) => `<h3 class="event__title">${type} ${name}</h3>`;
-const getEventFavoriteBtn = (isFavorite) => (
+const getEventTitleTemplate = (type, {name}) => `<h3 class="event__title">${type} ${name}</h3>`;
+const getEventFavoriteBtnTemplate = (isFavorite) => (
   `<button class="event__favorite-btn${isFavorite ? ' event__favorite-btn--active' : ''}" type="button">
     <span class="visually-hidden">Add to favorite</span>
     <svg class="event__favorite-icon" width="28" height="28" viewBox="0 0 28 28">
@@ -66,16 +66,16 @@ const getEventFavoriteBtn = (isFavorite) => (
     </svg>
   </button>`
 );
-const point = ({basePrice, destination, type, dateFrom, dateTo, offers, isFavorite}) => (
+const getPointTemplate = ({basePrice, destination, type, dateFrom, dateTo, offers, isFavorite}) => (
   `<li class="trip-events__item">
     <div class="event">
-      ${getEventDate(dateFrom)}
-      ${getEventType(type)}
-      ${getEventTitle(type, destination)}
-      ${getEventSchedule(dateFrom, dateTo)}
-      ${getEventPrice(basePrice)}
-      ${getEventOffers(offers)}
-      ${getEventFavoriteBtn(isFavorite)}
+      ${getEventDateTemplate(dateFrom)}
+      ${getEventTypeTemplate(type)}
+      ${getEventTitleTemplate(type, destination)}
+      ${getEventScheduleTemplate(dateFrom, dateTo)}
+      ${getEventPriceTemplate(basePrice)}
+      ${getEventOffersTemplate(offers)}
+      ${getEventFavoriteBtnTemplate(isFavorite)}
       <button class="event__rollup-btn" type="button">
         <span class="visually-hidden">Open event</span>
       </button>
@@ -88,7 +88,7 @@ export default class Point extends SmartView {
     super();
     this._data = data;
 
-    this._callback = {};
+    this._callbacks = {};
     this._bindHandles();
     this.restoreHandlers();
   }
@@ -101,40 +101,40 @@ export default class Point extends SmartView {
   }
 
   getTemplate() {
-    return point(this._data);
+    return getPointTemplate(this._data);
   }
 
-  _callbackOpen(evt) {
+  _openHandler(evt) {
     evt.preventDefault();
-    this._callback.open();
+    this._callbacks.open();
   }
 
   setHandlerOpen (callback) {
-    this._callback.open = callback;
-    this.getElement().querySelector('.event__rollup-btn').addEventListener('click', this._callbackOpen);
+    this._callbacks.open = callback;
+    this.getElement().querySelector('.event__rollup-btn').addEventListener('click', this._openHandler);
   }
 
-  _callbackFavorite(evt) {
+  _favoriteHandler(evt) {
     evt.preventDefault();
     this._callback.addFavorite();
   }
 
   setHandlerFavorite (callback) {
-    this._callback.addFavorite = callback;
-    this.getElement().querySelector('.event__favorite-btn').addEventListener('click', this._callbackFavorite);
+    this._callbacks.addFavorite = callback;
+    this.getElement().querySelector('.event__favorite-btn').addEventListener('click', this._favoriteHandler);
   }
 
   restoreHandlers() {
     this.getElement().
       querySelector('.event__favorite-btn').
-      addEventListener('click', this._callbackFavorite);
+      addEventListener('click', this._favoriteHandler);
     this.getElement().
       querySelector('.event__rollup-btn').
-      addEventListener('click', this._callbackOpen);
+      addEventListener('click', this._openHandler);
   }
 
   _bindHandles() {
-    this._callbackFavorite = this._callbackFavorite.bind(this);
-    this._callbackOpen = this._callbackOpen.bind(this);
+    this._favoriteHandler = this._favoriteHandler.bind(this);
+    this._openHandler = this._openHandler.bind(this);
   }
 }

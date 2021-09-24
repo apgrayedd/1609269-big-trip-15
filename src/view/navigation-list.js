@@ -1,18 +1,18 @@
 import {CONTROLS} from '../const.js';
 import {
-  getStrFromArr
+  getStrFromValues
 } from '../utils/common.js';
 import AbstractView from './abstract.js';
 
-const getNavigationItem = (sortItem) => `<a class="trip-tabs__btn" href="#">${sortItem}</a>`;
+const getNavigationItemTemplate = (sortItem) => `<a class="trip-tabs__btn" href="#">${sortItem}</a>`;
 
-const getNavigationItemActive = (sortItem) => `<a class="trip-tabs__btn trip-tabs__btn--active" href="#">${sortItem}</a>`;
+const getNavigationItemActiveTemplate = (sortItem) => `<a class="trip-tabs__btn trip-tabs__btn--active" href="#">${sortItem}</a>`;
 
-const getNavigationList = (checkedNav) => (
+const getNavigationListTemplate = (checkedNav) => (
   `<div class="trip-controls__navigation">
     <h2 class="visually-hidden">Switch trip view</h2>
     <nav class="trip-controls__trip-tabs  trip-tabs">
-      ${getStrFromArr(CONTROLS, getNavigationItem, checkedNav, getNavigationItemActive)}
+      ${getStrFromValues(CONTROLS, getNavigationItemTemplate, checkedNav, getNavigationItemActiveTemplate)}
     </nav>
   </div>`);
 
@@ -25,29 +25,29 @@ export default class NavigationList extends AbstractView {
   }
 
   getTemplate() {
-    return getNavigationList(this._checkedNav);
+    return getNavigationListTemplate(this._checkedNav);
   }
 
-  _handlerChangeNavigation(evt) {
+  _changeNavigationHandler(evt) {
     evt.preventDefault();
-    this._callback.changeNav(evt.target.innerText);
+    this._callbacks.changeNav(evt.target.innerText);
   }
 
   setChangeNavigation(callback) {
-    this._callback.changeNav = callback;
+    this._callbacks.changeNav = callback;
     this.getElement().querySelectorAll('.trip-tabs__btn').forEach((navItem) => {
-      navItem.addEventListener('click', this._handlerChangeNavigation);
+      navItem.addEventListener('click', this._changeNavigationHandler);
     });
   }
 
   _restoreHandles() {
     this.getElement().querySelectorAll('.trip-tabs__btn').forEach((navItem) => {
-      navItem.addEventListener('click', this._handlerChangeNavigation);
+      navItem.addEventListener('click', this._changeNavigationHandler);
     });
   }
 
   _bindHandles() {
-    this._handlerChangeNavigation = this._handlerChangeNavigation.bind(this);
+    this._changeNavigationHandler = this._changeNavigationHandler.bind(this);
   }
 }
 

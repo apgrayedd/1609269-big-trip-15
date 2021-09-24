@@ -1,24 +1,26 @@
 import { SortTypes } from '../const';
 import {timeAdapter} from '../utils/adapters';
 import {
-  getArrayValuesFromObjByKey,
-  getArrayByObj
+  getValuesFromListByKey,
+  getValueByList
 } from '../utils/common';
 import AbstractView from './abstract';
 
-const getTripInfo  = (data) => {
+const NUMBER_SEPARATION_NAMES = 3;
+
+const getTripInfoTemplate  = (data) => {
   data = data.sort(SortTypes.TIME_DOWN.funct);
-  const getTripeInfo = data.length <= 3
-    ? getArrayByObj(data)
+  const getTripeInfo = data.length <= NUMBER_SEPARATION_NAMES
+    ? getValueByList(data)
     : [data[0], data[data.length - 1]];
-  const getTripeInfoTitle = data.length <= 3
-    ? getArrayValuesFromObjByKey(getTripeInfo, 'name').join('&nbsp;—&nbsp;')
-    : getArrayValuesFromObjByKey(getTripeInfo, 'name').join('&nbsp;—&nbsp;...&nbsp;—&nbsp;');
+  const getTripeInfoTitle = data.length <= NUMBER_SEPARATION_NAMES
+    ? getValuesFromListByKey(getTripeInfo, 'name').join('&nbsp;—&nbsp;')
+    : getValuesFromListByKey(getTripeInfo, 'name').join('&nbsp;—&nbsp;...&nbsp;—&nbsp;');
   const getTripeInfoDays = [
     timeAdapter(getTripeInfo[0].dateFrom, 'MMM D'),
     timeAdapter(getTripeInfo[getTripeInfo.length - 1].dateFrom, 'MMM D'),
   ].join('&nbsp;—&nbsp;');
-  const getCostValue = getArrayValuesFromObjByKey(data, 'basePrice')
+  const getCostValue = getValuesFromListByKey(data, 'basePrice')
     .reduce((value, summ) => summ += value);
 
   return `<section class="trip-main__trip-info  trip-info">
@@ -40,6 +42,6 @@ export default class TripInfo extends AbstractView {
   }
 
   getTemplate() {
-    return getTripInfo(this._data);
+    return getTripInfoTemplate(this._data);
   }
 }

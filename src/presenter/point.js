@@ -13,11 +13,12 @@ const MODE = {
 };
 
 export default class Point {
-  constructor(container, pointUpdateData, changeModePoint) {
+  constructor(container, pointUpdateData, changeModePoint, constModel) {
     this._container = container;
     if (container instanceof Abstract) {
       this._container = container.getElement();
     }
+    this._constModel = constModel;
     this._pointUpdateData = pointUpdateData;
     this._changeModePoint = changeModePoint;
     this._point = null;
@@ -30,7 +31,7 @@ export default class Point {
     const oldPoint = this._point;
     const oldEditPoint = this._editPoint;
     this._point = new PointView(data);
-    this._editPoint = new EditPointView(data);
+    this._editPoint = new EditPointView(this._constModel, data);
 
     this._point.setHandlerOpen(this._replacePointToEdit);
     this._point.setHandlerFavorite(this._changeFavorite);

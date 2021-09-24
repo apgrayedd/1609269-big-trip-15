@@ -7,9 +7,10 @@ import { nanoid } from 'nanoid';
 const KEY_TO_CLOSE_POINT = 27;
 
 export default class NewPoint {
-  constructor(pointConrainer, changeDataFucnt) {
+  constructor(pointConrainer, changeDataFucnt, constModel) {
     this._pointConrainer = pointConrainer;
     this._changeDataFucnt = changeDataFucnt;
+    this._constModel = constModel;
 
     this._editPoint = null;
     this._bindHandles();
@@ -20,7 +21,7 @@ export default class NewPoint {
       return;
     }
 
-    this._editPoint = new EditPointView();
+    this._editPoint = new EditPointView(this._constModel);
     this._editPoint.setHandlerClose(this._handlerDeleteClick);
     this._editPoint.setHandlerDelete(this._handlerDeleteClick);
     this._editPoint.setSubmitClick(this._handlerClickSubmit);

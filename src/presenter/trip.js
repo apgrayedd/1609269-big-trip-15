@@ -6,12 +6,13 @@ import {filter} from '../utils/filter.js';
 import PointPresent from './point.js';
 import NewPointPresenter from './new-point.js';
 import TripInfoView from '../view/trip-info.js';
+import isEmpty from 'lodash.isempty';
 import {remove, render, RenderPosition} from '../utils/render.js';
 import {SortTypes, UserActions, UpdateTypes, FilterTypes, NavTypes} from '../const.js';
 
 export default class Trip {
-  constructor(container, pointModels, filterModel, api){
-    this._mainContainer = document.querySelector('.trip-main');
+  constructor(container, pointModels, filterModel, api, constModel){
+    this._mainContainerElement = document.querySelector('.trip-main');
     this._container = container;
     this._pointsMap = new Map();
     this._filterType = FilterTypes.EVERYTHING;
@@ -21,6 +22,7 @@ export default class Trip {
     this._sortList = null;
     this._tripInfoView = null;
     this._api = api;
+    this._constModel = constModel;
     this._loadingView = new LoadingView();
     this._isLoading = true;
     this._currentSortType = SortTypes.EVENT_DOWN.name;
@@ -36,7 +38,7 @@ export default class Trip {
       this._renderLoading();
       return;
     }
-    this._newPointPresenter = new NewPointPresenter(this._listEvents.getElement(), this._handleViewAction);
+    this._newPointPresenter = new NewPointPresenter(this._listEvents.getElement(), this._handleViewAction, this._constModel);
     const pointLength = this._getPoints().length;
 
     if (pointLength < 0) {
@@ -77,7 +79,7 @@ export default class Trip {
 
   _renderPoints() {
     this._getPoints().forEach((point) => {
-      const pointPresenter = new PointPresent(this._listEvents, this._handleViewAction, this._handleModChanger);
+      const pointPresenter = new PointPresent(this._listEvents, this._handleViewAction, this._handleModChanger, this._constModel);
       pointPresenter.init(point);
       this._pointsMap.set(point.id, pointPresenter);
     });
@@ -106,7 +108,7 @@ export default class Trip {
       this._tripInfoView = null;
     }
     this._tripInfoView = new TripInfoView(this._pointModels.getPoints());
-    render(this._mainContainer, this._tripInfoView, RenderPosition.BEFOREEND);
+    render(this._mainContainerElement, this._tripInfoView, RenderPosition.BEFOREEND);
   }
 
   _clear(resetSortType = false) {
@@ -139,27 +141,41 @@ export default class Trip {
     this._pointsMap.forEach((point) => point.resetView());
   }
 
-  _changeTextSaveBtn(view, text, attributes) {
-    const saveBtn = view.getElement().querySelector('.event__save-btn');
-    if (saveBtn === null) {
+  _changeSaveBtn(view, text, attributes) {
+    const saveBtnElement = view.getElement().querySelector('.event__save-btn');
+    if (saveBtnElement === null) {
       return;
     }
 
-    saveBtn.textContent = text;
+    saveBtnElement.textContent = text;
 
-    // eslint-disable-next-line no-undef
-    if (attributes && !_.isEmpty(attributes)) {
+    if (attributes && isEmpty(attributes)) {
       for (const attribute in attributes) {
-        saveBtn[attribute] = attributes[attributes];
+        saveBtnElement[attribute] = attributes[attributes];
+      }
+    }
+  }
+
+  _changeDeleteBtn(view, text, attributes) {
+    const deleteBtnElement = view.getElement().querySelector('.event__reset-btn');
+    if (deleteBtnElement === null) {
+      return;
+    }
+
+    deleteBtnElement.textContent = text;
+
+    if (attributes && isEmpty(attributes)) {
+      for (const attribute in attributes) {
+        deleteBtnElement[attribute] = attributes[attributes];
       }
     }
   }
 
   _handleViewAction(actionType, updateType, updateView, closeFunct) {
     const update = updateView._data;
-    this._changeTextSaveBtn(updateView, 'Загрузка...');
     switch(actionType){
       case UserActions.UPDATE_POINT: {
+        this._changeSaveBtn(updateView, 'Saving...');
         this._api.updatePoint(update)
           .then((answer) => {
             this._pointModels.updatePoint(updateType, answer);
@@ -170,7 +186,7 @@ export default class Trip {
             }
           })
           .catch(() => {
-            this._changeTextSaveBtn(
+            this._changeSaveBtn(
               'Ошибка',
               {disabled: true},
             );
@@ -178,6 +194,7 @@ export default class Trip {
         break;
       }
       case UserActions.ADD_POINT: {
+        this._changeSaveBtn(updateView, 'Saving...');
         this._api.addPoint(update)
           .then((answer) => {
             this._pointModels.addPoints(updateType, answer);
@@ -188,7 +205,7 @@ export default class Trip {
             }
           })
           .catch(() => {
-            this._changeTextSaveBtn(
+            this._changeSaveBtn(
               'Ошибка',
               {disabled: true},
             );
@@ -196,6 +213,7 @@ export default class Trip {
         break;
       }
       case UserActions.DELETE_POINT: {
+        this._changeDeleteBtn(updateView, 'Deleting...');
         this._api.deletePoint(update)
           .then(() => {
             this._pointModels.deletePoint(updateType, update);
@@ -206,7 +224,7 @@ export default class Trip {
             }
           })
           .catch(() => {
-            this._changeTextSaveBtn(
+            this._changeDeleteBtn(
               'Ошибка',
               {disabled: true},
             );

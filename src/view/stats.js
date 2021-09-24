@@ -6,8 +6,8 @@ import { createElement } from '../utils/render';
 import {getTimeFromMins} from '../utils/common.js';
 import {timeAdapterDiff} from '../utils/adapters';
 
-const createObjWithCount = (objdata, objKeys, functWithValues) => {
-  const objWithCount = {};
+const createListWithCount = (objdata, objKeys, functWithValues) => {
+  const listWithCount = {};
   objdata.forEach((dataItem) => {
     const type = dataItem[objKeys].toUpperCase();
     let value = 1;
@@ -16,14 +16,14 @@ const createObjWithCount = (objdata, objKeys, functWithValues) => {
       value = functWithValues(dataItem);
     }
 
-    if (type in objWithCount) {
-      objWithCount[type] += value;
+    if (type in listWithCount) {
+      listWithCount[type] += value;
     } else {
-      objWithCount[type] = value;
+      listWithCount[type] = value;
     }
   });
 
-  return objWithCount;
+  return listWithCount;
 };
 
 const getStats = () => (
@@ -125,7 +125,7 @@ export default class Stats extends AbstractView {
       this._moneyStatsChart = new Chart(
         this._element.querySelector('#money'),
         this._getChartOptions(
-          createObjWithCount(this._data, 'type', (item) => item.basePrice),
+          createListWithCount(this._data, 'type', (item) => item.basePrice),
           'MONEY',
           (val) => `€ ${val} `,
         ),
@@ -136,7 +136,7 @@ export default class Stats extends AbstractView {
       this._typeStatsChart = new Chart(
         this._element.querySelector('#type'),
         this._getChartOptions(
-          createObjWithCount(this._data, 'type'),
+          createListWithCount(this._data, 'type'),
           'TYPE',
           (val) => `${val}x `,
         ),
@@ -147,7 +147,7 @@ export default class Stats extends AbstractView {
       this._timeSpendStatsChart = new Chart(
         this._element.querySelector('#time-spend'),
         this._getChartOptions(
-          createObjWithCount(this._data, 'type', (item) => timeAdapterDiff(item.dateTo, item.dateFrom)),
+          createListWithCount(this._data, 'type', (item) => timeAdapterDiff(item.dateTo, item.dateFrom)),
           'TIME',
           (val) => `${getTimeFromMins(val)} `,
         ),
