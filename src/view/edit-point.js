@@ -31,18 +31,19 @@ const INT_RADIX = 10;
 const dataForNewPoint = {
   type: 'Taxi',
   destination: {
-    description: 'Desition',
+    description: '',
     pictures: [],
-    name: 'New point',
+    name: '',
   },
-  name: 'New point',
+  name: '',
   dateFrom: dayjs(),
   dateTo: dayjs(),
   basePrice: 0,
   offers: [],
 };
 
-const getEditPointTemplate = (types, destinations, offersData, {type, basePrice, name, destination, dateFrom, dateTo}) => (
+const getEditPointTemplate = (types, destinations, offersData,
+  {type, basePrice, name, destination, dateFrom, dateTo}) => (
   `<form class="event event--edit" action="#" method="post">
     <header class="event__header">
       ${getEventTypeWrapperTemplate(types, type)}
@@ -106,6 +107,7 @@ export default class EditPoint extends SmartView {
   }
 
   _typeEventHandler(evt) {
+    this._data.offers = [];
     this.updateData({
       type: evt.target.value,
     }, false);
@@ -168,9 +170,15 @@ export default class EditPoint extends SmartView {
   }
 
   checkInputDestination() {
-    return this.getElement().querySelector('#event-destination-1').value.length <= 0
-      ? 'Имя должно содержать хотя бы 1 символ'
-      : '';
+    const destinationValue = this.getElement()
+      .querySelector('#event-destination-1').value;
+    if (destinationValue.length <= 0) {
+      return 'Название должно содержать хотя бы 1 символ';
+    }
+    if (!getValuesFromListByKey(this._constModel.getDestinations(), 'name')
+      .includes(destinationValue)) {
+      return 'Данного пункта нету в базе';
+    }
   }
 
   checkInputPrice() {
@@ -205,9 +213,13 @@ export default class EditPoint extends SmartView {
 
     if (getValuesFromListByKey(offers, 'type').includes(activeType)) {
       for (const offersItem of offers) {
-        if (activeType === offersItem.type) {
+        if (activeType === offersItem.type &&
+            !isEmpty(offersItem.offers)) {
           const newOffersElement = createElement(
-            getEventAvailableOffersTemplate(offersItem.offers, this._data.offers));
+            getEventAvailableOffersTemplate(offersItem.offers, this._data.offers))
+            .querySelector('.event__offer-checkbox').forEach((offer) => {
+              offer.addEventListener('change', this._offerEventHandler);
+            });
           const prefOffersElement = this.getElement()
             .querySelector('.event__section--offers');
           if (prefOffersElement !== null) {
@@ -229,8 +241,14 @@ export default class EditPoint extends SmartView {
       evt.target.reportValidity();
       return;
     }
+
+    const destinationInfo = this._constModel.getDestinations(evt.target.value);
     this.updateData({
       name: evt.target.value,
+      destination: {
+        description: destinationInfo.description,
+        pictures: destinationInfo.pictures,
+      },
     }, true);
     evt.target.setCustomValidity('');
     evt.target.reportValidity();

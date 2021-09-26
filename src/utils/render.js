@@ -2,6 +2,7 @@ import Abstract from '../view/abstract.js';
 import {timeAdapter} from './adapters.js';
 import {getStrFromValues} from './common.js';
 import he from 'he';
+import isEmpty from 'lodash.isempty';
 
 export const RenderPosition = {
   AFTERBEGIN: 'afterbegin',
@@ -86,17 +87,6 @@ export const getOfferItemTemplate = ({title,price}, count) => (
     </label>
   </div>`);
 
-export const getOfferActiveItemTemplate = ({title,price}, count) => (
-  `<div class="event__offer-selector">
-    <input class="event__offer-checkbox  visually-hidden"
-    id="event-offer-luggage-${count}" type="checkbox" name="event-offer-luggage" checked>
-    <label class="event__offer-label" for="event-offer-luggage-${count}">
-      <span class="event__offer-title">${title}</span>
-      &plus;&euro;&nbsp;
-      <span class="event__offer-price">${price}</span>
-    </label>
-  </div>`);
-
 export const getPicturesItemTemplate = ({src,imgDescription}) => (
   `<img class="event__photo" src="${src}" alt="${imgDescription}">`
 );
@@ -132,7 +122,7 @@ export const getEventFieldGroupPriceTemplate = (basePrice) => `
 </div>`;
 
 export const getEventAvailableOffersTemplate = (offers) =>
-  getStrFromValues(offers, getOfferItemTemplate)
+  !isEmpty(offers)
     ? `<section class="event__section  event__section--offers">
         <h3 class="event__section-title  event__section-title--offers">Offers</h3>
         <div class="event__available-offers">

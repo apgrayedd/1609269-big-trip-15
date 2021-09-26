@@ -5,15 +5,12 @@ import NavigationListView from '../view/navigation-list.js';
 export default class Navigation {
   constructor(mainContainer, data,  tripPresenter, statsPresenter, filterPresenter) {
     this._data = data;
-    this._mainContainer = mainContainer;
     this._containerElement = mainContainer.querySelector('.trip-controls');
     this._tripPresenter = tripPresenter;
     this._statsPresenter = statsPresenter;
     this._filterPresenter = filterPresenter;
-    this._newPointPresenter = null;
     this._currentNavType = NavTypes.TABLE;
     this._navigationList = null;
-    this._statsView = null;
     this._bindHandles();
   }
 

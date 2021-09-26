@@ -4,8 +4,6 @@ import isEmpty from 'lodash.isempty';
 const MAX_MINUTES_DAY = 1440;
 const MAX_MINUTES_HOUR = 60;
 
-export const getRandomInt = (min, max) => Math.round(min - 0.5 + Math.random() * (max - min + 1));
-
 export const getTimeFromMins = (mins) => {
   const days = mins/MAX_MINUTES_DAY >= 1 ? Math.trunc(mins/MAX_MINUTES_DAY) : 0;
 
@@ -38,7 +36,7 @@ export const getStrFromValues = (arr, functOnArrItems, activeStr = false, functW
   },firstItem);
 };
 
-export const isDatesEqual = (dateA, dateB) => (dateA === null && dateB === null) ? true : dayjs(dateA).isSame(dateB, 'D');
+export const isDatesEqual = (dateA, dateB) => (dateA === null && dateB === null) ? true : dayjs(dateA).isSame(dateB, 'd');
 export const isDateFuture = (date) => (dayjs(date).isAfter(dayjs()));
 export const isDatePast = (date) => (dayjs(date).isBefore(dayjs()));
 
@@ -67,11 +65,6 @@ export const matchValidationInteger = (fieldValue, min = null, max = null) => {
   }
 
   return false;
-};
-export const dateValidation = (dateA, dateB) => {
-  if (dayjs(dateA).diff(dayjs(dateB)) < 0) {
-    return 'Дата конца не может превышать дату начала!';
-  }
 };
 
 export const getValuesFromListByKey = (array, key) => {

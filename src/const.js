@@ -1,8 +1,5 @@
 import dayjs from 'dayjs';
 
-export const TYPES = ['Taxi', 'Bus', 'Train', 'Ship', 'Drive', 'Flight', 'Check-in', 'Sightseeing', 'Restaurant'];
-export const DESTINATIONS = ['Amsterdam', 'Geneva', 'Chamonix'];
-export const FILTERS = ['Everything', 'Future', 'Past'];
 export const CONTROLS = ['Table', 'Stats'];
 export const SORTS = ['sort-day', 'sort-event', 'sort-time', 'sort-price', 'sort-offers'];
 export const DATE_STANDARD_FORMAT = 'YYYY-MM-DDTHH:mm:ss';

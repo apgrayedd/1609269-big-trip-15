@@ -149,9 +149,9 @@ export default class Trip {
 
     saveBtnElement.textContent = text;
 
-    if (attributes && isEmpty(attributes)) {
+    if (attributes && !isEmpty(attributes)) {
       for (const attribute in attributes) {
-        saveBtnElement[attribute] = attributes[attributes];
+        saveBtnElement[attribute] = attributes[attribute];
       }
     }
   }
@@ -164,9 +164,9 @@ export default class Trip {
 
     deleteBtnElement.textContent = text;
 
-    if (attributes && isEmpty(attributes)) {
+    if (attributes && !isEmpty(attributes)) {
       for (const attribute in attributes) {
-        deleteBtnElement[attribute] = attributes[attributes];
+        deleteBtnElement[attribute] = attributes[attribute];
       }
     }
   }
@@ -175,7 +175,11 @@ export default class Trip {
     const update = updateView._data;
     switch(actionType){
       case UserActions.UPDATE_POINT: {
-        this._changeSaveBtn(updateView, 'Saving...');
+        this._changeSaveBtn(
+          updateView,
+          'Saving...',
+          {disabled: true},
+        );
         this._api.updatePoint(update)
           .then((answer) => {
             this._pointModels.updatePoint(updateType, answer);
@@ -187,7 +191,8 @@ export default class Trip {
           })
           .catch(() => {
             this._changeSaveBtn(
-              'Ошибка',
+              updateView,
+              'Error',
               {disabled: true},
             );
           });
@@ -206,14 +211,19 @@ export default class Trip {
           })
           .catch(() => {
             this._changeSaveBtn(
-              'Ошибка',
+              updateView,
+              'Error',
               {disabled: true},
             );
           });
         break;
       }
       case UserActions.DELETE_POINT: {
-        this._changeDeleteBtn(updateView, 'Deleting...');
+        this._changeDeleteBtn(
+          updateView,
+          'Deleting...',
+          {disabled: true},
+        );
         this._api.deletePoint(update)
           .then(() => {
             this._pointModels.deletePoint(updateType, update);
@@ -225,7 +235,8 @@ export default class Trip {
           })
           .catch(() => {
             this._changeDeleteBtn(
-              'Ошибка',
+              updateView,
+              'Error',
               {disabled: true},
             );
           });

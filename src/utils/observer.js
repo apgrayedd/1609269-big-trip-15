@@ -7,10 +7,6 @@ export default class Observer {
     this._observers.add(observer);
   }
 
-  removeObserver(observer) {
-    this._observers.remove(observer);
-  }
-
   _notify(event, payload) {
     this._observers.forEach((observer) => observer(event, payload));
   }
