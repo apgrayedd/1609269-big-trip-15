@@ -161,7 +161,7 @@ export default class EditPoint extends SmartView {
     );
 
     if (dateTo.diff(dateFrom) < 0) {
-      return 'Дата начала должна меньше даты окончания';
+      return 'Дата начала должна быть меньше даты окончания';
     }
 
     return false;
