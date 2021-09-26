@@ -1,6 +1,6 @@
 import Abstract from '../view/abstract.js';
 import {timeAdapter} from './adapters.js';
-import {compareLists, getStrFromValues, getValuesFromListByKey} from './common.js';
+import {getStrFromValues} from './common.js';
 import he from 'he';
 
 export const RenderPosition = {
@@ -131,22 +131,15 @@ export const getEventFieldGroupPriceTemplate = (basePrice) => `
   type="text" name="event-price" value="${basePrice}" autocomplete = "off">
 </div>`;
 
-export const getEventAvailableOffersTemplate = (offers, activeOffers) => {
-  console.log(offers)
-  console.log(activeOffers)
-  console.log(compareLists(
-    getValuesFromListByKey(offers, 'title'),
-    getValuesFromListByKey(activeOffers, 'title')));
-
-  return getStrFromValues(offers, getOfferItemTemplate)
+export const getEventAvailableOffersTemplate = (offers) =>
+  getStrFromValues(offers, getOfferItemTemplate)
     ? `<section class="event__section  event__section--offers">
         <h3 class="event__section-title  event__section-title--offers">Offers</h3>
         <div class="event__available-offers">
-          ${getStrFromValues(offers, getOfferItemTemplate, activeOffers, getOfferActiveItemTemplate)}
+          ${getStrFromValues(offers, getOfferItemTemplate)}
         </div>
       </section>`
     : '';
-};
 
 export const getEventAvailableDestinationTemplate = ({description, pictures}) => {
   const picturesList = getStrFromValues(pictures, getPicturesItemTemplate)

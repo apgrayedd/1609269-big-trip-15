@@ -11,7 +11,7 @@ import ConstModel from './model/const.js';
 const buttonNewPoint = document.querySelector('.trip-main__event-add-btn');
 buttonNewPoint.disabled = true;
 
-const AUTHORIZATION = 'Basic apgrayedd/1609269-big-trip-15';
+const AUTHORIZATION = 'Basic apgrayedd/1609270-big-trip-15';
 const LINK = 'https://15.ecmascript.pages.academy/big-trip';
 
 const api = new Api(LINK, AUTHORIZATION);
@@ -31,12 +31,11 @@ const navigationPresenter = new NavigationPresenter(tripMainElement, pointModel,
 
 api.getAllData()
   .then((data) => {
-    console.log(data)
     constModel.setData(data);
     pointModel.setPoints(UpdateTypes.INIT, data.points);
     navigationPresenter.init();
     buttonNewPoint.disabled = false;
   })
-  // .catch((err) => {
-  //   throw new Error(err);
-  // });
+  .catch((err) => {
+    throw new Error(err);
+  });

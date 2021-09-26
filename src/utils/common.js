@@ -1,6 +1,5 @@
 import dayjs from 'dayjs';
 import isEmpty from 'lodash.isempty';
-import { getOfferItemTemplate } from './render';
 
 const MAX_MINUTES_DAY = 1440;
 const MAX_MINUTES_HOUR = 60;
@@ -37,12 +36,6 @@ export const getStrFromValues = (arr, functOnArrItems, activeStr = false, functW
     count += 1;
     return str + arrItem;
   },firstItem);
-};
-
-export const compareLists = (objMain, obj) => {
-  const mainValues = Object.values(objMain);
-  const values = Object.values(obj);
-  return mainValues.filter((elem) => values.indexOf(elem) !== 0);
 };
 
 export const isDatesEqual = (dateA, dateB) => (dateA === null && dateB === null) ? true : dayjs(dateA).isSame(dateB, 'D');
@@ -82,17 +75,25 @@ export const dateValidation = (dateA, dateB) => {
 };
 
 export const getValuesFromListByKey = (array, key) => {
-  const rezults = [];
+  const results = [];
   array.forEach((obj) => {
-    rezults.push(obj[key]);
+    results.push(obj[key]);
   });
-  return rezults;
+  return results;
+};
+
+export const getSumm = (arrValues) => {
+  let result = 0;
+  arrValues.forEach((value) => {
+    result += value;
+  });
+  return result;
 };
 
 export const getValueByList = (obj) => {
-  const rezults = [];
+  const results = [];
   obj.forEach((objElem) => {
-    rezults.push(objElem);
+    results.push(objElem);
   });
-  return rezults;
+  return results;
 };

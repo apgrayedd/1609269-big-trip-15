@@ -1,8 +1,10 @@
-import { SortTypes } from '../const';
+import isEmpty from 'lodash.isempty';
+import {SortTypes} from '../const';
 import {timeAdapter} from '../utils/adapters';
 import {
   getValuesFromListByKey,
-  getValueByList
+  getValueByList,
+  getSumm
 } from '../utils/common';
 import AbstractView from './abstract';
 
@@ -20,9 +22,15 @@ const getTripInfoTemplate  = (data) => {
     timeAdapter(getTripeInfo[0].dateFrom, 'MMM D'),
     timeAdapter(getTripeInfo[getTripeInfo.length - 1].dateFrom, 'MMM D'),
   ].join('&nbsp;—&nbsp;');
-  const getCostValue = getValuesFromListByKey(data, 'basePrice')
+  const getCostValueByBasePrice = getValuesFromListByKey(data, 'basePrice')
     .reduce((value, summ) => summ += value);
-
+  const getCostValueByOfferPrice = data.reduce((accumulator, point) => {
+    if (!isEmpty(point.offers)) {
+      const offerPriceSumm = getSumm(getValuesFromListByKey(point.offers, 'price'));
+      return accumulator + offerPriceSumm;
+    }
+    return accumulator + 0;
+  }, 0);
   return `<section class="trip-main__trip-info  trip-info">
   <div class="trip-info__main">
     <h1 class="trip-info__title"></h1>
@@ -30,7 +38,8 @@ const getTripInfoTemplate  = (data) => {
     <p class="trip-info__dates">${getTripeInfoDays}</p>
   </div>
     <p class="trip-info__cost">
-    Total: €&nbsp;<span class="trip-info__cost-value">${getCostValue}</span>
+    Total: €&nbsp;<span class="trip-info__cost-value">
+    ${getCostValueByBasePrice + getCostValueByOfferPrice}</span>
   </p>
 </section>`;
 };

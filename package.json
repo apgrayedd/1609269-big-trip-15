@@ -18,7 +18,7 @@
     "flatpickr": "4.6.9",
     "he": "1.2.0",
     "lodash.clonedeep": "4.5.0",
-    "lodash.isempty": "^4.4.0",
+    "lodash.difference": "4.5.0",
     "nanoid": "3.1.22",
     "webpack": "4.44.2",
     "webpack-cli": "3.3.12"

@@ -23,6 +23,7 @@ import '../../node_modules/flatpickr/dist/themes/dark.css';
 
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import dayjs from 'dayjs';
+import isEmpty from 'lodash.isempty';
 dayjs.extend(customParseFormat);
 
 const INT_RADIX = 10;
@@ -41,7 +42,7 @@ const dataForNewPoint = {
   offers: [],
 };
 
-const getEditPointTemplate = (types, destinations, offersData, {type, basePrice, offers, name, destination, dateFrom, dateTo}) => (
+const getEditPointTemplate = (types, destinations, offersData, {type, basePrice, name, destination, dateFrom, dateTo}) => (
   `<form class="event event--edit" action="#" method="post">
     <header class="event__header">
       ${getEventTypeWrapperTemplate(types, type)}
@@ -55,7 +56,7 @@ const getEditPointTemplate = (types, destinations, offersData, {type, basePrice,
       </button>
     </header>
     <section class="event__details">
-      ${getEventAvailableOffersTemplate(offersData, offers)}
+      ${getEventAvailableOffersTemplate(offersData)}
       ${getEventAvailableDestinationTemplate(destination)}
     </section>
   </form>`
@@ -71,6 +72,7 @@ export default class EditPoint extends SmartView {
 
     this._bindHandles();
     this.restoreHandlers();
+    this._checkOffers();
     this._disableSaveBtn();
   }
 
@@ -123,6 +125,29 @@ export default class EditPoint extends SmartView {
       return;
     }
     saveBtnElement.disabled = true;
+  }
+
+  _checkOffers() {
+    const activeOffers = this._data.offers;
+    if (isEmpty(activeOffers)) {
+      return;
+    }
+    const offersElements = this.getElement()
+      .querySelectorAll('.event__offer-selector');
+    activeOffers.forEach((activeOffer) => {
+      offersElements.forEach((offerElement) => {
+        const offerElementTitleValue = offerElement
+          .querySelector('.event__offer-title').textContent;
+        const offerElementPriceValue = offerElement
+          .querySelector('.event__offer-price').textContent;
+        if (
+          activeOffer.title === offerElementTitleValue &&
+          activeOffer.price === parseInt(offerElementPriceValue, INT_RADIX)
+        ) {
+          offerElement.querySelector('.event__offer-checkbox').checked = true;
+        }
+      });
+    });
   }
 
   checkInputDate() {
@@ -244,6 +269,43 @@ export default class EditPoint extends SmartView {
     }
   }
 
+  _offerEventHandler(evt) {
+    const targetOfferId = evt.target.id;
+    const targetOfferElement = this.getElement()
+      .querySelectorAll('.event__offer-selector');
+    for (const targetOfferKey in targetOfferElement) {
+      const offer = targetOfferElement[targetOfferKey];
+      const offerId = offer.querySelector('.event__offer-checkbox').id;
+      if (targetOfferId === offerId) {
+        const offerName = offer
+          .querySelector('.event__offer-title').textContent;
+        const offerPrice = offer
+          .querySelector('.event__offer-price').textContent;
+        const status = offer
+          .querySelector('.event__offer-checkbox').checked;
+        if (!status) {
+          this._data.offers = this._data.offers.filter((elem) => {
+            if (elem.title === offerName &&
+                elem.price === parseInt(offerPrice, INT_RADIX)
+            ) {
+              return false;
+            }
+            return true;
+          });
+          break;
+        }
+        this._data.offers.push({
+          title: offerName,
+          price: parseInt(offerPrice, INT_RADIX),
+        });
+        break;
+      }
+    }
+    this.updateData({
+      offers: this._data.offers,
+    }, true);
+  }
+
   _submitHandler(evt) {
     evt.preventDefault();
     this._data.destination.name = this._data.name;
@@ -289,6 +351,10 @@ export default class EditPoint extends SmartView {
         input.addEventListener('click', this._typeEventHandler);
       });
     this.getElement().
+      querySelectorAll('.event__offer-checkbox').forEach((offer) => {
+        offer.addEventListener('change', this._offerEventHandler);
+      });
+    this.getElement().
       querySelector('.event__rollup-btn').
       addEventListener('click', this._closeHandler);
     this.getElement().
@@ -311,5 +377,6 @@ export default class EditPoint extends SmartView {
     this._priceEventHandler = this._priceEventHandler.bind(this);
     this._dateStartEventHandler = this._dateStartEventHandler.bind(this);
     this._dateEndEventHandler = this._dateEndEventHandler.bind(this);
+    this._offerEventHandler = this._offerEventHandler.bind(this);
   }
 }
