@@ -116,7 +116,7 @@ export default class Point extends SmartView {
 
   _favoriteHandler(evt) {
     evt.preventDefault();
-    this._callback.addFavorite();
+    this._callbacks.addFavorite();
   }
 
   setHandlerFavorite (callback) {
