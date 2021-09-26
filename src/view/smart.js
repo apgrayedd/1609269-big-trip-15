@@ -35,10 +35,4 @@ export default class Smart extends AbstractView {
 
     this.updateElement();
   }
-
-  _typeEventHandler(evt) {
-    this.updateData({
-      type: evt.target.value,
-    }, false);
-  }
 }

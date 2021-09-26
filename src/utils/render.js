@@ -1,7 +1,6 @@
-import {TYPES} from '../const.js';
 import Abstract from '../view/abstract.js';
 import {timeAdapter} from './adapters.js';
-import {getStrFromArr} from './common.js';
+import {getStrFromValues} from './common.js';
 import he from 'he';
 
 export const RenderPosition = {
@@ -64,7 +63,7 @@ export const remove = (component) => {
 
 // Creating Items
 
-export const getEventTypeItem = (typeValue) => {
+export const getEventTypeItemTemplate = (typeValue) => {
   const lowerTypeValue = typeValue.toLowerCase();
   return `<div class="event__type-item">
     <input id="event-type-${lowerTypeValue}-1" class="event__type-input
@@ -74,32 +73,43 @@ export const getEventTypeItem = (typeValue) => {
   </div>`;
 };
 
-export const getDestinationItem = (destination) => `<option value="${he.encode(destination)}"></option>`;
+export const getDestinationItemTemplate = (destination) => `<option value="${he.encode(destination)}"></option>`;
 
-export const getOfferItem = ({title,price}) => (
+export const getOfferItemTemplate = ({title,price}, count) => (
   `<div class="event__offer-selector">
     <input class="event__offer-checkbox  visually-hidden"
-    id="event-offer-luggage-1" type="checkbox" name="event-offer-luggage">
-    <label class="event__offer-label" for="event-offer-luggage-1">
+    id="event-offer-luggage-${count}" type="checkbox" name="event-offer-luggage">
+    <label class="event__offer-label" for="event-offer-luggage-${count}">
       <span class="event__offer-title">${title}</span>
       &plus;&euro;&nbsp;
       <span class="event__offer-price">${price}</span>
     </label>
   </div>`);
 
-export const getPicturesItem = ({src,imgDescription}) => (
+export const getOfferActiveItemTemplate = ({title,price}, count) => (
+  `<div class="event__offer-selector">
+    <input class="event__offer-checkbox  visually-hidden"
+    id="event-offer-luggage-${count}" type="checkbox" name="event-offer-luggage" checked>
+    <label class="event__offer-label" for="event-offer-luggage-${count}">
+      <span class="event__offer-title">${title}</span>
+      &plus;&euro;&nbsp;
+      <span class="event__offer-price">${price}</span>
+    </label>
+  </div>`);
+
+export const getPicturesItemTemplate = ({src,imgDescription}) => (
   `<img class="event__photo" src="${src}" alt="${imgDescription}">`
 );
 
 // Creating big blocks
 
-export const getEventDate = (dateFrom) => {
+export const getEventDateTemplate = (dateFrom) => {
   const dateForDateTime = timeAdapter(dateFrom, 'YYYY-MM-DD');
   const dateForTime = timeAdapter(dateFrom, 'MMM D');
   return `<time class="event__date" datetime="${dateForDateTime}">${dateForTime}</time>`;
 };
 
-export const getEventFieldGroupDestination = (type, name, destinationArr) => (
+export const getEventFieldGroupDestinationTemplate = (type, name, destinationArr) => (
   `<div class="event__field-group  event__field-group--destination">
     <label class="event__label  event__type-output" for="event-destination-1">
       ${type}
@@ -107,11 +117,11 @@ export const getEventFieldGroupDestination = (type, name, destinationArr) => (
     <input class="event__input  event__input--destination" id="event-destination-1"
     type="text" name="event-destination" value="${name}" list="destination-list-1">
     <datalist id="destination-list-1">
-      ${getStrFromArr(destinationArr,getDestinationItem)}
+      ${getStrFromValues(destinationArr,getDestinationItemTemplate)}
     </datalist>
   </div>`);
 
-export const getEventFieldGroupPrice = (basePrice) => `
+export const getEventFieldGroupPriceTemplate = (basePrice) => `
 <div class="event__field-group  event__field-group--price">
   <label class="event__label" for="event-price-1">
     <span class="visually-hidden">Price</span>
@@ -121,23 +131,22 @@ export const getEventFieldGroupPrice = (basePrice) => `
   type="text" name="event-price" value="${basePrice}" autocomplete = "off">
 </div>`;
 
-export const getEventAvailableOffers = (offers) => (
-  getStrFromArr(offers, getOfferItem)
+export const getEventAvailableOffersTemplate = (offers) =>
+  getStrFromValues(offers, getOfferItemTemplate)
     ? `<section class="event__section  event__section--offers">
         <h3 class="event__section-title  event__section-title--offers">Offers</h3>
         <div class="event__available-offers">
-          ${getStrFromArr(offers, getOfferItem)}
+          ${getStrFromValues(offers, getOfferItemTemplate)}
         </div>
       </section>`
-    : ''
-);
+    : '';
 
-export const getEventAvailableDestination = ({description, pictures}) => {
-  const picturesList = getStrFromArr(pictures, getPicturesItem)
+export const getEventAvailableDestinationTemplate = ({description, pictures}) => {
+  const picturesList = getStrFromValues(pictures, getPicturesItemTemplate)
     ? (
       `<div class="event__photos-container">
         <div class="event__photos-tape">
-          ${getStrFromArr(pictures, getPicturesItem)}
+          ${getStrFromValues(pictures, getPicturesItemTemplate)}
         </div>
       </div>`)
     : '';
@@ -156,7 +165,7 @@ export const getEventAvailableDestination = ({description, pictures}) => {
       : '');
 };
 
-export const getEventTypeWrapper = (type) => (
+export const getEventTypeWrapperTemplate = (types, type) => (
   `<div class="event__type-wrapper">
     <label class="event__type  event__type-btn" for="event-type-toggle-1">
       <span class="visually-hidden">Choose event type</span>
@@ -167,13 +176,13 @@ export const getEventTypeWrapper = (type) => (
     <div class="event__type-list">
       <fieldset class="event__type-group">
         <legend class="visually-hidden">Event type</legend>
-        ${getStrFromArr(TYPES,getEventTypeItem)}
+        ${getStrFromValues(types, getEventTypeItemTemplate)}
       </fieldset>
     </div>
   </div>`
 );
 
-export const getEventFieldGroupTime = (dateFrom, dateTo) => (
+export const getEventFieldGroupTimeTemplate = (dateFrom, dateTo) => (
   `<div class="event__field-group  event__field-group--time">
     <label class="visually-hidden" for="event-start-time-1">From</label>
     <input class="event__input  event__input--time" id="event-start-time-1"

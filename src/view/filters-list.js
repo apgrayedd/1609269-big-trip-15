@@ -1,9 +1,9 @@
 import {
-  getStrFromArr
+  getStrFromValues
 } from '../utils/common.js';
 import AbstractView from './abstract.js';
 
-const filterItem = (filter) => (
+const filterItemTemplate = (filter) => (
   `<div class="trip-filters__filter">
     <input id="filter-${filter.toLowerCase()}" class="trip-filters__filter-input
     visually-hidden" type="radio" name="trip-filter" value="${filter.toLowerCase()}">
@@ -12,7 +12,7 @@ const filterItem = (filter) => (
 `
 );
 
-const currentFilterItem = (filter) => (
+const currentFilterItemTemplate = (filter) => (
   `<div class="trip-filters__filter">
     <input id="filter-${filter.toLowerCase()}" class="trip-filters__filter-input
     visually-hidden" type="radio" name="trip-filter" value="${filter.toLowerCase()}" checked>
@@ -21,11 +21,11 @@ const currentFilterItem = (filter) => (
 `
 );
 
-const getFiltersList = (filters, currentFilter) => (
+const getFiltersListTemplate = (filters, currentFilter) => (
   `<div class="trip-controls__filters">
     <h2 class="visually-hidden">Filter events</h2>
     <form class="trip-filters" action="#" method="get">
-      ${getStrFromArr(filters, filterItem, currentFilter, currentFilterItem)}
+      ${getStrFromValues(filters, filterItemTemplate, currentFilter, currentFilterItemTemplate)}
       <button class="visually-hidden" type="submit">Accept filter</button>
     </form>
   </div>`
@@ -40,22 +40,22 @@ export default class FiltersList extends AbstractView{
   }
 
   getTemplate() {
-    return getFiltersList(this._filter, this._currentFilter);
+    return getFiltersListTemplate(this._filter, this._currentFilter);
   }
 
-  _handlerChangeFilter(evt) {
+  _changeFilterHandler(evt) {
     evt.preventDefault();
-    this._callback.changeFilter(evt.target.value);
+    this._callbacks.changeFilter(evt.target.value);
   }
 
   setChangeFilter (callback) {
-    this._callback.changeFilter = callback;
+    this._callbacks.changeFilter = callback;
     this.getElement().querySelectorAll('.trip-filters__filter').forEach((filter) => {
-      filter.querySelector('.trip-filters__filter-input').addEventListener('change', this._handlerChangeFilter);
+      filter.querySelector('.trip-filters__filter-input').addEventListener('change', this._changeFilterHandler);
     });
   }
 
   _bindHandles() {
-    this._handlerChangeFilter = this._handlerChangeFilter.bind(this);
+    this._changeFilterHandler = this._changeFilterHandler.bind(this);
   }
 }

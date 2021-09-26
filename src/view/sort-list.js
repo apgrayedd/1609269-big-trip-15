@@ -1,10 +1,10 @@
 import {
-  getStrFromArr
+  getStrFromValues
 } from '../utils/common.js';
 import {SORTS} from '../const.js';
 import AbstractView from './abstract.js';
 
-const getSortItem = (sortItem) => (
+const getSortItemTemplate = (sortItem) => (
   `<div class="trip-sort__item  trip-sort__item--${sortItem.toLowerCase().replace('sort-','')}">
     <input id="${sortItem.toLowerCase()}" class="trip-sort__input
     visually-hidden" type="radio" name="trip-sort" value="${sortItem.toLowerCase()}">
@@ -12,7 +12,7 @@ const getSortItem = (sortItem) => (
   </div>`
 );
 
-const getSortItemChecked = (sortItem) => (
+const getSortItemCheckedTemplate = (sortItem) => (
   `<div class="trip-sort__item  trip-sort__item--${sortItem.toLowerCase().replace('sort-','')}">
     <input id="${sortItem.toLowerCase()}" class="trip-sort__input
     visually-hidden" type="radio" name="trip-sort" value="${sortItem.toLowerCase()}" checked>
@@ -20,9 +20,9 @@ const getSortItemChecked = (sortItem) => (
   </div>`
 );
 
-const getSortList = (checkedSortType) => (
+const getSortListTemplate = (checkedSortType) => (
   `<form class="trip-events__trip-sort  trip-sort" action="#" method="get">
-    ${getStrFromArr(SORTS, getSortItem, checkedSortType, getSortItemChecked)}
+    ${getStrFromValues(SORTS, getSortItemTemplate, checkedSortType, getSortItemCheckedTemplate)}
   </form>`
 );
 
@@ -34,22 +34,22 @@ export default class SortList extends AbstractView {
   }
 
   getTemplate() {
-    return getSortList(this._checkedSortType);
+    return getSortListTemplate(this._checkedSortType);
   }
 
-  _callbackSortChanger(evt) {
+  _sortChangerHandler(evt) {
     evt.preventDefault();
-    this._callback.sortChanger(evt.target.value);
+    this._callbacks.sortChanger(evt.target.value);
   }
 
   setHandlerSortChanger(callback) {
-    this._callback.sortChanger = callback;
+    this._callbacks.sortChanger = callback;
     this.getElement().querySelectorAll('.trip-sort__item').forEach((sortItem) => {
-      sortItem.querySelector('.trip-sort__input').addEventListener('change', this._callbackSortChanger);
+      sortItem.querySelector('.trip-sort__input').addEventListener('change', this._sortChangerHandler);
     });
   }
 
   _bindHandles() {
-    this._callbackSortChanger = this._callbackSortChanger.bind(this);
+    this._sortChangerHandler = this._sortChangerHandler.bind(this);
   }
 }

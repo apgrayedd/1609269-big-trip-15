@@ -6,7 +6,7 @@ export default class Abstract {
       throw new Error ('Невозможно создать абстрактный класс от абстрактного класса.');
     }
 
-    this._callback = [];
+    this._callbacks = [];
     this._element = null;
   }
 
