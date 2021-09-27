@@ -67,9 +67,9 @@ export const matchValidationInteger = (fieldValue, min = null, max = null) => {
   return false;
 };
 
-export const getValuesFromListByKey = (array, key) => {
+export const getValuesFromListByKey = (values, key) => {
   const results = [];
-  array.forEach((obj) => {
+  values.forEach((obj) => {
     results.push(obj[key]);
   });
   return results;
@@ -90,3 +90,5 @@ export const getValueByList = (obj) => {
   });
   return results;
 };
+
+export const isOnline = () => window.navigator.onLine;
